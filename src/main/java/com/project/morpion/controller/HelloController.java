@@ -43,8 +43,8 @@ public class HelloController {
 
         // Animation
         AnimationTimer timer = new AnimationTimer() {
-            double dx = 3;
-            double dy = 3;
+            double dx = 1;
+            double dy = 1;
 
             @Override
             public void handle(long now) {

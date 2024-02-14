@@ -18,11 +18,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         HelloController controller = fxmlLoader.getController();
-        FXMLLoader fxmlLoader2 = new FXMLLoader(HelloApplication.class.getResource("view/crazy-size.fxml"));
-        Scene scene2 = new Scene(fxmlLoader2.load());
-        CrazySize controller2 = fxmlLoader2.getController();
         controller.setStage(stage);
-        controller2.setStage(stage);
         stage.setTitle("Morpion project");
         stage.setScene(scene);
         stage.setResizable(false);
