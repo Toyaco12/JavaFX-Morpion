@@ -1,21 +1,23 @@
 package com.project.morpion.controller;
 
-import com.project.morpion.HelloApplication;
-import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class HelloController {
     private Stage stage;
@@ -35,43 +37,163 @@ public class HelloController {
 
     @FXML
     public void initialize() {
-        // Création de la balle
-        Circle ball = new Circle(10, Color.BLUE);
-        ball.relocate(100, 100);
+    }
 
-        panel.getChildren().add(ball);
 
-        // Animation
-        AnimationTimer timer = new AnimationTimer() {
-            double dx = 1;
-            double dy = 1;
+    public void openSettings(ActionEvent actionEvent) {
+        AtomicBoolean save = new AtomicBoolean(false);
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL);
+        modalStage.setTitle("Settings Window");
 
-            @Override
-            public void handle(long now) {
-                if (ball.getLayoutX() <= 0 || ball.getLayoutX() >= panel.getWidth() - ball.getRadius() * 2) {
-                    dx *= -1;
-                }
-                if (ball.getLayoutY() <= 0 || ball.getLayoutY() >= panel.getHeight() - ball.getRadius() * 2) {
-                    dy *= -1;
-                }
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
 
-                ball.setLayoutX(ball.getLayoutX() + dx);
-                ball.setLayoutY(ball.getLayoutY() + dy);
+        // Labels pour les lignes
+        Label labelRow1 = new Label("FACILE");
+        Label labelRow2 = new Label("MOYEN");
+        Label labelRow3 = new Label("DIFFICILE");
+
+        // Ajout des labels pour les lignes
+        gridPane.add(labelRow1, 0, 1);
+        gridPane.add(labelRow2, 0, 2);
+        gridPane.add(labelRow3, 0, 3);
+
+        // Labels pour les colonnes
+        Label labelColumn1 = new Label("Column 1");
+        Label labelColumn2 = new Label("Column 2");
+        Label labelColumn3 = new Label("Column 3");
+
+        // Ajout des labels pour les colonnes
+        gridPane.add(labelColumn1, 1, 0);
+        gridPane.add(labelColumn2, 2, 0);
+        gridPane.add(labelColumn3, 3, 0);
+
+        String[][] settings = getSettings();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                TextField textField = createTextField(settings[i][j+1]);
+                gridPane.add(textField, j + 1, i + 1);
             }
+        }
+
+        // Centrage du GridPane
+        StackPane modalLayout = new StackPane();
+        Button saveButton = new Button("Save Settings");
+        saveButton.setOnAction(e -> {
+            String[] set = {"F:", "M:", "D:"};
+            for(Node n : gridPane.getChildren()){
+                if(n instanceof TextField){
+                    TextField tmp = (TextField) n;
+                    int rowIndex = GridPane.getRowIndex(tmp);
+                    int colIndex = GridPane.getColumnIndex(tmp);
+                    if(colIndex == 3){
+                        set[rowIndex - 1] += tmp.getText();
+                    }
+                    else{
+                        set[rowIndex - 1] += tmp.getText() + ":";
+                    }
+                }
+            }
+            setSettings(set);
+            save.set(true);
+        });
+
+        Button closeButton = new Button("Close Settings");
+        closeButton.setOnAction(e -> {
+            String[] set = {"F:", "M:", "D:"};
+            for(Node n : gridPane.getChildren()){
+                if(n instanceof TextField){
+                    TextField tmp = (TextField) n;
+                    int rowIndex = GridPane.getRowIndex(tmp);
+                    int colIndex = GridPane.getColumnIndex(tmp);
+                    if(colIndex == 3){
+                        set[rowIndex - 1] += tmp.getText();
+                    }
+                    else{
+                        set[rowIndex - 1] += tmp.getText() + ":";
+                    }
+                }
+            }
+            String[] prev = {"F:" + settings[0][1] + ":" + settings[0][2] + ":" + settings[0][3], "M:" + settings[1][1] + ":" + settings[1][2] + ":" + settings[1][3], "D:" + settings[2][1] + ":" + settings[2][2] + ":" + settings[2][3]};
+            if(Arrays.equals(set, prev)){
+                modalStage.close();
+            }
+            else if (!save.get()){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Quitter sans Sauvegarder");
+                alert.setHeaderText("Confirmation nécessaire");
+                alert.setContentText("Êtes-vous sûr de vouloir quiter sans sauvegarder ?");
+
+                alert.showAndWait().ifPresent(response -> {
+                    if(response == ButtonType.OK){
+                        modalStage.close();
+                    }
+                });
+            }
+            else{
+                modalStage.close();
+            }
+        });
+
+        modalLayout.getChildren().addAll(gridPane);
+        StackPane.setAlignment(gridPane, javafx.geometry.Pos.CENTER);
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(modalLayout, closeButton, saveButton); // Ajout du GridPane et du bouton "Close Modal"
+        vBox.setPadding(new Insets(10));
+        vBox.setSpacing(10);
+        vBox.setAlignment(javafx.geometry.Pos.BOTTOM_CENTER);
+
+        Scene modalScene = new Scene(vBox, 600, 175);
+        modalStage.setScene(modalScene);
+        modalStage.showAndWait();
+    }
+
+
+    public String[][] getSettings() {
+        try {
+            FileReader settingFile = new FileReader("src/main/resources/com/project/morpion/ai/config.txt");
+            BufferedReader reader = new BufferedReader(settingFile);
+            String line;
+            String[][] setting = new String[4][4];
+            int i =0;
+            while ((line = reader.readLine()) != null) {
+                setting[i] = line.split(":");
+                i++;
+            }
+            return setting;
+        } catch (IOException ignored) {
+        }
+
+        return null;
+    }
+
+    public void setSettings(String[] settings){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/com/project/morpion/ai/config.txt"))) {
+            for(int i =0; i < 3 ; i++){
+                writer.write(settings[i]);
+                writer.newLine();
+            }
+        } catch (IOException ignored) { }
+    }
+
+    private TextField createTextField(String setText){
+        TextField textField = new TextField(setText);
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getText();
+            if (Pattern.matches("[0-9]*", text)) {
+                return change;
+            }
+            return null;
         };
-        timer.start();
-    }
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        textField.setTextFormatter(textFormatter);
 
-    public void goToNextStage(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/crazy-size.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        CrazySize controller = fxmlLoader.getController();
-        controller.setStage(stage);
-        stage.setScene(scene);
+        return textField;
     }
 }
