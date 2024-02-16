@@ -1,6 +1,5 @@
 package com.project.morpion;
 
-import com.project.morpion.controller.CrazySize;
 import com.project.morpion.controller.HelloController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

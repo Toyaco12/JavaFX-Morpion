@@ -1,7 +1,9 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.HelloApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -195,5 +197,13 @@ public class HelloController {
         textField.setTextFormatter(textFormatter);
 
         return textField;
+    }
+
+    public void openLearning(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/learn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageLearn = new Stage();
+        stageLearn.setScene(scene);
+        stageLearn.show();
     }
 }
