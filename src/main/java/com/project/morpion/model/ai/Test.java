@@ -14,51 +14,12 @@ import java.util.HashMap;
 public class Test {
 
 	public static void main(String[] args) {
-		try {
-			//
-			// LOAD DATA ...
-			//
-			HashMap<Integer, Coup> coups = loadGames("src/main/resources/com/project/morpion/ai/dataset/Tic_tac_initial_results.csv");
-			saveGames(coups, "src/main/resources/com/project/morpion/ai/train_dev_test/", 0.7);
-			//
-			// LOAD CONFIG ...
-			//
-			ConfigFileLoader cfl = new ConfigFileLoader();
-			cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-			Config config = cfl.get("F");
-			System.out.println("Test.main() : "+config);
-			//
-			//TRAIN THE MODEL ...
-			//
-			double epochs = 10000 ;
-			HashMap<Integer, Coup> mapTrain = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/train.txt");
-			DoubleProperty progressBa = null;
-			MultiLayerPerceptron net = learn(9, mapTrain, config.hiddenLayerSize, config.learningRate, config.numberOfhiddenLayers, true, epochs,progressBa);
-			//
-			//PLAY ...
-			//
-			HashMap<Integer, Coup> mapDev = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/dev.txt");
-			Coup c = mapTrain.get((int)(Math.round(Math.random() * mapDev.size())));
-			double[] res = play(net, c);
-			System.out.println("Dev predicted: "+Arrays.toString(res) + " -> true: "+ Arrays.toString(c.out));
-			//
-			HashMap<Integer, Coup> mapTest = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/test.txt");
-			c = mapTrain.get((int)(Math.round(Math.random() * mapTest.size())));
-			res = play(net, c);
-			System.out.println("Test predicted: "+Arrays.toString(res) + " -> true: "+ Arrays.toString(c.out));
-			//saveModel(net,"F");
-			MultiLayerPerceptron test = loadModel("F","model_157_0.5_2.srl");
-		} 
-		catch (Exception e) {
-			System.out.println("Test.main()");
-			e.printStackTrace();
-			System.exit(-1);
-		}
+
 	}
 
 	///////////
 
-	public static MultiLayerPerceptron learn(int size, HashMap<Integer, Coup> mapTrain, int h, double lr, int l, boolean verbose, double epochs, DoubleProperty progressProperty){
+	public static MultiLayerPerceptron learn(int size, HashMap<Integer, Coup> mapTrain, int h, double lr, int l, boolean verbose, double epochs){
 		try {
 			if ( verbose ) {
 				System.out.println();
@@ -90,10 +51,7 @@ public class Test {
 					c = mapTrain.get((int)(Math.round(Math.random() * mapTrain.size())));
 
 				error += net.backPropagate(c.in, c.out);
-				if (progressProperty != null) {
-					double progress = (i + 1) / epochs;
-					Platform.runLater(() -> progressProperty.set(progress));
-				}
+
 				if ( i % 10000 == 0 && verbose) System.out.println("Error at step "+i+" is "+ (error/(double)i));
 			}
 			if ( verbose ) 
@@ -297,44 +255,22 @@ public class Test {
 		return map ;
 	}
 
-	public static void saveModel(MultiLayerPerceptron modelToSave,String difficulty){
-		ConfigFileLoader cfl = new ConfigFileLoader();
-		cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-		Config config = cfl.get(difficulty);
-		modelToSave.save("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
-	}
-
-	public static MultiLayerPerceptron loadModel(String difficulty,String modelName){
-		return MultiLayerPerceptron.load("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/"+modelName);
-	}
-
-	public static void setupAndLearn(String difficulty, DoubleProperty progressProperty){
+	public static HashMap<Integer, Coup> setup(){
 		try {
 			//
 			// LOAD DATA ...
 			//
 			HashMap<Integer, Coup> coups = loadGames("src/main/resources/com/project/morpion/ai/dataset/Tic_tac_initial_results.csv");
 			saveGames(coups, "src/main/resources/com/project/morpion/ai/train_dev_test/", 0.7);
-			//
-			// LOAD CONFIG ...
-			//
-			ConfigFileLoader cfl = new ConfigFileLoader();
-			cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-			Config config = cfl.get(difficulty);
-			System.out.println("Test.main() : "+config);
-			//
-			//TRAIN THE MODEL ...
-			//
-			double epochs = 10000 ;
 			HashMap<Integer, Coup> mapTrain = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/train.txt");
-			MultiLayerPerceptron net = learn(9, mapTrain, config.hiddenLayerSize, config.learningRate, config.numberOfhiddenLayers, true, epochs,progressProperty);
-			saveModel(net,difficulty);
+			return mapTrain;
 		}
 		catch (Exception e) {
 			System.out.println("Test.main()");
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		return null;
 	}
 	///////////
 
