@@ -1,12 +1,14 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.model.ai.*;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -25,6 +27,9 @@ public class LearnController {
     public Button startbutton;
     @FXML
     public Button closeButton;
+    @FXML
+    public Label progressLabel;
+
     @FXML
     private void closeWindow(ActionEvent event) {
         // Récupère la scène actuelle et la ferme
@@ -102,6 +107,12 @@ public class LearnController {
 
         progbar.progressProperty().bind(learningTask.progressProperty());
         errorfield.textProperty().bind(learningTask.messageProperty());
+        progressLabel.textProperty().bind(
+                Bindings.createStringBinding(
+                        () -> String.format("%.0f%%", progbar.getProgress() * 100),
+                        progbar.progressProperty()
+                )
+        );
         Thread learningThread = new Thread(learningTask);
         learningThread.setDaemon(true);
         learningThread.start();
