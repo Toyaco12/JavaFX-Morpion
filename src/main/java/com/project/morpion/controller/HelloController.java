@@ -64,9 +64,9 @@ public class HelloController {
         gridPane.add(labelRow3, 0, 3);
 
         // Labels pour les colonnes
-        Label labelColumn1 = new Label("Column 1");
-        Label labelColumn2 = new Label("Column 2");
-        Label labelColumn3 = new Label("Column 3");
+        Label labelColumn1 = new Label("Hidden Layer Size");
+        Label labelColumn2 = new Label("Number of Hidden Layers");
+        Label labelColumn3 = new Label("Learning Rate");
 
         // Ajout des labels pour les colonnes
         gridPane.add(labelColumn1, 1, 0);
