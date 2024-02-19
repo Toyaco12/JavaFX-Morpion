@@ -29,6 +29,10 @@ public class LearnController {
     public Button closeButton;
     @FXML
     public Label progressLabel;
+    @FXML
+    public Button cancelButton;
+    @FXML
+    private Task<Void> learningTask;
 
     @FXML
     private void closeWindow(ActionEvent event) {
@@ -36,10 +40,18 @@ public class LearnController {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
+    @FXML
+    public void cancelTask(ActionEvent actionEvent) {
+        if (learningTask != null){
+            learningTask.cancel();
+        }
+    }
 
     @FXML
     private void processStart() {
         startbutton.setVisible(false);
+        startbutton.setManaged(false);
+
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
         Config config = cfl.get("F");
@@ -52,7 +64,7 @@ public class LearnController {
         int l = config.numberOfhiddenLayers;
         boolean verbose = true;
 
-        Task<Void> learningTask = new Task<Void>() {
+        learningTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
@@ -81,6 +93,11 @@ public class LearnController {
                     //TRAINING ...
                     for(int i = 0; i < epochs; i++){
 
+                        if (isCancelled()) {
+                            updateMessage("Unknown");
+                            return null; // Retourne immédiatement si la tâche est annulée
+                        }
+
                         Coup c = null ;
                         while ( c == null )
                             c = mapTrain.get((int)(Math.round(Math.random() * mapTrain.size())));
@@ -104,6 +121,8 @@ public class LearnController {
                 return null;
             }
         };
+        cancelButton.visibleProperty().bind(learningTask.runningProperty());
+        cancelButton.managedProperty().bind(learningTask.runningProperty());
 
         progbar.progressProperty().bind(learningTask.progressProperty());
         errorfield.textProperty().bind(learningTask.messageProperty());
@@ -113,6 +132,7 @@ public class LearnController {
                         progbar.progressProperty()
                 )
         );
+
         Thread learningThread = new Thread(learningTask);
         learningThread.setDaemon(true);
         learningThread.start();
@@ -123,7 +143,18 @@ public class LearnController {
 
             completionField.setVisible(true);
             completionField.setManaged(true);
-            completionField.setText("Learning complete");
+            completionField.setText("Learning completed");
         });
+        learningTask.setOnCancelled(event -> {
+            closeButton.setVisible(true);
+            closeButton.setManaged(true);
+            completionField.setVisible(true);
+            completionField.setManaged(true);
+            completionField.setText("Learning cancelled");
+
+        });
+
     }
+
+
 }

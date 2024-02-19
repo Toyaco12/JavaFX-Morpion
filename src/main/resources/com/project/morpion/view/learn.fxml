@@ -22,6 +22,8 @@
       </StackPane>
       <Button fx:id="startbutton" alignment="CENTER" mnemonicParsing="false" onAction="#processStart" text="Learn" />
       <Button fx:id="closeButton" managed="false" onAction="#closeWindow" text="Close" visible="false" />
+      <Button fx:id="cancelButton" text="Cancel" onAction="#cancelTask" visible="false" managed="false" />
+
    </children>
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

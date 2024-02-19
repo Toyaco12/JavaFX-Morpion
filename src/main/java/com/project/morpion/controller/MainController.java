@@ -1,6 +1,6 @@
 package com.project.morpion.controller;
 
-import com.project.morpion.HelloApplication;
+import com.project.morpion.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class HelloController {
+public class MainController {
     private Stage stage;
 
     public void setStage(Stage stage) {
@@ -149,8 +149,9 @@ public class HelloController {
         vBox.setSpacing(10);
         vBox.setAlignment(javafx.geometry.Pos.BOTTOM_CENTER);
 
-        Scene modalScene = new Scene(vBox, 600, 175);
+        Scene modalScene = new Scene(vBox, 600, 200);
         modalStage.setScene(modalScene);
+        modalStage.setResizable(false);
         modalStage.showAndWait();
     }
 
@@ -200,7 +201,7 @@ public class HelloController {
     }
 
     public void openLearning(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/learn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageLearn = new Stage();
         stageLearn.setScene(scene);
