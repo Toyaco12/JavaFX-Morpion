@@ -2,12 +2,16 @@ package com.project.morpion.controller;
 
 import com.project.morpion.model.ItemSuppr;
 import com.project.morpion.model.SupressCell;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 import java.io.File;
 
 public class ModelViewController {
+    public Button closeButton;
     @FXML
     private ListView<ItemSuppr> easyListView;
     @FXML
@@ -32,5 +36,10 @@ public class ModelViewController {
                 listView.getItems().add(item);
             }
         }
+    }
+
+    public void closeModal(ActionEvent actionEvent) {
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
     }
 }
