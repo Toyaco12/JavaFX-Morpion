@@ -8,7 +8,7 @@ import javafx.scene.layout.Priority;
 
 import java.io.File;
 
-public class SupressCell extends ListCell<ItemSuppr> {
+public class SupressCell extends ListCell<ItemModel> {
     HBox hbox = new HBox();
     Label label = new Label("(vide)");
     Pane pane = new Pane();
@@ -21,7 +21,7 @@ public class SupressCell extends ListCell<ItemSuppr> {
         HBox.setHgrow(pane, Priority.ALWAYS);
 
         deleteButton.setOnAction(event -> {
-            ItemSuppr item = getItem();
+            ItemModel item = getItem();
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Do you really want to delete "+item.getName()+" ?", ButtonType.YES,ButtonType.NO);
             confirm.showAndWait().ifPresent(response -> {
                 if(response == ButtonType.YES){
@@ -39,7 +39,7 @@ public class SupressCell extends ListCell<ItemSuppr> {
     }
 
     @Override
-    protected void updateItem(ItemSuppr item, boolean empty) {
+    protected void updateItem(ItemModel item, boolean empty) {
         super.updateItem(item, empty);
         setText(null);
         if (empty || item == null) {

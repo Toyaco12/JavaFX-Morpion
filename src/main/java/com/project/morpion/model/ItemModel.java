@@ -2,11 +2,11 @@ package com.project.morpion.model;
 
 import java.io.File;
 
-public class ItemSuppr {
+public class ItemModel {
     private String name;
     private String fullPath;
 
-    public ItemSuppr(String fullPath) {
+    public ItemModel(String fullPath) {
         this.fullPath = fullPath;
         this.name = new File(fullPath).getName();
     }

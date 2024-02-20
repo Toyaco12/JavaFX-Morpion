@@ -1,6 +1,6 @@
 package com.project.morpion.controller;
 
-import com.project.morpion.model.ItemSuppr;
+import com.project.morpion.model.ItemModel;
 import com.project.morpion.model.SupressCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,11 +13,11 @@ import java.io.File;
 public class ModelViewController {
     public Button closeButton;
     @FXML
-    private ListView<ItemSuppr> easyListView;
+    private ListView<ItemModel> easyListView;
     @FXML
-    private ListView<ItemSuppr> mediumListView;
+    private ListView<ItemModel> mediumListView;
     @FXML
-    private ListView<ItemSuppr> hardListView;
+    private ListView<ItemModel> hardListView;
 
     public void initialize(){
         easyListView.setCellFactory(param -> new SupressCell());
@@ -27,12 +27,12 @@ public class ModelViewController {
         loadModels("src/main/resources/com/project/morpion/ai/models/M", mediumListView);
         loadModels("src/main/resources/com/project/morpion/ai/models/D", hardListView);
     }
-    private void loadModels(String directoryPath, ListView<ItemSuppr> listView) {
+    private void loadModels(String directoryPath, ListView<ItemModel> listView) {
         File dir = new File(directoryPath);
         File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));
         if (files != null) {
             for (File file : files) {
-                ItemSuppr item = new ItemSuppr(file.getAbsolutePath());
+                ItemModel item = new ItemModel(file.getAbsolutePath());
                 listView.getItems().add(item);
             }
         }

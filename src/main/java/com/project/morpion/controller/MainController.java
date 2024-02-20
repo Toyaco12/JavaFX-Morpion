@@ -1,6 +1,8 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.ItemModel;
+import com.project.morpion.model.ModelUpdate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,38 +20,44 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class MainController {
+public class MainController implements ModelUpdate {
     @FXML
-    public Button testprog;
     public Button play;
-    public Button btnSinglePlayer;
-    public Button btn1vs1;
     @FXML
-    public HBox hboxMode;
-    public Label tittle;
-    public Label chooseMode;
+    public VBox chooseGameMode;
+    @FXML
+    public VBox playGame;
+    @FXML
+    public VBox chooseDifficulty;
+    @FXML
+    public MenuButton easyMenu;
+    @FXML
+    public MenuButton mediumMenu;
+    @FXML
+    public MenuButton hardMenu;
+    @FXML
+    public MenuItem F;
+    @FXML
+    public MenuItem M;
+    @FXML
+    public MenuItem D;
+    @FXML
     private Stage stage;
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-
-    public Pane panel;
-    public Button toNext;
-    @FXML
-    private VBox vbox1;
-
-    @FXML
-    private Label welcomeText;
-
     @FXML
     public void initialize() {
-        play.setVisible(true);
-        play.setManaged(true);
-
+        playGame.setVisible(true);
+        playGame.setManaged(true);
     }
-
+    @Override
+    public void onModelUpdated() {
+        loadModels(easyMenu, "src/main/resources/com/project/morpion/ai/models/F");
+        loadModels(mediumMenu, "src/main/resources/com/project/morpion/ai/models/M");
+        loadModels(hardMenu, "src/main/resources/com/project/morpion/ai/models/D");
+    }
 
     public void openSettings(ActionEvent actionEvent) {
         AtomicBoolean save = new AtomicBoolean(false);
@@ -210,10 +218,16 @@ public class MainController {
     }
 
     public void openLearning(ActionEvent actionEvent) throws IOException {
+        MenuItem menuItem = (MenuItem) actionEvent.getSource();
+        String difficulty = menuItem.getId();
+
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageLearn = new Stage();
         stageLearn.setScene(scene);
+        LearnController controller = fxmlLoader.getController();
+        controller.setDifficulty(difficulty);
+        controller.setUpdateListener(this);
         stageLearn.show();
     }
 
@@ -225,19 +239,53 @@ public class MainController {
         stageModel.show();
     }
 
+    @FXML
     public void play(ActionEvent actionEvent) {
-        play.setManaged(false);
-        play.setVisible(false);
+        playGame.setVisible(false);
+        playGame.setManaged(false);
 
-        tittle.setManaged(true);
-        tittle.setVisible(true);
-        chooseMode.setManaged(true);
-        chooseMode.setVisible(true);
-        hboxMode.setManaged(true);
-        hboxMode.setVisible(true);
-        btnSinglePlayer.setVisible(true);
-        btnSinglePlayer.setManaged(true);
-        btn1vs1.setVisible(true);
-        btn1vs1.setManaged(true);
+        chooseGameMode.setManaged(true);
+        chooseGameMode.setVisible(true);
+    }
+
+    @FXML
+    public void chooseDiff(ActionEvent actionEvent) {
+        chooseGameMode.setManaged(false);
+        chooseGameMode.setVisible(false);
+
+        chooseDifficulty.setManaged(true);
+        chooseDifficulty.setVisible(true);
+        loadModels(easyMenu, "src/main/resources/com/project/morpion/ai/models/F");
+        loadModels(mediumMenu, "src/main/resources/com/project/morpion/ai/models/M");
+        loadModels(hardMenu, "src/main/resources/com/project/morpion/ai/models/D");
+    }
+    private void loadModels(MenuButton menuButton, String path){
+        File dir = new File(path);
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));
+
+        if (files != null){
+            menuButton.getItems().clear();
+            for (File file : files){
+                ItemModel item = new ItemModel(file.getAbsolutePath());
+                MenuItem menuItem = new MenuItem(item.getName());
+                menuItem.setOnAction(event -> {
+                    //gérer ce qui se passe quand on clique sur un modèle
+                    System.out.println("Modèle sélectionné : " + item.getFullPath());
+                });
+                menuButton.getItems().add(menuItem);
+            }
+            String level = menuButton.getId();
+            switch (level){
+                case "easyMenu":
+                    menuButton.getItems().add(F);
+                    break;
+                case "mediumMenu":
+                    menuButton.getItems().add(M);
+                    break;
+                case "hardMenu":
+                    menuButton.getItems().add(D);
+                    break;
+            }
+        }
     }
 }

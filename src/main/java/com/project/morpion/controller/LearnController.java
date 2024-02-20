@@ -1,5 +1,6 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 
 
 public class LearnController {
+    private ModelUpdate updateModel;
     @FXML
     public TextField completionField;
     @FXML
@@ -31,8 +33,18 @@ public class LearnController {
     public Label progressLabel;
     @FXML
     public Button cancelButton;
+    public Label diff;
     @FXML
     private Task<Void> learningTask;
+
+    public void setUpdateListener(ModelUpdate updateModel) {
+        this.updateModel = updateModel;
+    }
+    public void trainingCompleted() {
+        if (updateModel != null) {
+            updateModel.onModelUpdated();
+        }
+    }
 
     @FXML
     private void closeWindow(ActionEvent event) {
@@ -46,6 +58,27 @@ public class LearnController {
             learningTask.cancel();
         }
     }
+    private String difficulty;
+
+    public void setDifficulty(String difficulty){
+        this.difficulty = difficulty;
+        String textDiff = "";
+        switch (this.difficulty){
+            case "F":
+                textDiff = " Easy";
+                break;
+            case "M":
+                textDiff = " Medium";
+                break;
+            case "D":
+                textDiff = " Hard";
+                break;
+        }
+
+        this.diff.setText(diff.getText() + textDiff);
+    }
+    public void initialize(){
+    }
 
     @FXML
     private void processStart() {
@@ -54,7 +87,7 @@ public class LearnController {
 
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-        Config config = cfl.get("F");
+        Config config = cfl.get(difficulty);
         System.out.println("Test.main() : "+config);
         HashMap<Integer, Coup> mapTrain = Test.setup();
         double epochs = 10000;
@@ -110,7 +143,7 @@ public class LearnController {
                     if ( verbose )
                         updateMessage("Final error is "+ (error/epochs));
 
-                    MultiLayerPerceptron.saveModel(net,"F");
+                    MultiLayerPerceptron.saveModel(net,difficulty);
                 }
                 catch (Exception e) {
                     System.out.println("Test.learn()");
@@ -138,6 +171,7 @@ public class LearnController {
         learningThread.start();
 
         learningTask.setOnSucceeded(event -> {
+            trainingCompleted();
             closeButton.setVisible(true);
             closeButton.setManaged(true);
 
@@ -157,4 +191,4 @@ public class LearnController {
     }
 
 
-}
+    }
