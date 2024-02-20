@@ -16,6 +16,7 @@ public class SupressCell extends ListCell<ItemSuppr> {
 
     public SupressCell() {
         super();
+        deleteButton.setFocusTraversable(false);
         hbox.getChildren().addAll(label, pane, deleteButton);
         HBox.setHgrow(pane, Priority.ALWAYS);
 

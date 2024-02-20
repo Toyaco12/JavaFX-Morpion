@@ -8,10 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -22,6 +19,15 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class MainController {
+    @FXML
+    public Button testprog;
+    public Button play;
+    public Button btnSinglePlayer;
+    public Button btn1vs1;
+    @FXML
+    public HBox hboxMode;
+    public Label tittle;
+    public Label chooseMode;
     private Stage stage;
 
     public void setStage(Stage stage) {
@@ -39,6 +45,9 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        play.setVisible(true);
+        play.setManaged(true);
+
     }
 
 
@@ -214,5 +223,21 @@ public class MainController {
         Stage stageModel = new Stage();
         stageModel.setScene(scene);
         stageModel.show();
+    }
+
+    public void play(ActionEvent actionEvent) {
+        play.setManaged(false);
+        play.setVisible(false);
+
+        tittle.setManaged(true);
+        tittle.setVisible(true);
+        chooseMode.setManaged(true);
+        chooseMode.setVisible(true);
+        hboxMode.setManaged(true);
+        hboxMode.setVisible(true);
+        btnSinglePlayer.setVisible(true);
+        btnSinglePlayer.setManaged(true);
+        btn1vs1.setVisible(true);
+        btn1vs1.setManaged(true);
     }
 }

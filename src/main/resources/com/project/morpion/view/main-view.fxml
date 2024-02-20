@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -28,6 +36,45 @@
       </MenuBar>
    </top>
    <center>
-      <Button fx:id="testprog" mnemonicParsing="false" onAction="#openLearning" text="progress bar" BorderPane.alignment="CENTER" />
+      <AnchorPane  BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="tittle" managed="false" visible="false" contentDisplay="CENTER" layoutX="406.0" layoutY="44.0" prefHeight="68.0" prefWidth="388.0" text="Lancement d'une partie" textAlignment="CENTER">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <Label fx:id="chooseMode" managed="false" visible="false" layoutX="471.0" layoutY="128.0" prefHeight="41.0" prefWidth="258.0" text="Choisissez un mode de jeu">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <VBox alignment="CENTER">
+               <children>
+                   <Button fx:id="testprog" managed="false" mnemonicParsing="false" onAction="#openLearning" text="progress bar" visible="false" />
+                   <Button fx:id="play" managed="false" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play" visible="false" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <HBox fx:id="hboxMode" alignment="CENTER" managed="false" prefHeight="100.0" prefWidth="200.0" spacing="70.0" visible="false">
+                     <children>
+                        <Button fx:id="btnSinglePlayer" managed="false" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="Singleplayer" visible="false">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btn1vs1" managed="false" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1" visible="false">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                   
+      
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
    </center>
 </BorderPane>
