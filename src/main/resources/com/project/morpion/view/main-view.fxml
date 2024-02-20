@@ -11,6 +11,7 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Close" />
                   <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#openModels" text="Models" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

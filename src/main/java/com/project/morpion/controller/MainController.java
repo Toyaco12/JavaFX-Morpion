@@ -207,4 +207,12 @@ public class MainController {
         stageLearn.setScene(scene);
         stageLearn.show();
     }
+
+    public void openModels(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/model-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageModel = new Stage();
+        stageModel.setScene(scene);
+        stageModel.show();
+    }
 }
