@@ -24,8 +24,10 @@ public class ConfigFileLoader {
 					if ( t.length == 4 ) {
 						String level = t[0];
 						int hiddenLayerSize = Integer.parseInt(t[1]);
-						double learningRate = Double.parseDouble(t[2]);
-						int numberOfhiddenLayers = Integer.parseInt(t[3]);
+
+						int numberOfhiddenLayers = Integer.parseInt(t[2]);
+
+						double learningRate = Double.parseDouble(t[3]);
 						//
 						Config c = new Config(level, hiddenLayerSize, numberOfhiddenLayers, learningRate);
 						mapConfig.put(level, c);

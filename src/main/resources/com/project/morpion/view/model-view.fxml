@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.ModelViewController">
+    <left>
+        <VBox>
+            <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="197.0" text="                        Facile" textAlignment="CENTER" />
+            <ListView fx:id="easyListView" prefHeight="200.0" prefWidth="200" />
+        </VBox>
+    </left>
+    <center>
+        <VBox>
+            <Label prefHeight="17.0" prefWidth="194.0" text="                       Moyen" />
+            <ListView fx:id="mediumListView" prefHeight="200.0" prefWidth="200.0" />
+        </VBox>
+    </center>
+    <right>
+        <VBox>
+            <Label prefHeight="17.0" prefWidth="198.0" text="                       Difficile" />
+            <ListView fx:id="hardListView" prefHeight="200.0" prefWidth="200.0" />
+        </VBox>
+    </right>
+   <bottom>
+      <Pane prefHeight="57.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="closeButton" layoutX="274.0" layoutY="16.0" mnemonicParsing="false" onAction="#closeModal" text="Close" />
+         </children>
+      </Pane>
+   </bottom>
+   <top>
+      <Pane prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="205.0" layoutY="9.0" text="Gestion des models">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </top>
+</BorderPane>

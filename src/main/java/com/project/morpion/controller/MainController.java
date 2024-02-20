@@ -1,7 +1,9 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class HelloController {
+public class MainController {
     private Stage stage;
 
     public void setStage(Stage stage) {
@@ -62,9 +64,9 @@ public class HelloController {
         gridPane.add(labelRow3, 0, 3);
 
         // Labels pour les colonnes
-        Label labelColumn1 = new Label("Column 1");
-        Label labelColumn2 = new Label("Column 2");
-        Label labelColumn3 = new Label("Column 3");
+        Label labelColumn1 = new Label("Hidden Layer Size");
+        Label labelColumn2 = new Label("Number of Hidden Layers");
+        Label labelColumn3 = new Label("Learning Rate");
 
         // Ajout des labels pour les colonnes
         gridPane.add(labelColumn1, 1, 0);
@@ -147,8 +149,9 @@ public class HelloController {
         vBox.setSpacing(10);
         vBox.setAlignment(javafx.geometry.Pos.BOTTOM_CENTER);
 
-        Scene modalScene = new Scene(vBox, 600, 175);
+        Scene modalScene = new Scene(vBox, 600, 200);
         modalStage.setScene(modalScene);
+        modalStage.setResizable(false);
         modalStage.showAndWait();
     }
 
@@ -195,5 +198,21 @@ public class HelloController {
         textField.setTextFormatter(textFormatter);
 
         return textField;
+    }
+
+    public void openLearning(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageLearn = new Stage();
+        stageLearn.setScene(scene);
+        stageLearn.show();
+    }
+
+    public void openModels(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/model-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageModel = new Stage();
+        stageModel.setScene(scene);
+        stageModel.show();
     }
 }
