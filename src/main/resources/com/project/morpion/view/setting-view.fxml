@@ -26,6 +26,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label alignment="CENTER" prefHeight="69.0" prefWidth="200.0" text="EASY" GridPane.rowIndex="1">
@@ -62,6 +63,7 @@
             </GridPane>
          </children>
       </StackPane>
+      <Label fx:id="errorLabel" focusTraversable="false" textFill="#fa0808" visible="false" />
       <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
          <VBox.margin>
             <Insets bottom="5.0" />

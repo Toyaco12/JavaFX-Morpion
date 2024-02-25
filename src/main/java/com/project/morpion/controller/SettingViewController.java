@@ -16,7 +16,7 @@ public class SettingViewController {
     public GridPane settingsPane;
     public Button saveButton;
     public Button closeButton;
-
+    public Label errorLabel;
     private boolean save = false;
 
 
@@ -26,7 +26,14 @@ public class SettingViewController {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                TextField textField = createTextField(settings[i][j+1]);
+                TextField textField;
+                if(j == 2){
+                    textField = createDecimalTextField(settings[i][j+1]);
+                }
+                else{
+                    textField = createTextField(settings[i][j+1]);
+                }
+
                 settingsPane.add(textField, j + 1, i + 1);
             }
         }
@@ -70,12 +77,22 @@ public class SettingViewController {
     }
 
     public void saveSettings(ActionEvent actionEvent) {
+        boolean error = false;
         String[] set = {"F:", "M:", "D:"};
         for(Node n : settingsPane.getChildren()){
             if(n instanceof TextField){
                 TextField tmp = (TextField) n;
                 int rowIndex = GridPane.getRowIndex(tmp);
                 int colIndex = GridPane.getColumnIndex(tmp);
+                if(Double.parseDouble(tmp.getText()) > 150){
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Maximum : 150");
+                    tmp.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+                    error = true;
+                }
+                else{
+                    tmp.setStyle("-fx-text-box-border: transparent;");
+                }
                 if(colIndex == 3){
                     set[rowIndex - 1] += tmp.getText();
                 }
@@ -84,11 +101,13 @@ public class SettingViewController {
                 }
             }
         }
-        setSettings(set);
-        save = true;
+        if(!error){
+            errorLabel.setVisible(false);
+            setSettings(set);
+            save = true;
+        }
+
     }
-
-
 
     private TextField createTextField(String setText){
         TextField textField = new TextField(setText);
@@ -96,6 +115,23 @@ public class SettingViewController {
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getText();
             if (Pattern.matches("[0-9]*", text)) {
+                return change;
+            }
+            return null;
+        };
+
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        textField.setTextFormatter(textFormatter);
+
+        return textField;
+    }
+
+    private TextField createDecimalTextField(String setText){
+        TextField textField = new TextField(setText);
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getControlNewText();
+            if (Pattern.matches("\\d*(\\.\\d*)?", text)) {
                 return change;
             }
             return null;
