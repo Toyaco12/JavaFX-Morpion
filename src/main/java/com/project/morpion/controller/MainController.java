@@ -3,6 +3,8 @@ package com.project.morpion.controller;
 import com.project.morpion.App;
 import com.project.morpion.model.ItemModel;
 import com.project.morpion.model.ModelUpdate;
+import com.project.morpion.model.ai.Config;
+import com.project.morpion.model.ai.ConfigFileLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,18 +31,12 @@ public class MainController implements ModelUpdate {
     public VBox playGame;
     @FXML
     public VBox chooseDifficulty;
+
     @FXML
-    public MenuButton easyMenu;
+    public MenuButton difficultyMenu;
     @FXML
-    public MenuButton mediumMenu;
-    @FXML
-    public MenuButton hardMenu;
-    @FXML
-    public MenuItem F;
-    @FXML
-    public MenuItem M;
-    @FXML
-    public MenuItem D;
+    public Button submitBtn;
+    private String selectDifficulty;
     @FXML
     private Stage stage;
     public void setStage(Stage stage) {
@@ -54,9 +50,6 @@ public class MainController implements ModelUpdate {
     }
     @Override
     public void onModelUpdated() {
-        loadModels(easyMenu, "src/main/resources/com/project/morpion/ai/models/F");
-        loadModels(mediumMenu, "src/main/resources/com/project/morpion/ai/models/M");
-        loadModels(hardMenu, "src/main/resources/com/project/morpion/ai/models/D");
     }
 
     public void openSettings(ActionEvent actionEvent) throws IOException {
@@ -107,11 +100,30 @@ public class MainController implements ModelUpdate {
 
         chooseDifficulty.setManaged(true);
         chooseDifficulty.setVisible(true);
-        loadModels(easyMenu, "src/main/resources/com/project/morpion/ai/models/F");
-        loadModels(mediumMenu, "src/main/resources/com/project/morpion/ai/models/M");
-        loadModels(hardMenu, "src/main/resources/com/project/morpion/ai/models/D");
     }
-    private void loadModels(MenuButton menuButton, String path){
+
+    @FXML
+    public void selectDifficulty(ActionEvent actionEvent) {
+        MenuItem selected = (MenuItem) actionEvent.getSource();
+        selectDifficulty = selected.getText();
+        difficultyMenu.setText("Difficulté: " + selectDifficulty);
+    }
+    @FXML
+    private void handleSubmit(ActionEvent event) {
+        if (selectDifficulty != null) {
+            System.out.println("Difficulté sélectionnée: " + selectDifficulty);
+            switch (selectDifficulty){
+                case "easy":
+                    break;
+            }
+            ConfigFileLoader cfl = new ConfigFileLoader();
+            cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
+           // Config config = cfl.get(difficulty);
+        } else {
+            System.out.println("Aucune difficulté sélectionnée.");
+        }
+    }
+/*    private void loadModels(MenuButton menuButton, String path){
         File dir = new File(path);
         File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));
 
@@ -139,5 +151,5 @@ public class MainController implements ModelUpdate {
                     break;
             }
         }
-    }
+    }*/
 }
