@@ -4,21 +4,36 @@ import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import java.util.Random;
 
 public class GameController {
 
     public GridPane morpionGrille;
     public Label currentPlayer;
+    public Button buttonChoice1;
+    public Button buttonChoice2;
+    public ImageView player1Object;
+    public ImageView player2Object;
+    public VBox vboxChoice;
+    public Button startPlayer1;
+    public Button startPlayer2;
+    public Button startRandom;
+    public HBox hboxStart;
+    public Label startLabel;
 
     private int[] placement = new int[9];
-    private boolean turn = true;
+    private boolean turn;
 
 
     @FXML
@@ -54,6 +69,9 @@ public class GameController {
                     int victory = victory();
                     if(victory != 0){
                         int []row = getVictory();
+                        for (int b : row){
+                            System.out.println(b);
+                        }
                         for(int a : row){
                             StackPane s = (StackPane) morpionGrille.getChildren().get(a);
                             ImageView imageView = (ImageView) s.getChildren().getFirst();
@@ -62,6 +80,12 @@ public class GameController {
                         if(victory == 1)
                             currentPlayer.setText("The Winner Is Player 1 !!!");
                         else currentPlayer.setText("The Winner Is Player 2 !!!");
+                    }
+                    else{
+                        System.out.println("*************************************");
+                        for (int k : placement) {
+                            System.out.println(k);
+                        }
                     }
                 }
             });
@@ -96,18 +120,22 @@ public class GameController {
         for(int i = 0; i < 7; i+=3){
             if(placement[i] == placement[i+1] && placement[i] == placement[i+2]){
                 rowVictory = new int[]{i, i + 1, i + 2};
+                return rowVictory;
             }
         }
         for(int i = 0; i < 3; i++){
             if(placement[i] == placement[i+3] && placement[i] == placement[i+6]){
                 rowVictory = new int[]{i, i + 3, i + 6};
+                return rowVictory;
             }
         }
         if(placement[0] == placement[4] && placement[0] == placement[8]){
             rowVictory = new int[]{0, 4, 8};
+            return rowVictory;
         }
         if(placement[2] == placement[4] && placement[2] == placement[6]){
             rowVictory = new int[]{2, 4, 6};
+            return rowVictory;
         }
         return rowVictory;
     }
@@ -121,4 +149,52 @@ public class GameController {
     }
 
 
+    public void chooseCircle(ActionEvent actionEvent) {
+        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+        player1Object.setImage(circle);
+        player2Object.setImage(cross);
+        startLabel.setVisible(true);
+        hboxStart.setVisible(true);
+    }
+
+    public void chooseCross(ActionEvent actionEvent) {
+        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+        player1Object.setImage(cross);
+        player2Object.setImage(circle);
+        startLabel.setVisible(true);
+        hboxStart.setVisible(true);
+    }
+
+    public void startRandom(ActionEvent actionEvent) {
+        startLabel.setVisible(false);
+        hboxStart.setVisible(false);
+        vboxChoice.setVisible(false);
+        Random random = new Random();
+        int randomNumber = random.nextInt(2) + 1;
+        if(randomNumber == 1){
+            turn = true;
+        }
+        else{
+            turn = false;
+        }
+        morpionGrille.setVisible(true);
+    }
+
+    public void startPlayer2(ActionEvent actionEvent) {
+        startLabel.setVisible(false);
+        hboxStart.setVisible(false);
+        vboxChoice.setVisible(false);
+        turn = false;
+        morpionGrille.setVisible(true);
+    }
+
+    public void startPlayer1(ActionEvent actionEvent) {
+        startLabel.setVisible(false);
+        hboxStart.setVisible(false);
+        vboxChoice.setVisible(false);
+        turn = true;
+        morpionGrille.setVisible(true);
+    }
 }
