@@ -1,11 +1,16 @@
 package com.project.morpion.controller;
 
 import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -31,6 +37,15 @@ public class GameController {
     public Button startRandom;
     public HBox hboxStart;
     public Label startLabel;
+    public Label whosTurn;
+    public StackPane overlayPane;
+    public StackPane mainGame;
+    public VBox vboxLeft;
+    public VBox vboxRight;
+    public HBox hboxTop;
+    public VBox vBoxVictory;
+    private Image player1Image;
+    private Image player2Image;
 
     private int[] placement = new int[9];
     private boolean turn;
@@ -54,38 +69,26 @@ public class GameController {
                     placement[position] = turn ? 1 : -1;
                     Image i;
                     if(turn){
-                        currentPlayer.setText("Current Player : Player 1");
-                        currentPlayer.setVisible(true);
-                        i = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+                        whosTurn.setText("Player 2's Turn");
+                        imageView.setImage(player1Image);
                     }
                     else{
-                        currentPlayer.setText("Current Player : Player 2");
-                        currentPlayer.setVisible(true);
-                        i = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+                        whosTurn.setText("Player 1's Turn");
+                        imageView.setImage(player2Image);
                     }
-                    imageView.setImage(i);
                     imageView.setOnMouseClicked(null);
                     turn = !turn;
                     int victory = victory();
+
                     if(victory != 0){
                         int []row = getVictory();
-                        for (int b : row){
-                            System.out.println(b);
-                        }
+                        RotateTransition rotateTransition = null;
                         for(int a : row){
                             StackPane s = (StackPane) morpionGrille.getChildren().get(a);
                             ImageView imageView = (ImageView) s.getChildren().getFirst();
-                            rotateImage(imageView);
+                            rotateTransition = rotateImage(imageView);
                         }
-                        if(victory == 1)
-                            currentPlayer.setText("The Winner Is Player 1 !!!");
-                        else currentPlayer.setText("The Winner Is Player 2 !!!");
-                    }
-                    else{
-                        System.out.println("*************************************");
-                        for (int k : placement) {
-                            System.out.println(k);
-                        }
+                        rotateTransition.setOnFinished(e -> showVictory(victory));
                     }
                 }
             });
@@ -140,29 +143,31 @@ public class GameController {
         return rowVictory;
     }
 
-    private void rotateImage(ImageView i){
+    private RotateTransition rotateImage(ImageView i){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);
         rotateTransition.setByAngle(360);
-        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setCycleCount(2);
         rotateTransition.setAutoReverse(false);
         rotateTransition.play();
+        return rotateTransition;
     }
 
 
     public void chooseCircle(ActionEvent actionEvent) {
-        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
-        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
-        player1Object.setImage(circle);
-        player2Object.setImage(cross);
+        player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+
+        player1Object.setImage(player1Image);
+        player2Object.setImage(player2Image);
         startLabel.setVisible(true);
         hboxStart.setVisible(true);
     }
 
     public void chooseCross(ActionEvent actionEvent) {
-        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
-        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
-        player1Object.setImage(cross);
-        player2Object.setImage(circle);
+        player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+        player1Object.setImage(player1Image);
+        player2Object.setImage(player2Image);
         startLabel.setVisible(true);
         hboxStart.setVisible(true);
     }
@@ -175,9 +180,11 @@ public class GameController {
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
             turn = true;
+            whosTurn.setText("Player 1's turn");
         }
         else{
             turn = false;
+            whosTurn.setText("Player 2's turn");
         }
         morpionGrille.setVisible(true);
     }
@@ -187,6 +194,7 @@ public class GameController {
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
         turn = false;
+        whosTurn.setText("Player 2's turn");
         morpionGrille.setVisible(true);
     }
 
@@ -195,6 +203,50 @@ public class GameController {
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
         turn = true;
+        whosTurn.setText("Player 1's turn");
         morpionGrille.setVisible(true);
+    }
+
+    private void showVictory(int player){
+//        System.out.println("yegyge");
+//        Label victory = new Label("Player " + player + " Win !!!!");
+//        victory.setFont(new Font("Arial", 35));
+//        Button restart = new Button("Restart");
+//        restart.setOnAction(e ->System.out.println("restart"));
+//        Button home = new Button("Home");
+//        home.setOnAction(e ->System.out.println("home"));
+//        HBox hbox = new HBox(10, home, restart);
+//        hbox.setAlignment(Pos.CENTER);
+//        VBox vbox = new VBox(10);
+//        vbox.setPadding(new Insets(10));
+//        vbox.getChildren().addAll(victory, hbox);
+//        vbox.setAlignment(Pos.CENTER);
+//        overlayPane.getChildren().add(vbox);
+        blur();
+        morpionGrille.setVisible(false);
+        vBoxVictory.setVisible(true);
+        //overlayPane.toFront();
+        vBoxVictory.setTranslateY(-vBoxVictory.getHeight());
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), vBoxVictory);
+        transition.setToY(0);
+        transition.play();
+//
+//        transition.setOnFinished(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                // Ce code sera exécuté une fois que la transition est terminée
+//                // Vous pouvez effectuer d'autres actions ici si nécessaire
+//                System.out.println("Transition finished");
+//            }
+//        });
+    }
+
+    private void blur(){
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setWidth(5);
+        boxBlur.setHeight(5);
+        vboxLeft.setEffect(boxBlur);
+        vboxRight.setEffect(boxBlur);
+        hboxTop.setEffect(boxBlur);
     }
 }
