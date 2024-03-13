@@ -1,7 +1,6 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
-import com.project.morpion.model.ItemModel;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.Config;
 import com.project.morpion.model.ai.ConfigFileLoader;
@@ -9,19 +8,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 
 public class MainController implements ModelUpdate {
     @FXML
@@ -44,6 +36,7 @@ public class MainController implements ModelUpdate {
     private ToggleGroup difficultyGroup;
     private String selectDifficulty;
     private String letterDifficulty ="F";
+    private String modelName;
 
     @FXML
     private Stage stage;
@@ -64,16 +57,20 @@ public class MainController implements ModelUpdate {
     public void onModelUpdated() {
         Platform.runLater(() -> {
             try {
-                loadPlay1v1View();
+                loadPlay1v1View(modelName);
             } catch (IOException e) {
                 e.printStackTrace(); // Gérer l'exception comme vous le souhaitez
             }
         });
     }
-    private void loadPlay1v1View() throws IOException {
+    private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/play1v1-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);  // Utilisez 'stage' si vous souhaitez réutiliser la fenêtre actuelle
+        stage.setScene(scene);
+        PlaySinglePlayerController controller = fxmlLoader.getController();
+        controller.setModelName(this.modelName);
+        controller.setDifficulty(letterDifficulty);
+        controller.initModel();
         stage.show();
     }
 
@@ -148,14 +145,14 @@ public class MainController implements ModelUpdate {
             }
             ConfigFileLoader cfl = new ConfigFileLoader();
             cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-            System.out.println(letterDifficulty);
             Config config = cfl.get(letterDifficulty);
             File model = new File("src/main/resources/com/project/morpion/ai/models/"+letterDifficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+            this.modelName = model.getName();
             if(!model.exists()){
                 openLearning(event);
             }
             else{
-                loadPlay1v1View();
+                loadPlay1v1View(model.getName());
             }
 
         } else {
