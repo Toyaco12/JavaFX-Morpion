@@ -64,7 +64,7 @@ public class MainController implements ModelUpdate {
         });
     }
     private void loadPlay1v1View(String modelName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/play1v1-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         PlaySinglePlayerController controller = fxmlLoader.getController();
