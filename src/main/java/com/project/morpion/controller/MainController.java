@@ -123,6 +123,14 @@ public class MainController implements ModelUpdate {
             System.out.println("Aucune difficulté sélectionnée.");
         }
     }
+
+    public void startGame(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageGame = new Stage();
+        stageGame.setScene(scene);
+        stageGame.show();
+    }
 /*    private void loadModels(MenuButton menuButton, String path){
         File dir = new File(path);
         File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));

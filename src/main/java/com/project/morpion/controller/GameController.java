@@ -1,13 +1,11 @@
 package com.project.morpion.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
@@ -18,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -44,9 +41,10 @@ public class GameController {
     public VBox vboxRight;
     public HBox hboxTop;
     public VBox vBoxVictory;
+    public Label victoryLabel;
     private Image player1Image;
     private Image player2Image;
-
+    private boolean player1win;
     private int[] placement = new int[9];
     private boolean turn;
 
@@ -81,6 +79,14 @@ public class GameController {
                     int victory = victory();
 
                     if(victory != 0){
+                        player1win = !turn;
+                        currentPlayer.setVisible(false);
+                        for (javafx.scene.Node node : morpionGrille.getChildren()) {
+                            if (node instanceof StackPane stackPane) {
+                                ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
+                                imageView.setOnMouseClicked(null);
+                            }
+                        }
                         int []row = getVictory();
                         RotateTransition rotateTransition = null;
                         for(int a : row){
@@ -153,7 +159,7 @@ public class GameController {
     }
 
 
-    public void chooseCircle(ActionEvent actionEvent) {
+    public void chooseCircle(MouseEvent actionEvent) {
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
         player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
 
@@ -163,7 +169,7 @@ public class GameController {
         hboxStart.setVisible(true);
     }
 
-    public void chooseCross(ActionEvent actionEvent) {
+    public void chooseCross(MouseEvent actionEvent) {
         player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
         player1Object.setImage(player1Image);
@@ -208,45 +214,34 @@ public class GameController {
     }
 
     private void showVictory(int player){
-//        System.out.println("yegyge");
-//        Label victory = new Label("Player " + player + " Win !!!!");
-//        victory.setFont(new Font("Arial", 35));
-//        Button restart = new Button("Restart");
-//        restart.setOnAction(e ->System.out.println("restart"));
-//        Button home = new Button("Home");
-//        home.setOnAction(e ->System.out.println("home"));
-//        HBox hbox = new HBox(10, home, restart);
-//        hbox.setAlignment(Pos.CENTER);
-//        VBox vbox = new VBox(10);
-//        vbox.setPadding(new Insets(10));
-//        vbox.getChildren().addAll(victory, hbox);
-//        vbox.setAlignment(Pos.CENTER);
-//        overlayPane.getChildren().add(vbox);
+        if(player1win){
+            victoryLabel.setText("Player 1 Win");
+        }
+        else{
+            victoryLabel.setText("Player 2 Win");
+        }
         blur();
-        morpionGrille.setVisible(false);
+        fadeOutGridPane();
         vBoxVictory.setVisible(true);
-        //overlayPane.toFront();
-        vBoxVictory.setTranslateY(-vBoxVictory.getHeight());
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), vBoxVictory);
-        transition.setToY(0);
-        transition.play();
-//
-//        transition.setOnFinished(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                // Ce code sera exécuté une fois que la transition est terminée
-//                // Vous pouvez effectuer d'autres actions ici si nécessaire
-//                System.out.println("Transition finished");
-//            }
-//        });
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
+        scaleTransition.setFromX(0.1); // Taille initiale en x
+        scaleTransition.setFromY(0.1); // Taille initiale en y
+        scaleTransition.setToX(1.0);   // Taille finale en x
+        scaleTransition.setToY(1.0);   // Taille finale en y
+        scaleTransition.play();
     }
 
     private void blur(){
-        BoxBlur boxBlur = new BoxBlur();
-        boxBlur.setWidth(5);
-        boxBlur.setHeight(5);
+        BoxBlur boxBlur = new BoxBlur(10, 10, 3);
         vboxLeft.setEffect(boxBlur);
         vboxRight.setEffect(boxBlur);
         hboxTop.setEffect(boxBlur);
+    }
+
+    private void fadeOutGridPane() {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.play();
     }
 }

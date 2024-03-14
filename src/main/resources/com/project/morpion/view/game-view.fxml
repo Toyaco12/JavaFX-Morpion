@@ -15,7 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
+<?import javafx.scene.control.skin.ProgressIndicatorSkin.IndeterminateSpinner.IndicatorPaths?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" style="-fx-background-color: rgb(20,20,20)"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
    <top>
       <HBox fx:id="hboxTop" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -27,12 +29,12 @@
             <Region HBox.hgrow="ALWAYS" />
             <VBox prefHeight="100.0" prefWidth="352.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" text="Partie En Cours" textAlignment="CENTER">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" text="Partie En Cours" textAlignment="CENTER" style="-fx-text-fill: white">
                      <font>
                         <Font size="40.0" />
                      </font>
                   </Label>
-                  <Label fx:id="whosTurn" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="353.0">
+                  <Label fx:id="whosTurn" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="353.0" style="-fx-text-fill: white">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -52,7 +54,7 @@
          <children>
             <VBox alignment="CENTER" prefHeight="725.0" prefWidth="250.0">
                <children>
-                  <Label text="Player 2 :">
+                  <Label text="Player 2 :" style="-fx-text-fill: white">
                      <font>
                         <Font size="28.0" />
                      </font>
@@ -69,7 +71,7 @@
    <center>
       <StackPane fx:id="mainGame" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="currentPlayer" text="Current Player : Player 1" visible="false" StackPane.alignment="TOP_CENTER">
+            <Label fx:id="currentPlayer" text="Current Player : Player 1" visible="false" StackPane.alignment="TOP_CENTER" style="-fx-text-fill: white">
                <font>
                   <Font size="22.0" />
                </font>
@@ -135,7 +137,7 @@
             </GridPane>
             <VBox fx:id="vboxChoice" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="Player 1 choose you're caca">
+                  <Label text="Player 1 choose you're Icon" style="-fx-text-fill: white">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -145,30 +147,24 @@
                   </Label>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="452.0">
                      <children>
-                        <Button fx:id="buttonChoice1" mnemonicParsing="false" onAction="#chooseCross" prefHeight="150.0" prefWidth="200.0">
-                           <graphic>
-                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#chooseCross" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../ai/images/TicTacToe/cross.png" />
                                  </image>
                               </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="buttonChoice2" mnemonicParsing="false" onAction="#chooseCircle" prefHeight="150.0" prefWidth="200.0">
-                           <graphic>
-                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#chooseCircle" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../ai/images/TicTacToe/circle.png" />
                                  </image>
+                                 <HBox.margin>
+                                    <Insets left="30"/>
+                                 </HBox.margin>
                               </ImageView>
-                           </graphic>
-                           <HBox.margin>
-                              <Insets left="30.0" />
-                           </HBox.margin>
-                        </Button>
+
+
                      </children>
                   </HBox>
-                  <Label fx:id="startLabel" text="Who's Starting ?" visible="false">
+                  <Label fx:id="startLabel" text="Who's Starting ?" visible="false" style="-fx-text-fill: white">
                      <VBox.margin>
                         <Insets top="30.0" />
                      </VBox.margin>
@@ -203,9 +199,9 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="vBoxVictory" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false">
+            <VBox fx:id="vBoxVictory" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false" style="-fx-background-color: lightblue">
                <children>
-                  <Label text="Player's 1 Win !!!">
+                  <Label fx:id="victoryLabel" style="-fx-text-fill: white">
                      <font>
                         <Font size="45.0" />
                      </font>
@@ -231,7 +227,7 @@
    <left>
       <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="700.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Player 1 :">
+            <Label text="Player 1 :" style="-fx-text-fill: white">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
