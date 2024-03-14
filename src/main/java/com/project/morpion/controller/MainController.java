@@ -1,26 +1,19 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
-import com.project.morpion.model.ItemModel;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.Config;
 import com.project.morpion.model.ai.ConfigFileLoader;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 
 public class MainController implements ModelUpdate {
     @FXML
@@ -31,12 +24,20 @@ public class MainController implements ModelUpdate {
     public VBox playGame;
     @FXML
     public VBox chooseDifficulty;
-
-    @FXML
-    public MenuButton difficultyMenu;
     @FXML
     public Button submitBtn;
+    @FXML
+    private RadioButton easyRadioButton;
+    @FXML
+    private RadioButton mediumRadioButton;
+    @FXML
+    private RadioButton hardRadioButton;
+    @FXML
+    private ToggleGroup difficultyGroup;
     private String selectDifficulty;
+    private String letterDifficulty ="F";
+    private String modelName;
+
     @FXML
     private Stage stage;
     public void setStage(Stage stage) {
@@ -47,10 +48,32 @@ public class MainController implements ModelUpdate {
     public void initialize() {
         playGame.setVisible(true);
         playGame.setManaged(true);
+        difficultyGroup = new ToggleGroup();
+        easyRadioButton.setToggleGroup(difficultyGroup);
+        mediumRadioButton.setToggleGroup(difficultyGroup);
+        hardRadioButton.setToggleGroup(difficultyGroup);
     }
     @Override
     public void onModelUpdated() {
+        Platform.runLater(() -> {
+            try {
+                loadPlay1v1View(modelName);
+            } catch (IOException e) {
+                e.printStackTrace(); // Gérer l'exception comme vous le souhaitez
+            }
+        });
     }
+    private void loadPlay1v1View(String modelName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        PlaySinglePlayerController controller = fxmlLoader.getController();
+        controller.setModelName(this.modelName);
+        controller.setDifficulty(letterDifficulty);
+        controller.initModel();
+        stage.show();
+    }
+
 
     public void openSettings(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/setting-view.fxml"));
@@ -63,15 +86,12 @@ public class MainController implements ModelUpdate {
     }
 
     public void openLearning(ActionEvent actionEvent) throws IOException {
-        MenuItem menuItem = (MenuItem) actionEvent.getSource();
-        String difficulty = menuItem.getId();
-
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageLearn = new Stage();
         stageLearn.setScene(scene);
         LearnController controller = fxmlLoader.getController();
-        controller.setDifficulty(difficulty);
+        controller.setDifficulty(letterDifficulty);
         controller.setUpdateListener(this);
         stageLearn.show();
     }
@@ -104,21 +124,37 @@ public class MainController implements ModelUpdate {
 
     @FXML
     public void selectDifficulty(ActionEvent actionEvent) {
-        MenuItem selected = (MenuItem) actionEvent.getSource();
-        selectDifficulty = selected.getText();
-        difficultyMenu.setText("Difficulté: " + selectDifficulty);
+        RadioButton selectedRadioButton = (RadioButton) actionEvent.getSource();
+        selectDifficulty = selectedRadioButton.getText();
     }
+
     @FXML
-    private void handleSubmit(ActionEvent event) {
-        if (selectDifficulty != null) {
+    private void handleSubmit(ActionEvent event) throws IOException {
+        if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
             switch (selectDifficulty){
-                case "easy":
+                case "Easy":
+                    letterDifficulty = "F";
+                    break;
+                case "Medium":
+                    letterDifficulty = "M";
+                    break;
+                case "Hard":
+                    letterDifficulty ="D";
                     break;
             }
             ConfigFileLoader cfl = new ConfigFileLoader();
             cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-           // Config config = cfl.get(difficulty);
+            Config config = cfl.get(letterDifficulty);
+            File model = new File("src/main/resources/com/project/morpion/ai/models/"+letterDifficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+            this.modelName = model.getName();
+            if(!model.exists()){
+                openLearning(event);
+            }
+            else{
+                loadPlay1v1View(model.getName());
+            }
+
         } else {
             System.out.println("Aucune difficulté sélectionnée.");
         }
