@@ -1,11 +1,15 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
 import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
@@ -18,6 +22,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameController {
@@ -42,6 +48,8 @@ public class GameController {
     public HBox hboxTop;
     public VBox vBoxVictory;
     public Label victoryLabel;
+    public Button homeButton;
+    public Button restartButton;
     private Image player1Image;
     private Image player2Image;
     private boolean player1win;
@@ -101,7 +109,13 @@ public class GameController {
         });
     }
 
+    @FXML
     public void returnHome(ActionEvent actionEvent) {
+        try{
+            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
+            Scene scene = homeButton.getScene();
+            scene.setRoot(mainView);
+        }catch (IOException ignored){};
     }
 
     public int victory(){
@@ -243,5 +257,14 @@ public class GameController {
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
         fadeTransition.play();
+    }
+
+    @FXML
+    public void restartGame(ActionEvent actionEvent) {
+        try{
+            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/game-view.fxml")));
+            Scene scene = homeButton.getScene();
+            scene.setRoot(mainView);
+        }catch (IOException ignored){};
     }
 }

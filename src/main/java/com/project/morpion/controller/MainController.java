@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -65,13 +67,17 @@ public class MainController implements ModelUpdate {
     }
     private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
+        Parent root = fxmlLoader.load();
         PlaySinglePlayerController controller = fxmlLoader.getController();
         controller.setModelName(this.modelName);
         controller.setDifficulty(letterDifficulty);
         controller.initModel();
-        stage.show();
+
+        Scene scene = new Scene(root);
+        Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+        s.setScene(scene);
+
+        s.show();
     }
 
 
@@ -163,7 +169,7 @@ public class MainController implements ModelUpdate {
     public void startGame(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        Stage stageGame = new Stage();
+        Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();
     }

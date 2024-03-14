@@ -21,7 +21,7 @@
    <top>
       <HBox fx:id="hboxTop" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#returnHome" prefHeight="48.0" prefWidth="93.0" text="Home">
+            <Button fx:id="homeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#returnHome" prefHeight="48.0" prefWidth="93.0" text="Home">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
@@ -29,7 +29,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <VBox prefHeight="100.0" prefWidth="352.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" text="Partie En Cours" textAlignment="CENTER" style="-fx-text-fill: white">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" text="Partie En Cours" textAlignment="CENTER" style="-fx-text-fill: white; -fx-font-weight: bold">
                      <font>
                         <Font size="40.0" />
                      </font>
@@ -42,7 +42,7 @@
                </children>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="46.0" mnemonicParsing="false" onAction="#returnHome" prefHeight="48.0" prefWidth="93.0" text="Home">
+            <Button fx:id="restartButton" alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="46.0" mnemonicParsing="false" onAction="#restartGame" prefHeight="48.0" prefWidth="93.0" text="Restart">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin></Button>
