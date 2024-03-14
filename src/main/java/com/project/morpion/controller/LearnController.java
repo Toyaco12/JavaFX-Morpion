@@ -81,7 +81,7 @@ public class LearnController {
     }
 
     @FXML
-    private void processStart() {
+    public void processStart() {
         startbutton.setVisible(false);
         startbutton.setManaged(false);
 
@@ -178,6 +178,8 @@ public class LearnController {
             completionField.setVisible(true);
             completionField.setManaged(true);
             completionField.setText("Learning completed");
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
         });
         learningTask.setOnCancelled(event -> {
             closeButton.setVisible(true);

@@ -98,6 +98,7 @@ public class MainController implements ModelUpdate {
         stageLearn.setScene(scene);
         LearnController controller = fxmlLoader.getController();
         controller.setDifficulty(letterDifficulty);
+        controller.processStart();
         controller.setUpdateListener(this);
         stageLearn.show();
     }
