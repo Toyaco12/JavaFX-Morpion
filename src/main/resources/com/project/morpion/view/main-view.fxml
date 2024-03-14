@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="game" mnemonicParsing="false" onAction="#startGame" text="Start" />
               <MenuItem mnemonicParsing="false" text="Close" />
                   <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
                   <MenuItem mnemonicParsing="false" onAction="#openModels" text="Models" />
@@ -46,12 +38,12 @@
          <children>
             <VBox fx:id="chooseGameMode" layoutX="316.0" layoutY="14.0" managed="false" prefHeight="392.0" prefWidth="569.0" visible="false">
                <children>
-                  <Label fx:id="tittle" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="570.0" text="Lancement d'une partie" textAlignment="CENTER">
+                  <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="570.0" text="Lancement d'une partie" textAlignment="CENTER" style="-fx-text-fill: white">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <Label fx:id="chooseMode" alignment="TOP_CENTER" prefHeight="113.0" prefWidth="569.0" text="Choisissez un mode de jeu">
+                  <Label fx:id="chooseMode" alignment="TOP_CENTER" prefHeight="113.0" prefWidth="569.0" text="Choisissez un mode de jeu" style="-fx-text-fill: white">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -63,7 +55,7 @@
                               <Font size="20.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn1vs1" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1">
+                        <Button fx:id="btn1vs1" onAction="#startGame" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -74,7 +66,7 @@
             </VBox>
             <VBox fx:id="playGame" alignment="TOP_CENTER" layoutX="396.0" managed="false" prefHeight="436.0" prefWidth="351.0" visible="false">
                <children>
-                  <Label alignment="CENTER" prefHeight="266.0" prefWidth="350.0" text="Morpion">
+                  <Label alignment="CENTER" prefHeight="266.0" prefWidth="350.0" text="Morpion" style="-fx-text-fill: white; -fx-font-weight: bold">
                      <VBox.margin>
                         <Insets top="50.0" />
                      </VBox.margin>
@@ -89,36 +81,29 @@
                   </Button>
                </children>
             </VBox>
-            <VBox fx:id="chooseDifficulty" alignment="TOP_CENTER" layoutY="1.0" managed="false" prefHeight="773.0" prefWidth="1200.0" visible="false">
-               <children>
-                  <Label alignment="CENTER" prefHeight="250.0" prefWidth="409.0" text="Choose a difficulty">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER" spacing="80.0">
-                     <children>
-                        <MenuButton fx:id="easyMenu" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Easy">
-                           <items>
-                              <MenuItem fx:id="F" mnemonicParsing="false" onAction="#openLearning" text="train" />
-                           </items>
-                        </MenuButton>
-                        <MenuButton fx:id="mediumMenu" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Medium">
-                           <items>
-                              <MenuItem fx:id="M" mnemonicParsing="false" onAction="#openLearning" text="train" />
-                           </items>
-                        </MenuButton>
-                        <MenuButton fx:id="hardMenu" layoutX="109.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="164.0" text="Hard">
-                           <items>
-                              <MenuItem fx:id="D" mnemonicParsing="false" onAction="#openLearning" text="train" />
-                           </items>
-                        </MenuButton>
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="50.0" />
-               </padding></VBox>
+             <VBox fx:id="chooseDifficulty" alignment="TOP_CENTER" layoutY="1.0" managed="false" prefHeight="773.0" prefWidth="1200.0" visible="false">
+                 <children>
+                     <Label alignment="CENTER" prefHeight="250.0" prefWidth="409.0" text="Choose a difficulty" style="-fx-text-fill: white">
+                         <font>
+                             <Font size="18.0" />
+                         </font>
+                     </Label>
+                     <HBox alignment="CENTER" spacing="80.0">
+                         <children>
+                             <RadioButton fx:id="easyRadioButton" onAction="#selectDifficulty" prefWidth="64.0" text="Easy" style="-fx-text-fill: white"/>
+                             <RadioButton fx:id="mediumRadioButton" onAction="#selectDifficulty" text="Medium" style="-fx-text-fill: white"/>
+                             <RadioButton fx:id="hardRadioButton" onAction="#selectDifficulty" text="Hard" style="-fx-text-fill: white"/>
+                         </children>
+                     </HBox>
+                     <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="43.0" prefWidth="85.0" text="Start">
+                     <VBox.margin>
+                        <Insets top="60.0" />
+                     </VBox.margin></Button>
+                 </children>
+                 <padding>
+                     <Insets bottom="50.0" />
+                 </padding>
+             </VBox>
          </children>
       </Pane>
    </center>

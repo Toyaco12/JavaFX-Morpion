@@ -1,11 +1,18 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
+import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -15,6 +22,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameController {
@@ -31,7 +40,19 @@ public class GameController {
     public Button startRandom;
     public HBox hboxStart;
     public Label startLabel;
-
+    public Label whosTurn;
+    public StackPane overlayPane;
+    public StackPane mainGame;
+    public VBox vboxLeft;
+    public VBox vboxRight;
+    public HBox hboxTop;
+    public VBox vBoxVictory;
+    public Label victoryLabel;
+    public Button homeButton;
+    public Button restartButton;
+    private Image player1Image;
+    private Image player2Image;
+    private boolean player1win;
     private int[] placement = new int[9];
     private boolean turn;
 
@@ -54,45 +75,47 @@ public class GameController {
                     placement[position] = turn ? 1 : -1;
                     Image i;
                     if(turn){
-                        currentPlayer.setText("Current Player : Player 1");
-                        currentPlayer.setVisible(true);
-                        i = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+                        whosTurn.setText("Player 2's Turn");
+                        imageView.setImage(player1Image);
                     }
                     else{
-                        currentPlayer.setText("Current Player : Player 2");
-                        currentPlayer.setVisible(true);
-                        i = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+                        whosTurn.setText("Player 1's Turn");
+                        imageView.setImage(player2Image);
                     }
-                    imageView.setImage(i);
                     imageView.setOnMouseClicked(null);
                     turn = !turn;
                     int victory = victory();
+
                     if(victory != 0){
-                        int []row = getVictory();
-                        for (int b : row){
-                            System.out.println(b);
+                        player1win = !turn;
+                        currentPlayer.setVisible(false);
+                        for (javafx.scene.Node node : morpionGrille.getChildren()) {
+                            if (node instanceof StackPane stackPane) {
+                                ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
+                                imageView.setOnMouseClicked(null);
+                            }
                         }
+                        int []row = getVictory();
+                        RotateTransition rotateTransition = null;
                         for(int a : row){
                             StackPane s = (StackPane) morpionGrille.getChildren().get(a);
                             ImageView imageView = (ImageView) s.getChildren().getFirst();
-                            rotateImage(imageView);
+                            rotateTransition = rotateImage(imageView);
                         }
-                        if(victory == 1)
-                            currentPlayer.setText("The Winner Is Player 1 !!!");
-                        else currentPlayer.setText("The Winner Is Player 2 !!!");
-                    }
-                    else{
-                        System.out.println("*************************************");
-                        for (int k : placement) {
-                            System.out.println(k);
-                        }
+                        rotateTransition.setOnFinished(e -> showVictory(victory));
                     }
                 }
             });
         });
     }
 
+    @FXML
     public void returnHome(ActionEvent actionEvent) {
+        try{
+            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
+            Scene scene = homeButton.getScene();
+            scene.setRoot(mainView);
+        }catch (IOException ignored){};
     }
 
     public int victory(){
@@ -140,29 +163,31 @@ public class GameController {
         return rowVictory;
     }
 
-    private void rotateImage(ImageView i){
+    private RotateTransition rotateImage(ImageView i){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);
         rotateTransition.setByAngle(360);
-        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setCycleCount(2);
         rotateTransition.setAutoReverse(false);
         rotateTransition.play();
+        return rotateTransition;
     }
 
 
-    public void chooseCircle(ActionEvent actionEvent) {
-        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
-        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
-        player1Object.setImage(circle);
-        player2Object.setImage(cross);
+    public void chooseCircle(MouseEvent actionEvent) {
+        player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+
+        player1Object.setImage(player1Image);
+        player2Object.setImage(player2Image);
         startLabel.setVisible(true);
         hboxStart.setVisible(true);
     }
 
-    public void chooseCross(ActionEvent actionEvent) {
-        Image cross = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
-        Image circle = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
-        player1Object.setImage(cross);
-        player2Object.setImage(circle);
+    public void chooseCross(MouseEvent actionEvent) {
+        player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
+        player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
+        player1Object.setImage(player1Image);
+        player2Object.setImage(player2Image);
         startLabel.setVisible(true);
         hboxStart.setVisible(true);
     }
@@ -175,9 +200,11 @@ public class GameController {
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
             turn = true;
+            whosTurn.setText("Player 1's turn");
         }
         else{
             turn = false;
+            whosTurn.setText("Player 2's turn");
         }
         morpionGrille.setVisible(true);
     }
@@ -187,6 +214,7 @@ public class GameController {
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
         turn = false;
+        whosTurn.setText("Player 2's turn");
         morpionGrille.setVisible(true);
     }
 
@@ -195,6 +223,48 @@ public class GameController {
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
         turn = true;
+        whosTurn.setText("Player 1's turn");
         morpionGrille.setVisible(true);
+    }
+
+    private void showVictory(int player){
+        if(player1win){
+            victoryLabel.setText("Player 1 Win");
+        }
+        else{
+            victoryLabel.setText("Player 2 Win");
+        }
+        blur();
+        fadeOutGridPane();
+        vBoxVictory.setVisible(true);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
+        scaleTransition.setFromX(0.1); // Taille initiale en x
+        scaleTransition.setFromY(0.1); // Taille initiale en y
+        scaleTransition.setToX(1.0);   // Taille finale en x
+        scaleTransition.setToY(1.0);   // Taille finale en y
+        scaleTransition.play();
+    }
+
+    private void blur(){
+        BoxBlur boxBlur = new BoxBlur(10, 10, 3);
+        vboxLeft.setEffect(boxBlur);
+        vboxRight.setEffect(boxBlur);
+        hboxTop.setEffect(boxBlur);
+    }
+
+    private void fadeOutGridPane() {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.play();
+    }
+
+    @FXML
+    public void restartGame(ActionEvent actionEvent) {
+        try{
+            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/game-view.fxml")));
+            Scene scene = homeButton.getScene();
+            scene.setRoot(mainView);
+        }catch (IOException ignored){};
     }
 }
