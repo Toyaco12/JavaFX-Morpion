@@ -5,169 +5,114 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
-                  <MenuItem mnemonicParsing="false" onAction="#openModels" text="Models" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <bottom>
-      <VBox>
-          <Button fx:id="homeButton" onAction="#back">
-              <graphic>
-                  <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" >
-                      <Image url="@../image/home.png" />
-                  </ImageView>
-              </graphic>
-
-              <VBox.margin>
-                  <Insets bottom="80" left="80"/>
-              </VBox.margin>
-          </Button>
-      </VBox>
-   </bottom>
-   <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox fx:id="chooseGameMode" layoutX="316.0" layoutY="14.0" managed="false" prefHeight="392.0" prefWidth="569.0" visible="false">
-               <children>
-                  <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="570.0" style="-fx-text-fill: white; " text="Lancement d'une partie" textAlignment="CENTER">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="chooseMode" alignment="TOP_CENTER" prefHeight="113.0" prefWidth="569.0" style="-fx-text-fill: white" text="Choisissez un mode de jeu">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <HBox fx:id="hboxMode" alignment="TOP_CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
-                     <children>
-                         <VBox spacing="10">
-                             <children>
-                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer">
-                                     <font>
-                                         <Font size="20.0" />
-                                     </font>
-                                     <RadioButton fx:id="easyRadioButon" onAction="#selectDifficulty" prefWidth="64.0" text="Easy" style="-fx-text-fill: white"/>
-                                     <RadioButton fx:id="mediumRadioButon" onAction="#selectDifficulty" text="Medium" style="-fx-text-fill: white"/>
-                                     <RadioButton fx:id="hardRadioButon" onAction="#selectDifficulty" text="Hard" style="-fx-text-fill: white"/>
-                                 </Button>
-
-                             </children>
-                         </VBox>
-
-                        <Button fx:id="btn1vs1" onAction="#startGame" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1">
-                        <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer" style=" -fx-background-color: #69B9FF">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Settings" />
+                        <MenuItem mnemonicParsing="false" onAction="#openModels" text="Models" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <bottom>
+        <Pane BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox fx:id="chooseGameMode" layoutX="316.0" layoutY="14.0" managed="false" prefHeight="392.0" prefWidth="569.0" visible="false">
+                    <children>
+                        <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="570.0" style="-fx-text-fill: white; " text="Lancement d'une partie" textAlignment="CENTER">
+                            <font>
+                                <Font size="30.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="chooseMode" alignment="TOP_CENTER" prefHeight="113.0" prefWidth="569.0" style="-fx-text-fill: white" text="Choisissez un mode de jeu">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox fx:id="hboxMode" alignment="CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
+                            <children>
+                                <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer" style=" -fx-background-color: #69B9FF">
+                                    <font>
+                                        <Font size="20.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="btn1vs1" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="164.0" text="1vs1" style=" -fx-background-color: #FF6962">
+                                    <font>
+                                        <Font size="20.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox fx:id="playGame" alignment="TOP_CENTER" layoutX="396.0" managed="false" prefHeight="436.0" prefWidth="351.0" visible="false">
+                    <children>
+                        <Label alignment="CENTER" prefHeight="266.0" prefWidth="350.0" style="-fx-text-fill: white; -fx-font-weight: bold" text="Morpion">
+                            <VBox.margin>
+                                <Insets top="50.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="play" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play" style=" -fx-background-color: #FDFD96">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
                         </Button>
-                        <Button fx:id="btn1vs1" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="164.0" text="1vs1" style=" -fx-background-color: #FF6962">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="playGame" alignment="TOP_CENTER" layoutX="396.0" managed="false" prefHeight="436.0" prefWidth="351.0" visible="false">
-               <children>
-                  <Label alignment="CENTER" prefHeight="266.0" prefWidth="350.0" style="-fx-text-fill: white; -fx-font-weight: bold" text="Morpion">
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                   <Button fx:id="play" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play" style=" -fx-background-color: #FDFD96">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                   <Button fx:id="setting" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Settings">
-                       <font>
-                           <Font size="20.0" />
-                       </font>
-                       <VBox.margin>
-                           <Insets top="40.0" />
-                       </VBox.margin>
-                   </Button>
-                   <Button fx:id="exit" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Exit">
-                       <font>
-                           <Font size="20.0" />
-                       </font>
-                       <VBox.margin>
-                           <Insets top="40.0" />
-                       </VBox.margin>
-                   </Button>
-               </children>
-            </VBox>
-             <VBox fx:id="chooseDifficulty" alignment="TOP_CENTER" layoutY="1.0" managed="false" prefHeight="773.0" prefWidth="1200.0" visible="false">
-                 <children>
-                     <Label alignment="CENTER" prefHeight="250.0" prefWidth="409.0" style="-fx-text-fill: white" text="Choose a difficulty">
-                         <font>
-                             <Font size="18.0" />
-                         </font>
-                     </Label>
-                     <HBox alignment="CENTER" spacing="80.0">
-                         <children>
-                             <RadioButton fx:id="easyRadioButton" onAction="#selectDifficulty" prefWidth="64.0" style="-fx-text-fill: white" text="Easy" />
-                             <RadioButton fx:id="mediumRadioButton" onAction="#selectDifficulty" style="-fx-text-fill: white" text="Medium" />
-                             <RadioButton fx:id="hardRadioButton" onAction="#selectDifficulty" style="-fx-text-fill: white" text="Hard" />
-                         </children>
-                     </HBox>
-                     <Label fx:id="errorLabel" alignment="CENTER" text="Please Choose a Difficulty" style="-fx-text-fill: red" visible="false">
-                         <font>
-                             <Font size="18.0" />
-                         </font>
-                         <VBox.margin>
-                             <Insets top="20"/>
-                         </VBox.margin>
-                     </Label>
-                  <Label fx:id="timerMessage" layoutX="606.0" layoutY="328.0" managed="false" text="Game is starting in :" textFill="WHITE" visible="false">
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin></Label>
-                  <Label fx:id="timer" managed="false" text="3" textFill="WHITE" visible="false">
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </Label>
-                     <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="43.0" prefWidth="85.0" text="Start">
-                     <VBox.margin>
-                        <Insets top="60.0" />
-                     </VBox.margin></Button>
-                 </children>
-                 <padding>
-                     <Insets bottom="50.0" />
-                 </padding>
-             </VBox>
-         </children>
-      </Pane>
-   </center>
+                    </children>
+                </VBox>
+                <VBox fx:id="chooseDifficulty" alignment="TOP_CENTER" layoutY="1.0" managed="false" prefHeight="773.0" prefWidth="1200.0" visible="false">
+                    <children>
+                        <Label alignment="CENTER" prefHeight="250.0" prefWidth="409.0" style="-fx-text-fill: white" text="Choose a difficulty">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="80.0">
+                            <children>
+                                <RadioButton fx:id="easyRadioButton" onAction="#selectDifficulty" prefWidth="64.0" style="-fx-text-fill: white" text="Easy" />
+                                <RadioButton fx:id="mediumRadioButton" onAction="#selectDifficulty" style="-fx-text-fill: white" text="Medium" />
+                                <RadioButton fx:id="hardRadioButton" onAction="#selectDifficulty" style="-fx-text-fill: white" text="Hard" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="timerMessage" layoutX="606.0" layoutY="328.0" managed="false" text="Game is starting in :" textFill="WHITE" visible="false">
+                            <VBox.margin>
+                                <Insets top="50.0" />
+                            </VBox.margin></Label>
+                        <Label fx:id="timer" managed="false" text="3" textFill="WHITE" visible="false">
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="43.0" prefWidth="85.0" text="Start">
+                            <VBox.margin>
+                                <Insets top="60.0" />
+                            </VBox.margin></Button>
+                    </children>
+                    <padding>
+                        <Insets bottom="50.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </Pane>
+    </center>
 </BorderPane>

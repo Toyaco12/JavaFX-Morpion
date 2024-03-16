@@ -32,8 +32,6 @@ public class MainController implements ModelUpdate {
     public VBox chooseDifficulty;
     @FXML
     public Button submitBtn;
-    public Label errorLabel;
-    public Button homeButton;
     @FXML
     public Label timer;
     @FXML
@@ -156,31 +154,6 @@ public class MainController implements ModelUpdate {
 
         chooseDifficulty.setManaged(true);
         chooseDifficulty.setVisible(true);
-        try {
-            FileReader settingFile = new FileReader("src/main/resources/com/project/morpion/ai/config.txt");
-            BufferedReader reader = new BufferedReader(settingFile);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.charAt(0) == 'Z') {
-                    String d = line.substring(line.lastIndexOf(":") + 1);
-                    if(d.matches("E")){
-                        easyRadioButton.setSelected(true);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else if(d.matches("M")){
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(true);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else{
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(true);
-                    }
-                }
-            }
-        }catch(IOException ignored){}
     }
 
     @FXML
@@ -192,7 +165,6 @@ public class MainController implements ModelUpdate {
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
         if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
-            errorLabel.setVisible(false);
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
             switch (selectDifficulty){
                 case "Easy":
@@ -218,7 +190,6 @@ public class MainController implements ModelUpdate {
             }
 
         } else {
-            errorLabel.setVisible(true);
             System.out.println("Aucune difficulté sélectionnée.");
         }
     }
@@ -229,17 +200,6 @@ public class MainController implements ModelUpdate {
         Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();
-    }
-
-    public void back(ActionEvent actionEvent) {
-        if(chooseDifficulty.isVisible()){
-            chooseDifficulty.setVisible(false);
-            chooseGameMode.setVisible(true);
-        }
-        else if(chooseGameMode.isVisible()){
-            chooseGameMode.setVisible(false);
-            playGame.setVisible(true);
-        }
     }
 /*    private void loadModels(MenuButton menuButton, String path){
         File dir = new File(path);
