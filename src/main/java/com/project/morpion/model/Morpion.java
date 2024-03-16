@@ -2,21 +2,23 @@ package com.project.morpion.model;
 
 import com.project.morpion.model.ai.Config;
 import com.project.morpion.model.ai.ConfigFileLoader;
+import com.project.morpion.model.ai.Coup;
 import com.project.morpion.model.ai.MultiLayerPerceptron;
 
 public class Morpion {
     private MultiLayerPerceptron model;
-    private int[] board;
+    private Coup board;
     private boolean isGameStarted = false;
 
     public Morpion(){
+        board = new Coup(9,"Morpion");
         this.model = null;
-        this.board = new int[9];
+
     }
     public Morpion(MultiLayerPerceptron model){
-
+        board = new Coup(9,"Morpion");
         this.model = model;
-        this.board = new int[9];
+
     }
 
     public boolean startGame(){
