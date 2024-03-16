@@ -17,11 +17,20 @@ public class SettingViewController {
     public Button saveButton;
     public Button closeButton;
     public Label errorLabel;
+    public RadioButton easyRadioButton;
+    public RadioButton mediumRadioButton;
+    public RadioButton hardRadioButton;
     private boolean save = false;
+    private ToggleGroup difficulty;
 
 
     @FXML
     public void initialize() {
+        difficulty = new ToggleGroup();
+        easyRadioButton.setToggleGroup(difficulty);
+        mediumRadioButton.setToggleGroup(difficulty);
+        hardRadioButton.setToggleGroup(difficulty);
+        easyRadioButton.setSelected(true);
         String[][] settings = getSettings();
 
         for (int i = 0; i < 3; i++) {
@@ -84,7 +93,13 @@ public class SettingViewController {
                 TextField tmp = (TextField) n;
                 int rowIndex = GridPane.getRowIndex(tmp);
                 int colIndex = GridPane.getColumnIndex(tmp);
-                if(Double.parseDouble(tmp.getText()) > 150){
+                if(tmp.getText().isEmpty()){
+                    errorLabel.setVisible(true);
+                    errorLabel.setText("Champs Vides");
+                    tmp.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+                    error = true;
+                }
+                else if(Double.parseDouble(tmp.getText()) > 150){
                     errorLabel.setVisible(true);
                     errorLabel.setText("Maximum : 150");
                     tmp.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
@@ -101,9 +116,11 @@ public class SettingViewController {
                 }
             }
         }
+        RadioButton tmp = (RadioButton) difficulty.getSelectedToggle();
+        String diff = (String) tmp.getUserData();
         if(!error){
             errorLabel.setVisible(false);
-            setSettings(set);
+            setSettings(set, diff);
             save = true;
         }
 
@@ -151,8 +168,28 @@ public class SettingViewController {
             String[][] setting = new String[4][4];
             int i =0;
             while ((line = reader.readLine()) != null) {
-                setting[i] = line.split(":");
-                i++;
+                if(line.charAt(0) != 'Z'){
+                    setting[i] = line.split(":");
+                    i++;
+                }
+                else{
+                    String d = line.substring(line.lastIndexOf(":") + 1);
+                    if(d.matches("E")){
+                        easyRadioButton.setSelected(true);
+                        mediumRadioButton.setSelected(false);
+                        hardRadioButton.setSelected(false);
+                    }
+                    else if(d.matches("M")){
+                        easyRadioButton.setSelected(false);
+                        mediumRadioButton.setSelected(true);
+                        hardRadioButton.setSelected(false);
+                    }
+                    else{
+                        easyRadioButton.setSelected(false);
+                        mediumRadioButton.setSelected(false);
+                        hardRadioButton.setSelected(true);
+                    }
+                }
             }
             return setting;
         } catch (IOException ignored) {
@@ -161,12 +198,16 @@ public class SettingViewController {
         return null;
     }
 
-    public void setSettings(String[] settings){
+    public void setSettings(String[] settings, String diff){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/com/project/morpion/ai/config.txt"))) {
             for(int i =0; i < 3 ; i++){
                 writer.write(settings[i]);
                 writer.newLine();
             }
+            writer.write("Z:"+diff);
         } catch (IOException ignored) { }
+    }
+
+    public void selectDifficulty(ActionEvent actionEvent) {
     }
 }

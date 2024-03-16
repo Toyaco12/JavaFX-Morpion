@@ -14,44 +14,6 @@ import java.util.HashMap;
 public class Test {
 
 	public static void main(String[] args) {
-		try {
-			//
-			// LOAD DATA ...
-			//
-			HashMap<Integer, Coup> coups = loadGames("src/main/resources/com/project/morpion/ai/dataset/Tic_tac_initial_results.csv");
-			saveGames(coups, "src/main/resources/com/project/morpion/ai/train_dev_test/", 0.7);
-			//
-			// LOAD CONFIG ...
-			//
-			ConfigFileLoader cfl = new ConfigFileLoader();
-			cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-			Config config = cfl.get("F");
-			System.out.println("Test.main() : "+config);
-			//
-			//TRAIN THE MODEL ...
-			//
-			double epochs = 10000 ;
-			HashMap<Integer, Coup> mapTrain = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/train.txt");
-			MultiLayerPerceptron net = learn(9, mapTrain, config.hiddenLayerSize, config.learningRate, config.numberOfhiddenLayers, true, epochs);
-			//
-			//PLAY ...
-			//
-			HashMap<Integer, Coup> mapDev = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/dev.txt");
-			Coup c = mapTrain.get((int)(Math.round(Math.random() * mapDev.size())));
-			double[] res = play(net, c);
-
-			System.out.println("Dev predicted: "+Arrays.toString(res) + " -> true: "+ Arrays.toString(c.out));
-			//
-			HashMap<Integer, Coup> mapTest = loadCoupsFromFile("src/main/resources/com/project/morpion/ai/train_dev_test/test.txt");
-			c = mapTrain.get((int)(Math.round(Math.random() * mapTest.size())));
-			res = play(net, c);
-			System.out.println("Test predicted: "+Arrays.toString(res) + " -> true: "+ Arrays.toString(c.out));
-		}
-		catch (Exception e) {
-			System.out.println("Test.main()");
-			e.printStackTrace();
-			System.exit(-1);
-		}
 
 	}
 
