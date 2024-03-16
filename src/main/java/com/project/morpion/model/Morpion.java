@@ -6,21 +6,16 @@ import com.project.morpion.model.ai.MultiLayerPerceptron;
 
 public class Morpion {
     private MultiLayerPerceptron model;
-    private String difficulty;
     private int[] board;
     private boolean isGameStarted = false;
 
     public Morpion(){
         this.model = null;
-        this.difficulty = null;
         this.board = new int[9];
     }
-    public Morpion(String difficulty){
-        ConfigFileLoader cfl = new ConfigFileLoader();
-        cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-        Config config = cfl.get(difficulty);
-        this.model = MultiLayerPerceptron.loadModel(difficulty,"model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
-        this.difficulty = difficulty;
+    public Morpion(MultiLayerPerceptron model){
+
+        this.model = model;
         this.board = new int[9];
     }
 

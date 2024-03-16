@@ -4,6 +4,9 @@ import com.project.morpion.App;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.Config;
 import com.project.morpion.model.ai.ConfigFileLoader;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.*;
 
@@ -28,8 +32,10 @@ public class MainController implements ModelUpdate {
     public VBox chooseDifficulty;
     @FXML
     public Button submitBtn;
-    public Label errorLabel;
-    public Button homeButton;
+    @FXML
+    public Label timer;
+    @FXML
+    public Label timerMessage;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -41,6 +47,7 @@ public class MainController implements ModelUpdate {
     private String selectDifficulty;
     private String letterDifficulty ="F";
     private String modelName;
+    int seconds = 3;
 
     @FXML
     private Stage stage;
@@ -68,18 +75,36 @@ public class MainController implements ModelUpdate {
         });
     }
     private void loadPlay1v1View(String modelName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
-        Parent root = fxmlLoader.load();
-        PlaySinglePlayerController controller = fxmlLoader.getController();
-        controller.setModelName(this.modelName);
-        controller.setDifficulty(letterDifficulty);
-        controller.initModel();
+        timer.setVisible(true);
+        timer.setManaged(true);
+        timerMessage.setVisible(true);
+        timerMessage.setManaged(true);
+        timer.setText(String.valueOf(seconds));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            seconds--;
+            timer.setText(String.valueOf(seconds));
+            if (seconds == 0) {
+                FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
+                Parent root = null;
+                try {
+                    root = fxmlLoader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                PlaySinglePlayerController controller = fxmlLoader.getController();
+                controller.setModelName(this.modelName);
+                controller.setDifficulty(letterDifficulty);
+                controller.initModel();
 
-        Scene scene = new Scene(root);
-        Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
-        s.setScene(scene);
+                Scene scene = new Scene(root);
+                Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+                s.setScene(scene);
 
-        s.show();
+                s.show();
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
 
@@ -100,6 +125,7 @@ public class MainController implements ModelUpdate {
         stageLearn.setScene(scene);
         LearnController controller = fxmlLoader.getController();
         controller.setDifficulty(letterDifficulty);
+        controller.processStart();
         controller.setUpdateListener(this);
         stageLearn.show();
     }
@@ -128,31 +154,6 @@ public class MainController implements ModelUpdate {
 
         chooseDifficulty.setManaged(true);
         chooseDifficulty.setVisible(true);
-        try {
-            FileReader settingFile = new FileReader("src/main/resources/com/project/morpion/ai/config.txt");
-            BufferedReader reader = new BufferedReader(settingFile);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.charAt(0) == 'Z') {
-                    String d = line.substring(line.lastIndexOf(":") + 1);
-                    if(d.matches("E")){
-                        easyRadioButton.setSelected(true);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else if(d.matches("M")){
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(true);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else{
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(true);
-                    }
-                }
-            }
-        }catch(IOException ignored){}
     }
 
     @FXML
@@ -164,7 +165,6 @@ public class MainController implements ModelUpdate {
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
         if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
-            errorLabel.setVisible(false);
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
             switch (selectDifficulty){
                 case "Easy":
@@ -190,7 +190,6 @@ public class MainController implements ModelUpdate {
             }
 
         } else {
-            errorLabel.setVisible(true);
             System.out.println("Aucune difficulté sélectionnée.");
         }
     }
@@ -201,17 +200,6 @@ public class MainController implements ModelUpdate {
         Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();
-    }
-
-    public void back(ActionEvent actionEvent) {
-        if(chooseDifficulty.isVisible()){
-            chooseDifficulty.setVisible(false);
-            chooseGameMode.setVisible(true);
-        }
-        else if(chooseGameMode.isVisible()){
-            chooseGameMode.setVisible(false);
-            playGame.setVisible(true);
-        }
     }
 /*    private void loadModels(MenuButton menuButton, String path){
         File dir = new File(path);
