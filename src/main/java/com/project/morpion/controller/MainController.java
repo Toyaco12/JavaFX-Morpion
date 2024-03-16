@@ -4,6 +4,9 @@ import com.project.morpion.App;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.Config;
 import com.project.morpion.model.ai.ConfigFileLoader;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.*;
 
@@ -31,6 +35,10 @@ public class MainController implements ModelUpdate {
     public Label errorLabel;
     public Button homeButton;
     @FXML
+    public Label timer;
+    @FXML
+    public Label timerMessage;
+    @FXML
     private RadioButton easyRadioButton;
     @FXML
     private RadioButton mediumRadioButton;
@@ -41,6 +49,7 @@ public class MainController implements ModelUpdate {
     private String selectDifficulty;
     private String letterDifficulty ="F";
     private String modelName;
+    int seconds = 3;
 
     @FXML
     private Stage stage;
@@ -68,18 +77,36 @@ public class MainController implements ModelUpdate {
         });
     }
     private void loadPlay1v1View(String modelName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
-        Parent root = fxmlLoader.load();
-        PlaySinglePlayerController controller = fxmlLoader.getController();
-        controller.setModelName(this.modelName);
-        controller.setDifficulty(letterDifficulty);
-        controller.initModel();
+        timer.setVisible(true);
+        timer.setManaged(true);
+        timerMessage.setVisible(true);
+        timerMessage.setManaged(true);
+        timer.setText(String.valueOf(seconds));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            seconds--;
+            timer.setText(String.valueOf(seconds));
+            if (seconds == 0) {
+                FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
+                Parent root = null;
+                try {
+                    root = fxmlLoader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                PlaySinglePlayerController controller = fxmlLoader.getController();
+                controller.setModelName(this.modelName);
+                controller.setDifficulty(letterDifficulty);
+                controller.initModel();
 
-        Scene scene = new Scene(root);
-        Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
-        s.setScene(scene);
+                Scene scene = new Scene(root);
+                Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+                s.setScene(scene);
 
-        s.show();
+                s.show();
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
 
