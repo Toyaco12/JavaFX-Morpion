@@ -8,13 +8,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -50,16 +54,30 @@ public class GameController {
     public Label victoryLabel;
     public Button homeButton;
     public Button restartButton;
+    public Label numberTry;
+    public TextField player1Name;
+    public TextField player2Name;
+    public Label victoryPlayer1;
+    public Label victoryPlayer2;
+    public Label partyState;
     private Image player1Image;
     private Image player2Image;
     private boolean player1win;
     private int[] placement = new int[9];
     private boolean turn;
+    private boolean finish = false;
+    private int[] cptVictory = new int[2];
 
 
     @FXML
     public void initialize() {
         setClickListener();
+        fadeInNode(vboxChoice);
+        fadeInNode(partyState);
+        fadeInNode(player1Name);
+        fadeInNode(player2Name);
+        fadeInNode(restartButton);
+        fadeInNode(homeButton);
     }
 
 
@@ -67,46 +85,99 @@ public class GameController {
         morpionGrille.getChildren().forEach(node -> {
             StackPane stackPane = (StackPane) node;
             ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
-
+            imageView.setImage(null);
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//                @Override
+//                public void handle(MouseEvent event) {
+//                    int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
+//                    placement[position] = turn ? 1 : -1;
+//                    Image i;
+//                    if(turn){
+//                        whosTurn.setText("Player 2's Turn");
+//                        imageView.setImage(player1Image);
+//                    }
+//                    else{
+//                        whosTurn.setText("Player 1's Turn");
+//                        imageView.setImage(player2Image);
+//                    }
+//                    imageView.setOnMouseClicked(null);
+//                    turn = !turn;
+//                    int victory = victory();
+//
+//                    if(victory != 0){
+//                        player1win = !turn;
+//                        currentPlayer.setVisible(false);
+//                        for (javafx.scene.Node node : morpionGrille.getChildren()) {
+//                            if (node instanceof StackPane stackPane) {
+//                                ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
+//                                imageView.setOnMouseClicked(null);
+//                            }
+//                        }
+//                        int []row = getVictory();
+//                        RotateTransition rotateTransition = null;
+//                        for(int a : row){
+//                            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
+//                            ImageView imageView = (ImageView) s.getChildren().getFirst();
+//                            rotateTransition = rotateImage(imageView);
+//                        }
+//                        rotateTransition.setOnFinished(e -> showVictory(victory));
+//                    }
+//                }
                 @Override
-                public void handle(MouseEvent event) {
-                    int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
-                    placement[position] = turn ? 1 : -1;
-                    Image i;
-                    if(turn){
-                        whosTurn.setText("Player 2's Turn");
-                        imageView.setImage(player1Image);
-                    }
-                    else{
-                        whosTurn.setText("Player 1's Turn");
-                        imageView.setImage(player2Image);
-                    }
-                    imageView.setOnMouseClicked(null);
-                    turn = !turn;
-                    int victory = victory();
-
-                    if(victory != 0){
-                        player1win = !turn;
-                        currentPlayer.setVisible(false);
-                        for (javafx.scene.Node node : morpionGrille.getChildren()) {
-                            if (node instanceof StackPane stackPane) {
-                                ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
-                                imageView.setOnMouseClicked(null);
-                            }
-                        }
-                        int []row = getVictory();
-                        RotateTransition rotateTransition = null;
-                        for(int a : row){
-                            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
-                            ImageView imageView = (ImageView) s.getChildren().getFirst();
-                            rotateTransition = rotateImage(imageView);
-                        }
-                        rotateTransition.setOnFinished(e -> showVictory(victory));
-                    }
+                public  void  handle(MouseEvent mouseEvent){
+                    imageClicked(imageView, stackPane);
                 }
             });
         });
+    }
+
+    public void imageClicked(ImageView imageView, StackPane stackPane){
+        if(!finish) {
+            int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
+            placement[position] = turn ? 1 : -1;
+            Image i;
+            if (turn) {
+                whosTurn.setText(player2Name.getText() + "'s Turn");
+                imageView.setImage(player1Image);
+            } else {
+                whosTurn.setText(player1Name.getText() + "'s Turn");
+                imageView.setImage(player2Image);
+            }
+            imageView.setOnMouseClicked(null);
+            turn = !turn;
+            int victory = victory();
+
+            if (victory != 0) {
+                whosTurn.setVisible(false);
+                finish = true;
+                if(victory == -2){
+                    showVictory(victory);
+                }
+                else {
+                    if(victory == 1){
+                        cptVictory[0]++;
+                    }
+                    else{
+                        cptVictory[1]++;
+                    }
+                    player1win = !turn;
+                    for (javafx.scene.Node node : morpionGrille.getChildren()) {
+                        if (node instanceof StackPane s) {
+                            ImageView imageView1 = (ImageView) s.getChildren().getFirst();
+                            imageView1.setOnMouseClicked(null);
+                        }
+                    }
+                    int[] row = getVictory();
+                    RotateTransition rotateTransition = null;
+                    for (int a : row) {
+                        StackPane s = (StackPane) morpionGrille.getChildren().get(a);
+                        ImageView imageView1 = (ImageView) s.getChildren().getFirst();
+                        rotateTransition = rotateImage(imageView1);
+                    }
+                    rotateTransition.setOnFinished(e -> showVictory(victory));
+                }
+            }
+        }
     }
 
     @FXML
@@ -135,6 +206,12 @@ public class GameController {
         if(placement[2] == placement[4] && placement[2] == placement[6]){
             return placement[2];
         }
+        int cpt = 0;
+        for(int i : placement){
+          if(i != 0) cpt++;
+        }
+        if(cpt == 9)
+            return -2;
         return 0;
     }
 
@@ -179,8 +256,14 @@ public class GameController {
 
         player1Object.setImage(player1Image);
         player2Object.setImage(player2Image);
-        startLabel.setVisible(true);
-        hboxStart.setVisible(true);
+        if(!hboxStart.isVisible()) {
+            fadeInNode(hboxStart);
+            fadeInNode(startLabel);
+        }
+        fadeInNode(player2Object);
+        fadeInNode(player1Object);
+//        startLabel.setVisible(true);
+//        hboxStart.setVisible(true);
     }
 
     public void chooseCross(MouseEvent actionEvent) {
@@ -188,52 +271,77 @@ public class GameController {
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
         player1Object.setImage(player1Image);
         player2Object.setImage(player2Image);
-        startLabel.setVisible(true);
-        hboxStart.setVisible(true);
+        if(!hboxStart.isVisible()) {
+            fadeInNode(startLabel);
+            fadeInNode(hboxStart);
+        }
+        fadeInNode(player2Object);
+        fadeInNode(player1Object);
+//        startLabel.setVisible(true);
+//        hboxStart.setVisible(true);
     }
 
     public void startRandom(ActionEvent actionEvent) {
         startLabel.setVisible(false);
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
+        player1Name.setEditable(false);
+        player2Name.setEditable(false);
+        player1Name.setDisable(true);
+        player2Name.setDisable(true);
         Random random = new Random();
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
             turn = true;
-            whosTurn.setText("Player 1's turn");
+            whosTurn.setText(player1Name.getText() + "'s turn");
         }
         else{
             turn = false;
-            whosTurn.setText("Player 2's turn");
+            whosTurn.setText(player2Name.getText() + "'s turn");
         }
-        morpionGrille.setVisible(true);
+        whosTurn.setVisible(true);
+        fadeInGridPane();
     }
 
     public void startPlayer2(ActionEvent actionEvent) {
         startLabel.setVisible(false);
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
+        player1Name.setEditable(false);
+        player2Name.setEditable(false);
+        player1Name.setDisable(true);
+        player2Name.setDisable(true);
         turn = false;
-        whosTurn.setText("Player 2's turn");
-        morpionGrille.setVisible(true);
+        whosTurn.setText(player2Name.getText() + "'s turn");
+        whosTurn.setVisible(true);
+        fadeInGridPane();
     }
 
     public void startPlayer1(ActionEvent actionEvent) {
         startLabel.setVisible(false);
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
+        player1Name.setEditable(false);
+        player2Name.setEditable(false);
+        player1Name.setDisable(true);
+        player2Name.setDisable(true);
         turn = true;
-        whosTurn.setText("Player 1's turn");
-        morpionGrille.setVisible(true);
+        whosTurn.setText(player1Name.getText() + "'s turn");
+        whosTurn.setVisible(true);
+        fadeInGridPane();
     }
 
     private void showVictory(int player){
-        if(player1win){
-            victoryLabel.setText("Player 1 Win");
+        if(player == 1){
+            victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+        }
+        else if (player == -1){
+            victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
         }
         else{
-            victoryLabel.setText("Player 2 Win");
+            victoryLabel.setText("Egality .....");
         }
+        numberTry.setText("Number of Try In The Game : " + 5);
         blur();
         fadeOutGridPane();
         vBoxVictory.setVisible(true);
@@ -243,6 +351,24 @@ public class GameController {
         scaleTransition.setToX(1.0);   // Taille finale en x
         scaleTransition.setToY(1.0);   // Taille finale en y
         scaleTransition.play();
+
+    }
+
+    private void hideVictory(){
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
+        scaleTransition.setFromX(1.0); // Taille initiale en x
+        scaleTransition.setFromY(1.0); // Taille initiale en y
+        scaleTransition.setToX(0.1);   // Taille finale en x
+        scaleTransition.setToY(0.1);   // Taille finale en y
+        scaleTransition.play();
+        scaleTransition.setOnFinished(event ->{
+            vBoxVictory.setVisible(false);
+            vboxLeft.setEffect(null);
+            vboxRight.setEffect(null);
+            hboxTop.setEffect(null);
+            //
+            //fadeInGridPane();
+        });
     }
 
     private void blur(){
@@ -259,6 +385,22 @@ public class GameController {
         fadeTransition.play();
     }
 
+    private void fadeInGridPane(){
+        morpionGrille.setVisible(true);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.play();
+    }
+
+    private void fadeInNode(Node node){
+        node.setVisible(true);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), node);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.play();
+    }
+
     @FXML
     public void restartGame(ActionEvent actionEvent) {
         try{
@@ -266,5 +408,32 @@ public class GameController {
             Scene scene = homeButton.getScene();
             scene.setRoot(mainView);
         }catch (IOException ignored){};
+    }
+
+    public void handleKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0")){
+            System.out.println(keyEvent.getText());
+            int index = Integer.parseInt(keyEvent.getText());
+            if(placement[index-1] != 0) return;
+            StackPane stackPane = (StackPane) morpionGrille.getChildren().get(index-1);
+            ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
+            imageClicked(imageView, stackPane);
+        }
+    }
+
+    public void revenge(ActionEvent actionEvent) {
+        hideVictory();
+        hboxStart.setVisible(true);
+        startLabel.setVisible(true);
+        vboxChoice.setVisible(true);
+        for(int i = 0; i < placement.length ; i++){
+            placement[i] = 0;
+        }
+        finish = false;
+        setClickListener();
+        victoryPlayer1.setText("Nbr Victory : " + cptVictory[0]);
+        victoryPlayer2.setText("Nbr Victory : " + cptVictory[1]);
+        victoryPlayer1.setVisible(true);
+        victoryPlayer2.setVisible(true);
     }
 }
