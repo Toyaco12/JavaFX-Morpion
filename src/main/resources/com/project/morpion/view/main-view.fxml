@@ -87,16 +87,16 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="playGame" alignment="TOP_CENTER" managed="false" prefHeight="800.0" prefWidth="1200.0" visible="false">
+            <VBox fx:id="playGame" alignment="TOP_CENTER" layoutX="396.0" managed="false" prefHeight="436.0" prefWidth="351.0" visible="false">
                <children>
-                   <ImageView fitHeight="150" fitWidth="600">
-                       <image>
-                           <Image url="@../image/bannermorpion.png"/>
-                       </image>
-                       <VBox.margin>
-                           <Insets top="50"/>
-                       </VBox.margin>
-                   </ImageView>
+                  <Label alignment="CENTER" prefHeight="266.0" prefWidth="350.0" text="Morpion" style="-fx-text-fill: white; -fx-font-weight: bold">
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
                    <Button fx:id="play" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play">
                      <font>
                         <Font size="20.0" />
@@ -140,6 +140,15 @@
                          </font>
                          <VBox.margin>
                              <Insets top="20"/>
+                         </VBox.margin>
+                     </Label>
+                     <Label fx:id="timerMessage" layoutX="606.0" layoutY="328.0" managed="false" text="Game is starting in :" textFill="WHITE" visible="false">
+                         <VBox.margin>
+                             <Insets top="50.0" />
+                         </VBox.margin></Label>
+                     <Label fx:id="timer" managed="false" text="3" textFill="WHITE" visible="false">
+                         <VBox.margin>
+                             <Insets top="20.0" />
                          </VBox.margin>
                      </Label>
                      <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="43.0" prefWidth="85.0" text="Start">
