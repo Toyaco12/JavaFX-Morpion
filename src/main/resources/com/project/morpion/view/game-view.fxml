@@ -195,19 +195,32 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="vBoxVictory" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false" style="-fx-background-color: lightblue">
+            <VBox fx:id="vBoxVictory" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" visible="false" style="-fx-background-color: grey">
                <children>
+                  <ImageView fitHeight="150" fitWidth="600">
+                     <image>
+                        <Image url="@../image/bannermorpion.png"/>
+                     </image>
+                     <VBox.margin>
+                        <Insets top="50"/>
+                     </VBox.margin>
+                  </ImageView>
                   <Label fx:id="victoryLabel" style="-fx-text-fill: white">
                      <font>
                         <Font size="45.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="50"/>
+                     </VBox.margin>
                   </Label>
-                  <Label fx:id="numberTry" style="-fx-text-fill: white">
+                  <Label text="N'hésitez pas à prendre votre revanche !!" style="-fx-text-fill: white">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20"/>
                      </font>
+                     <VBox.margin>
+                        <Insets top="50"/>
+                     </VBox.margin>
                   </Label>
-                  <Label text="N'hésitez pas à prendre votre revanche !!"/>
                   <Button onAction="#revenge" mnemonicParsing="false" text="Revanche"/>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>

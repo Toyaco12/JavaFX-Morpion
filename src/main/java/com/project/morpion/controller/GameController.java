@@ -341,13 +341,13 @@ public class GameController {
         else{
             victoryLabel.setText("Egality .....");
         }
-        numberTry.setText("Number of Try In The Game : " + 5);
+
         blur();
         fadeOutGridPane();
         vBoxVictory.setVisible(true);
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
-        scaleTransition.setFromX(0.1); // Taille initiale en x
-        scaleTransition.setFromY(0.1); // Taille initiale en y
+        scaleTransition.setFromX(0.0); // Taille initiale en x
+        scaleTransition.setFromY(0.0); // Taille initiale en y
         scaleTransition.setToX(1.0);   // Taille finale en x
         scaleTransition.setToY(1.0);   // Taille finale en y
         scaleTransition.play();
@@ -358,8 +358,8 @@ public class GameController {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
         scaleTransition.setFromX(1.0); // Taille initiale en x
         scaleTransition.setFromY(1.0); // Taille initiale en y
-        scaleTransition.setToX(0.1);   // Taille finale en x
-        scaleTransition.setToY(0.1);   // Taille finale en y
+        scaleTransition.setToX(0.0);   // Taille finale en x
+        scaleTransition.setToY(0.0);   // Taille finale en y
         scaleTransition.play();
         scaleTransition.setOnFinished(event ->{
             vBoxVictory.setVisible(false);
@@ -368,6 +368,10 @@ public class GameController {
             hboxTop.setEffect(null);
             //
             //fadeInGridPane();
+            //hideVictory();
+            fadeInNode(hboxStart);
+            fadeInNode(startLabel);
+            fadeInNode(vboxChoice);
         });
     }
 
@@ -423,9 +427,10 @@ public class GameController {
 
     public void revenge(ActionEvent actionEvent) {
         hideVictory();
-        hboxStart.setVisible(true);
-        startLabel.setVisible(true);
-        vboxChoice.setVisible(true);
+//        fadeInNode(hboxStart);
+//        fadeInNode(startLabel);
+//        fadeInNode(vboxChoice);
+
         for(int i = 0; i < placement.length ; i++){
             placement[i] = 0;
         }
