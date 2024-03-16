@@ -4,6 +4,7 @@ import com.project.morpion.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class App extends Application {
         MainController controller = fxmlLoader.getController();
         controller.setStage(stage);
         stage.setTitle("Morpion project");
+        stage.getIcons().add(new Image("file:src/main/resources/com/project/morpion/image/morpionlogo.png"));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
