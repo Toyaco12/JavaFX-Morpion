@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)"
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.MainController">
    <top>
@@ -31,7 +33,19 @@
       </MenuBar>
    </top>
    <bottom>
-      <Pane BorderPane.alignment="CENTER" />
+      <VBox>
+          <Button fx:id="homeButton" onAction="#back">
+              <graphic>
+                  <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" >
+                      <Image url="@../image/home.png" />
+                  </ImageView>
+              </graphic>
+
+              <VBox.margin>
+                  <Insets bottom="80" left="80"/>
+              </VBox.margin>
+          </Button>
+      </VBox>
    </bottom>
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -48,13 +62,22 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <HBox fx:id="hboxMode" alignment="CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
+                  <HBox fx:id="hboxMode" alignment="TOP_CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
                      <children>
-                        <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Button>
+                         <VBox spacing="10">
+                             <children>
+                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer">
+                                     <font>
+                                         <Font size="20.0" />
+                                     </font>
+                                     <RadioButton fx:id="easyRadioButon" onAction="#selectDifficulty" prefWidth="64.0" text="Easy" style="-fx-text-fill: white"/>
+                                     <RadioButton fx:id="mediumRadioButon" onAction="#selectDifficulty" text="Medium" style="-fx-text-fill: white"/>
+                                     <RadioButton fx:id="hardRadioButon" onAction="#selectDifficulty" text="Hard" style="-fx-text-fill: white"/>
+                                 </Button>
+
+                             </children>
+                         </VBox>
+
                         <Button fx:id="btn1vs1" onAction="#startGame" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1">
                            <font>
                               <Font size="20.0" />
@@ -79,6 +102,22 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
+                   <Button fx:id="setting" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Settings">
+                       <font>
+                           <Font size="20.0" />
+                       </font>
+                       <VBox.margin>
+                           <Insets top="40.0" />
+                       </VBox.margin>
+                   </Button>
+                   <Button fx:id="exit" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Exit">
+                       <font>
+                           <Font size="20.0" />
+                       </font>
+                       <VBox.margin>
+                           <Insets top="40.0" />
+                       </VBox.margin>
+                   </Button>
                </children>
             </VBox>
              <VBox fx:id="chooseDifficulty" alignment="TOP_CENTER" layoutY="1.0" managed="false" prefHeight="773.0" prefWidth="1200.0" visible="false">
@@ -95,6 +134,14 @@
                              <RadioButton fx:id="hardRadioButton" onAction="#selectDifficulty" text="Hard" style="-fx-text-fill: white"/>
                          </children>
                      </HBox>
+                     <Label fx:id="errorLabel" alignment="CENTER" text="Please Choose a Difficulty" style="-fx-text-fill: red" visible="false">
+                         <font>
+                             <Font size="18.0" />
+                         </font>
+                         <VBox.margin>
+                             <Insets top="20"/>
+                         </VBox.margin>
+                     </Label>
                      <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="43.0" prefWidth="85.0" text="Start">
                      <VBox.margin>
                         <Insets top="60.0" />
