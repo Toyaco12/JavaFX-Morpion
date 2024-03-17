@@ -89,9 +89,6 @@ public class Test {
 
             System.out.println("Fin du jeu.");
 
-
-
-
         }
         catch (Exception e) {
             System.out.println("Test.main()");
