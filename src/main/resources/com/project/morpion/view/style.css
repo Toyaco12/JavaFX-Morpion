@@ -1,5 +1,5 @@
 .image-border {
-    -fx-border-color: white;
+    -fx-border-color: rgb(210, 210, 210) ;
     -fx-border-width: 10;
     -fx-background-color: transparent;
 }

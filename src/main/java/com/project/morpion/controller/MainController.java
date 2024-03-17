@@ -36,6 +36,12 @@ public class MainController implements ModelUpdate {
     public Label timer;
     @FXML
     public Label timerMessage;
+    public Button homeButton;
+    public VBox settingVbox;
+    public Slider sliderVolume;
+    public Label volumeLabel;
+    public Slider sliderLuminosity;
+    public Label luminosityLabel;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -63,6 +69,14 @@ public class MainController implements ModelUpdate {
         easyRadioButton.setToggleGroup(difficultyGroup);
         mediumRadioButton.setToggleGroup(difficultyGroup);
         hardRadioButton.setToggleGroup(difficultyGroup);
+        sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
+            volumeLabel.setText(String.valueOf(newValue.intValue()));
+        });
+        sliderLuminosity.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
+            luminosityLabel.setText(String.valueOf(newValue.intValue()));
+        });
     }
     @Override
     public void onModelUpdated() {
@@ -142,7 +156,7 @@ public class MainController implements ModelUpdate {
     public void play(ActionEvent actionEvent) {
         playGame.setVisible(false);
         playGame.setManaged(false);
-
+        homeButton.setVisible(true);
         chooseGameMode.setManaged(true);
         chooseGameMode.setVisible(true);
     }
@@ -200,6 +214,34 @@ public class MainController implements ModelUpdate {
         Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();
+    }
+
+    public void back(ActionEvent actionEvent) {
+        System.out.println("apagnan");
+        if(chooseGameMode.isVisible()){
+            chooseGameMode.setVisible(false);
+            playGame.setVisible(true);
+            homeButton.setVisible(false);
+        } else if (chooseDifficulty.isVisible()) {
+            chooseDifficulty.setVisible(false);
+            chooseGameMode.setVisible(true);
+        } else if (settingVbox.isVisible()) {
+            settingVbox.setVisible(false);
+            playGame.setVisible(true);
+            homeButton.setVisible(false);
+        }
+    }
+
+    public void gameSettings(ActionEvent actionEvent) {
+        playGame.setVisible(false);
+        playGame.setManaged(false);
+        homeButton.setVisible(true);
+        settingVbox.setManaged(true);
+        settingVbox.setVisible(true);
+    }
+
+    public void exit(ActionEvent actionEvent) {
+        Platform.exit();
     }
 /*    private void loadModels(MenuButton menuButton, String path){
         File dir = new File(path);

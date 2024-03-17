@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,6 +56,7 @@ public class GameController {
     public Button homeButton;
     public Button restartButton;
     public Label numberTry;
+
     public TextField player1Name;
     public TextField player2Name;
     public Label victoryPlayer1;
@@ -78,6 +80,20 @@ public class GameController {
         fadeInNode(player2Name);
         fadeInNode(restartButton);
         fadeInNode(homeButton);
+        TextFormatter<String> textFormatter1 = new TextFormatter<>(change -> {
+            if (change.isContentChange() && change.getControlNewText().length() > 12) {
+                return null; // Rejeter le changement si le texte est trop long
+            }
+            return change;
+        });
+        TextFormatter<String> textFormatter2 = new TextFormatter<>(change -> {
+            if (change.isContentChange() && change.getControlNewText().length() > 12) {
+                return null; // Rejeter le changement si le texte est trop long
+            }
+            return change;
+        });
+        player1Name.setTextFormatter(textFormatter1);
+        player2Name.setTextFormatter(textFormatter2);
     }
 
 
@@ -282,13 +298,7 @@ public class GameController {
     }
 
     public void startRandom(ActionEvent actionEvent) {
-        startLabel.setVisible(false);
-        hboxStart.setVisible(false);
-        vboxChoice.setVisible(false);
-        player1Name.setEditable(false);
-        player2Name.setEditable(false);
-        player1Name.setDisable(true);
-        player2Name.setDisable(true);
+        hideToStartGame();
         Random random = new Random();
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
@@ -304,13 +314,7 @@ public class GameController {
     }
 
     public void startPlayer2(ActionEvent actionEvent) {
-        startLabel.setVisible(false);
-        hboxStart.setVisible(false);
-        vboxChoice.setVisible(false);
-        player1Name.setEditable(false);
-        player2Name.setEditable(false);
-        player1Name.setDisable(true);
-        player2Name.setDisable(true);
+        hideToStartGame();
         turn = false;
         whosTurn.setText(player2Name.getText() + "'s turn");
         whosTurn.setVisible(true);
@@ -318,6 +322,15 @@ public class GameController {
     }
 
     public void startPlayer1(ActionEvent actionEvent) {
+        hideToStartGame();
+        turn = true;
+        whosTurn.setText(player1Name.getText() + "'s turn");
+        whosTurn.setVisible(true);
+        fadeInGridPane();
+    }
+
+    public void hideToStartGame(){
+        checkEmptyField();
         startLabel.setVisible(false);
         hboxStart.setVisible(false);
         vboxChoice.setVisible(false);
@@ -325,10 +338,15 @@ public class GameController {
         player2Name.setEditable(false);
         player1Name.setDisable(true);
         player2Name.setDisable(true);
-        turn = true;
-        whosTurn.setText(player1Name.getText() + "'s turn");
-        whosTurn.setVisible(true);
-        fadeInGridPane();
+    }
+
+    private void checkEmptyField(){
+        if(player1Name.getText().isEmpty()){
+            player1Name.setText("Player 1");
+        }
+        if(player2Name.getText().isEmpty()){
+            player2Name.setText("Player 2");
+        }
     }
 
     private void showVictory(int player){
@@ -436,8 +454,8 @@ public class GameController {
         }
         finish = false;
         setClickListener();
-        victoryPlayer1.setText("Nbr Victory : " + cptVictory[0]);
-        victoryPlayer2.setText("Nbr Victory : " + cptVictory[1]);
+        victoryPlayer1.setText("Number of Victory : " + cptVictory[0]);
+        victoryPlayer2.setText("Number of Victory : " + cptVictory[1]);
         victoryPlayer1.setVisible(true);
         victoryPlayer2.setVisible(true);
     }

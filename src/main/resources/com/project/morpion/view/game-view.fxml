@@ -3,33 +3,30 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.skin.ProgressIndicatorSkin.IndeterminateSpinner.IndicatorPaths?>
-<?import javafx.scene.control.TextField?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" style="-fx-background-color: rgb(20,20,20)"
-            onKeyPressed="#handleKeyPressed" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
    <top>
       <HBox fx:id="hboxTop" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <VBox prefHeight="100.0" prefWidth="352.0">
                <children>
-                  <Label fx:id="partyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" text="Partie En Cours" textAlignment="CENTER" style="-fx-text-fill: white; -fx-font-weight: bold">
+                  <Label fx:id="partyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Game In Progress" textAlignment="CENTER">
                      <font>
                         <Font size="40.0" />
                      </font>
                   </Label>
-                  <Label fx:id="whosTurn" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="353.0" style="-fx-text-fill: white">
+                  <Label fx:id="whosTurn" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="353.0" style="-fx-text-fill: rgb(1, 191, 200)">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -39,31 +36,58 @@
          </children>
       </HBox>
    </top>
+   <left>
+      <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="700.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="player1Name" alignment="CENTER" prefWidth="100" style="-fx-text-fill: white; -fx-background-color: fc6c00 ; -fx-font-size: 25" text="Player 1">
+               <VBox.margin>
+                  <Insets bottom="15" left="15" right="15" />
+               </VBox.margin>
+            </TextField>
+            <ImageView fx:id="player1Object" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="victoryPlayer1" style="-fx-text-fill: fc6c00; -fx-font-size: 20" visible="false">
+               <VBox.margin>
+                  <Insets top="15" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="homeButton" focusTraversable="false" onAction="#returnHome" style="-fx-background-color: rgb(1, 191, 200)">
+               <graphic>
+                  <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@../image/home.png" />
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets top="200" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </left>
    <right>
       <VBox fx:id="vboxRight" prefHeight="700.0" prefWidth="250.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="725.0" prefWidth="250.0">
                <children>
-                  <TextField fx:id="player2Name" alignment="CENTER" prefWidth="100" text="Player 2" style="-fx-text-fill: white; -fx-background-color: rgb(30,30,30); -fx-font-size: 25">
+                  <TextField fx:id="player2Name" alignment="CENTER" prefWidth="100" style="-fx-text-fill: white; -fx-background-color: rgb(1, 191, 200); -fx-font-size: 25" text="Player 2">
                      <VBox.margin>
-                        <Insets bottom="15" left="15" right="15"/>
+                        <Insets bottom="15" left="15" right="15" />
                      </VBox.margin>
                   </TextField>
                   <ImageView fx:id="player2Object" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="victoryPlayer2" style="-fx-text-fill: white; -fx-font-size: 20" visible="false">
+                  <Label fx:id="victoryPlayer2" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 20" visible="false">
                      <VBox.margin>
-                        <Insets top="15"/>
+                        <Insets top="15" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="restartButton" onAction="#restartGame">
+                  <Button fx:id="restartButton" onAction="#restartGame" style="-fx-background-color: fc6c00">
                      <graphic>
-                        <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" >
+                        <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <Image url="@../image/restart.png" />
                         </ImageView>
                      </graphic>
 
                      <VBox.margin>
-                        <Insets top="200"/>
+                        <Insets top="200" />
                      </VBox.margin>
                   </Button>
                </children>
@@ -135,7 +159,7 @@
             </GridPane>
             <VBox fx:id="vboxChoice" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label text="Player 1 choose you're Icon" style="-fx-text-fill: white">
+                  <Label style="-fx-text-fill: rgb(1, 191, 200)" text="Player 1 choose you're Icon">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -155,12 +179,12 @@
                                     <Image url="@../ai/images/TicTacToe/circle.png" />
                                  </image>
                                  <HBox.margin>
-                                    <Insets left="30"/>
+                                    <Insets left="30" />
                                  </HBox.margin>
                               </ImageView>
                      </children>
                   </HBox>
-                  <Label fx:id="startLabel" text="Who's Starting ?" visible="false" style="-fx-text-fill: white">
+                  <Label fx:id="startLabel" style="-fx-text-fill: fc6c00" text="Who's Starting ?" visible="false">
                      <VBox.margin>
                         <Insets top="30.0" />
                      </VBox.margin>
@@ -170,7 +194,7 @@
                   </Label>
                   <HBox fx:id="hboxStart" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
                      <children>
-                        <Button fx:id="startPlayer1" mnemonicParsing="false" onAction="#startPlayer1" text="Player 1">
+                        <Button fx:id="startPlayer1" mnemonicParsing="false" onAction="#startPlayer1" style="-fx-background-color: fc6c00; -fx-text-fill: white" text="Player 1">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -178,7 +202,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startPlayer2" mnemonicParsing="false" onAction="#startPlayer2" text="Player 2">
+                        <Button fx:id="startPlayer2" mnemonicParsing="false" onAction="#startPlayer2" style="-fx-background-color: rgb(1, 191, 200); -fx-text-fill: white" text="Player 2">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -186,7 +210,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startRandom" mnemonicParsing="false" onAction="#startRandom" text="Random">
+                        <Button fx:id="startRandom" mnemonicParsing="false" onAction="#startRandom" style="-fx-background-color: fc6c00; -fx-text-fill: white" text="Random">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -195,41 +219,56 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="vBoxVictory" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" visible="false" style="-fx-background-color: grey">
+            <VBox fx:id="vBoxVictory" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: rgb(40,40,40)" visible="false">
                <children>
                   <ImageView fitHeight="150" fitWidth="600">
                      <image>
-                        <Image url="@../image/bannermorpion.png"/>
+                        <Image url="@../image/bannermorpion.png" />
                      </image>
                      <VBox.margin>
-                        <Insets top="50"/>
+                        <Insets top="50" />
                      </VBox.margin>
                   </ImageView>
-                  <Label fx:id="victoryLabel" style="-fx-text-fill: white">
+                  <Label fx:id="victoryLabel" style="-fx-text-fill: fc6c00; -fx-font-weight: bold">
                      <font>
-                        <Font size="45.0" />
+                        <Font size="40.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="50"/>
+                        <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Label text="N'hésitez pas à prendre votre revanche !!" style="-fx-text-fill: white">
+                  <Label style="-fx-text-fill: rgb(1, 191, 200)" text="Don't hesitate to get your revenge!!">
                      <font>
-                        <Font size="20"/>
+                        <Font size="30" />
                      </font>
                      <VBox.margin>
-                        <Insets top="50"/>
+                        <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Button onAction="#revenge" mnemonicParsing="false" text="Revanche"/>
+                  <Button mnemonicParsing="false" onAction="#revenge" style="-fx-background-color: fc6c00; -fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="100.0" text="Revenge">
+                     <VBox.margin >
+                        <Insets top="40" bottom="40"/>
+                     </VBox.margin>
+                  </Button>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button onAction="#returnHome" mnemonicParsing="false" text="Home">
+                        <Button mnemonicParsing="false" style="-fx-background-color:fc6c00" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">
+                           <graphic>
+                              <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                                 <Image url="@../image/home.png"/>
+                              </ImageView>
+                           </graphic>
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button onAction="#restartGame" alignment="CENTER" mnemonicParsing="false" text="Restart" />
+                        <Button style="-fx-background-color: rgb(1, 191, 200)" mnemonicParsing="false" onAction="#restartGame" prefHeight="40.0" prefWidth="80.0">
+                           <graphic>
+                              <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                                 <Image url="@../image/restart.png"/>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
                   </HBox>
                </children>
@@ -240,31 +279,5 @@
          </BorderPane.margin>
       </StackPane>
    </center>
-   <left>
-      <VBox fx:id="vboxLeft" alignment="CENTER" prefHeight="700.0" prefWidth="250.0" BorderPane.alignment="CENTER">
-         <children>
-            <TextField fx:id="player1Name" prefWidth="100" alignment="CENTER" text="Player 1" style="-fx-text-fill: white; -fx-background-color: rgb(30,30,30); -fx-font-size: 25" >
-               <VBox.margin>
-                  <Insets bottom="15" right="15" left="15"/>
-               </VBox.margin>
-            </TextField>
-            <ImageView fx:id="player1Object" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="victoryPlayer1" style="-fx-text-fill: white; -fx-font-size: 20" visible="false">
-               <VBox.margin>
-                  <Insets top="15"/>
-               </VBox.margin>
-            </Label>
-            <Button fx:id="homeButton" onAction="#returnHome">
-               <graphic>
-                  <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" >
-                     <Image url="@../image/home.png" />
-                  </ImageView>
-               </graphic>
-               <VBox.margin>
-                  <Insets top="200"/>
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </left>
+
 </BorderPane>
