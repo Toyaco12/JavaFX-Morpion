@@ -56,8 +56,8 @@
                   </Label>
                   <HBox fx:id="hboxMode" alignment="TOP_CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
                      <children>
-                         <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer" style="-fx-background-color:fc6c00; -fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold"/>
-                        <Button fx:id="btn1vs1" onAction="#startGame" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1" style="-fx-background-color:rgb(1, 191, 200); -fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold"/>
+                         <Button fx:id="btnSinglePlayer" styleClass="orange-button" mnemonicParsing="false" onAction="#chooseDiff" prefHeight="80.0" prefWidth="164.0" text="Singleplayer" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold"/>
+                        <Button fx:id="btn1vs1" styleClass="blue-button" onAction="#startGame" mnemonicParsing="false" prefHeight="80.0" prefWidth="164.0" text="1vs1" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold"/>
                      </children>
                   </HBox>
                </children>
@@ -70,13 +70,13 @@
                           <Insets top="50" bottom="50"/>
                       </VBox.margin>
                   </ImageView>
-                   <Button fx:id="playButton" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play" style="-fx-background-color:fc6c00; -fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold"/>
-                   <Button fx:id="settingButton" onAction="#gameSettings" prefHeight="80.0" prefWidth="164.0" text="Settings" style="-fx-background-color:rgb(1, 191, 200); -fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold">
+                   <Button fx:id="playButton" styleClass="orange-button" onAction="#play" prefHeight="80.0" prefWidth="164.0" text="Play" style="-fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold"/>
+                   <Button fx:id="settingButton" styleClass="blue-button" onAction="#gameSettings" prefHeight="80.0" prefWidth="164.0" text="Settings" style="-fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold">
                        <VBox.margin>
                            <Insets top="40.0" />
                        </VBox.margin>
                    </Button>
-                   <Button fx:id="exitButton" onAction="#exit" prefHeight="80.0" prefWidth="164.0" text="Exit" style="-fx-background-color:fc6c00; -fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold">
+                   <Button fx:id="exitButton" styleClass="orange-button" onAction="#exit" prefHeight="80.0" prefWidth="164.0" text="Exit" style="-fx-text-fill: white; -fx-font-size: 25; -fx-font-weight: bold">
                        <VBox.margin>
                            <Insets top="40.0" />
                        </VBox.margin>
@@ -160,7 +160,7 @@
                              <Insets top="40"/>
                          </VBox.margin>
                      </HBox>
-                     <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" style="-fx-background-color: fc6c00; -fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold" prefHeight="50.0" prefWidth="100.0" text="Save">
+                     <Button fx:id="saveButton" styleClass="orange-button" mnemonicParsing="false" onAction="#save" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold" prefHeight="50.0" prefWidth="100.0" text="Save">
                          <VBox.margin >
                              <Insets top="40" bottom="40"/>
                          </VBox.margin>
@@ -173,7 +173,7 @@
     <bottom>
         <VBox>
             <children>
-                <Button fx:id="homeButton" style="-fx-background-color: rgb(1, 191, 200)" onAction="#back"  focusTraversable="false" visible="false">
+                <Button fx:id="homeButton" styleClass="blue-button" onAction="#back"  focusTraversable="false" visible="false">
                     <graphic>
                         <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../image/home.png" />

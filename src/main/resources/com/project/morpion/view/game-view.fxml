@@ -50,7 +50,7 @@
                   <Insets top="15" />
                </VBox.margin>
             </Label>
-            <Button fx:id="homeButton" focusTraversable="false" onAction="#returnHome" style="-fx-background-color: rgb(1, 191, 200)">
+            <Button fx:id="homeButton" styleClass="blue-button" focusTraversable="false" onAction="#returnHome">
                <graphic>
                   <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../image/home.png" />
@@ -79,7 +79,7 @@
                         <Insets top="15" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="restartButton" onAction="#restartGame" style="-fx-background-color: fc6c00">
+                  <Button fx:id="restartButton" styleClass="orange-button" onAction="#restartGame">
                      <graphic>
                         <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <Image url="@../image/restart.png" />
@@ -194,7 +194,7 @@
                   </Label>
                   <HBox fx:id="hboxStart" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
                      <children>
-                        <Button fx:id="startPlayer1" mnemonicParsing="false" onAction="#startPlayer1" style="-fx-background-color: fc6c00; -fx-text-fill: white" text="Player 1">
+                        <Button fx:id="startPlayer1" styleClass="orange-button" mnemonicParsing="false" onAction="#startPlayer1" style="-fx-text-fill: white" text="Player 1">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -202,7 +202,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startPlayer2" mnemonicParsing="false" onAction="#startPlayer2" style="-fx-background-color: rgb(1, 191, 200); -fx-text-fill: white" text="Player 2">
+                        <Button fx:id="startPlayer2" styleClass="blue-button" mnemonicParsing="false" onAction="#startPlayer2" style="-fx-text-fill: white" text="Player 2">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -210,7 +210,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startRandom" mnemonicParsing="false" onAction="#startRandom" style="-fx-background-color: fc6c00; -fx-text-fill: white" text="Random">
+                        <Button fx:id="startRandom" styleClass="orange-button" mnemonicParsing="false" onAction="#startRandom" style="-fx-text-fill: white" text="Random">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -245,14 +245,14 @@
                         <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="revengeButton" mnemonicParsing="false" onAction="#revenge" style="-fx-background-color: fc6c00; -fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="100.0" text="Revenge">
+                  <Button fx:id="revengeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="110.0" text="Revenge">
                      <VBox.margin >
                         <Insets top="40" bottom="40"/>
                      </VBox.margin>
                   </Button>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color:fc6c00" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">
+                        <Button mnemonicParsing="false" styleClass="orange-button" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">
                            <graphic>
                               <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
                                  <Image url="@../image/home.png"/>
@@ -262,7 +262,7 @@
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button style="-fx-background-color: rgb(1, 191, 200)" mnemonicParsing="false" onAction="#restartGame" prefHeight="40.0" prefWidth="80.0">
+                        <Button styleClass="blue-button" mnemonicParsing="false" onAction="#restartGame" prefHeight="40.0" prefWidth="80.0">
                            <graphic>
                               <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
                                  <Image url="@../image/restart.png"/>
