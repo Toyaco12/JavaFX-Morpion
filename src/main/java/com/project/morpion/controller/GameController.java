@@ -446,7 +446,6 @@ public class GameController {
 
     public void handleKeyPressed(KeyEvent keyEvent) {
         if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0")){
-            System.out.println(keyEvent.getText());
             int index = Integer.parseInt(keyEvent.getText());
             if(placement[index-1] != 0) return;
             StackPane stackPane = (StackPane) morpionGrille.getChildren().get(index-1);
