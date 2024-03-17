@@ -4,6 +4,23 @@ import java.util.Arrays;
 
 public class Coup{
 
+	//CHAMPS ...
+	public String game ;
+	public double[] in ;
+	public double[] out ;
+	//
+	//
+	public static int X = -1;
+	public static int O = 1 ;
+	//
+	public static int EMPTY = 0 ;
+	//
+	public int joueurCourant = 0 ;
+	//
+	public int nbCoups ;
+	//
+	public boolean partieGagne = false ;
+
 	public Coup(int size, String game) {
 		if ( size > 0 ) {
 			in = new double[size];
@@ -34,20 +51,4 @@ public class Coup{
 				+ ", nbCoups=" + nbCoups + ", partieGagne=" + partieGagne + "]";
 	}
 
-	//CHAMPS ...
-	public String game ; 
-	public double[] in ;
-	public double[] out ;
-	//
-	//
-	public static int X = -1;
-	public static int O = 1 ;
-	//
-	public static int EMPTY = 0 ;
-	//
-	public int joueurCourant = 0 ;
-	//
-	public int nbCoups ;
-	//
-	public boolean partieGagne = false ;
 }
