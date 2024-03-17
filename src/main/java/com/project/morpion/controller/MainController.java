@@ -15,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -42,6 +44,7 @@ public class MainController implements ModelUpdate {
     public Label volumeLabel;
     public Slider sliderLuminosity;
     public Label luminosityLabel;
+    public BorderPane borderPane;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -63,6 +66,7 @@ public class MainController implements ModelUpdate {
 
     @FXML
     public void initialize() {
+        int lum = getLuminosity();
         playGame.setVisible(true);
         playGame.setManaged(true);
         difficultyGroup = new ToggleGroup();
@@ -77,6 +81,8 @@ public class MainController implements ModelUpdate {
             // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
             luminosityLabel.setText(String.valueOf(newValue.intValue()));
         });
+        sliderLuminosity.setValue(lum);
+        luminosityLabel.setText(String.valueOf(lum));
     }
     @Override
     public void onModelUpdated() {
@@ -126,10 +132,11 @@ public class MainController implements ModelUpdate {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/setting-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageSettings = new Stage();
+        stageSettings.initModality(Modality.APPLICATION_MODAL);
         stageSettings.setResizable(false);
         stageSettings.setTitle("Model Settings");
         stageSettings.setScene(scene);
-        stageSettings.show();
+        stageSettings.showAndWait();
     }
 
     public void openLearning(ActionEvent actionEvent) throws IOException {
@@ -148,8 +155,44 @@ public class MainController implements ModelUpdate {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/model-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageModel = new Stage();
+        stageModel.initModality(Modality.APPLICATION_MODAL);
         stageModel.setScene(scene);
-        stageModel.show();
+        stageModel.showAndWait();
+    }
+
+    public void setLuminosity(int lum){
+        double l = -0.9 + ((double) lum /100);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(l);
+        borderPane.setEffect(colorAdjust);
+    }
+
+    public void save(){
+        try{
+            FileWriter fileWriter = new FileWriter(new File("src/main/resources/com/project/morpion/settings.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            int lum = (int) sliderLuminosity.getValue();
+            bufferedWriter.write("L:"+lum);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            setLuminosity(lum);
+        }
+        catch (IOException ignored){}
+    }
+
+    public int getLuminosity(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            if(line.charAt(0) == 'L'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                int lum = Integer.parseInt(d);
+                setLuminosity(lum);
+                return lum;
+            }
+        }catch (IOException e){}
+        return 0;
     }
 
     @FXML

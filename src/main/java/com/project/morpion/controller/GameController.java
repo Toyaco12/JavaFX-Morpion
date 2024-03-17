@@ -16,17 +16,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
@@ -62,6 +62,7 @@ public class GameController {
     public Label victoryPlayer1;
     public Label victoryPlayer2;
     public Label partyState;
+    public BorderPane borderPane;
     private Image player1Image;
     private Image player2Image;
     private boolean player1win;
@@ -73,6 +74,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        getLuminosity();
         setClickListener();
         fadeInNode(vboxChoice);
         fadeInNode(partyState);
@@ -94,6 +96,28 @@ public class GameController {
         });
         player1Name.setTextFormatter(textFormatter1);
         player2Name.setTextFormatter(textFormatter2);
+    }
+
+    public void setLuminosity(int lum){
+        double l = -0.9 + ((double) lum /100);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(l);
+        borderPane.setEffect(colorAdjust);
+    }
+
+    public int getLuminosity(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            if(line.charAt(0) == 'L'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                int lum = Integer.parseInt(d);
+                setLuminosity(lum);
+                return lum;
+            }
+        }catch (IOException e){}
+        return 0;
     }
 
 
