@@ -140,8 +140,10 @@ public class LearnController {
                         if ( i % 1000 == 0 && verbose) updateMessage("Error at step "+i+" is "+ (error/(double)i));
                         updateProgress(i, epochs);
                     }
-                    if ( verbose )
+                    if ( verbose ){
                         updateMessage("Final error is "+ (error/epochs));
+                        System.out.println(error/epochs);
+                    }
 
                     MultiLayerPerceptron.saveModel(net,difficulty);
                 }

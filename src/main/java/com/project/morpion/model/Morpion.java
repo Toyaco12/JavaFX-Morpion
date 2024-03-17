@@ -87,7 +87,7 @@ public class Morpion {
         while (!isWin() && !isDraw()) {
             System.out.println("Current board:");
             printBoard();
-            if (currentPlayer == Coup.X || model == null) {  // Joueur humain ou mode Joueur vs Joueur
+            if (currentPlayer == Coup.X || model == null) {  // human player or human vs human
                 System.out.print("Enter your move (0-8): ");
                 int move = scanner.nextInt();
                 if (!play(move)) {
