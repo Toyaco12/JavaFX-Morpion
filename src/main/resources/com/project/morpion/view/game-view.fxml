@@ -159,7 +159,7 @@
             </GridPane>
             <VBox fx:id="vboxChoice" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label style="-fx-text-fill: rgb(1, 191, 200)" text="Player 1 choose you're Icon">
+                  <Label fx:id="chooseLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="Player 1 choose you're Icon">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -237,7 +237,7 @@
                         <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Label style="-fx-text-fill: rgb(1, 191, 200)" text="Don't hesitate to get your revenge!!">
+                  <Label fx:id="revengeLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="Don't hesitate to get your revenge!!">
                      <font>
                         <Font size="30" />
                      </font>
@@ -245,7 +245,7 @@
                         <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#revenge" style="-fx-background-color: fc6c00; -fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="100.0" text="Revenge">
+                  <Button fx:id="revengeButton" mnemonicParsing="false" onAction="#revenge" style="-fx-background-color: fc6c00; -fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="100.0" text="Revenge">
                      <VBox.margin >
                         <Insets top="40" bottom="40"/>
                      </VBox.margin>

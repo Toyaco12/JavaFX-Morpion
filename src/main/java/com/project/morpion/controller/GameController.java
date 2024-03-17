@@ -63,6 +63,9 @@ public class GameController {
     public Label victoryPlayer2;
     public Label partyState;
     public BorderPane borderPane;
+    public Label chooseLabel;
+    public Label revengeLabel;
+    public Button revengeButton;
     private Image player1Image;
     private Image player2Image;
     private boolean player1win;
@@ -70,10 +73,15 @@ public class GameController {
     private boolean turn;
     private boolean finish = false;
     private int[] cptVictory = new int[2];
+    private String language = "English";
 
 
     @FXML
     public void initialize() {
+        if(isFrench()){
+            language = "French";
+            setToFrench();
+        }
         getLuminosity();
         setClickListener();
         fadeInNode(vboxChoice);
@@ -127,42 +135,6 @@ public class GameController {
             ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
             imageView.setImage(null);
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent event) {
-//                    int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
-//                    placement[position] = turn ? 1 : -1;
-//                    Image i;
-//                    if(turn){
-//                        whosTurn.setText("Player 2's Turn");
-//                        imageView.setImage(player1Image);
-//                    }
-//                    else{
-//                        whosTurn.setText("Player 1's Turn");
-//                        imageView.setImage(player2Image);
-//                    }
-//                    imageView.setOnMouseClicked(null);
-//                    turn = !turn;
-//                    int victory = victory();
-//
-//                    if(victory != 0){
-//                        player1win = !turn;
-//                        currentPlayer.setVisible(false);
-//                        for (javafx.scene.Node node : morpionGrille.getChildren()) {
-//                            if (node instanceof StackPane stackPane) {
-//                                ImageView imageView = (ImageView) stackPane.getChildren().getFirst();
-//                                imageView.setOnMouseClicked(null);
-//                            }
-//                        }
-//                        int []row = getVictory();
-//                        RotateTransition rotateTransition = null;
-//                        for(int a : row){
-//                            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
-//                            ImageView imageView = (ImageView) s.getChildren().getFirst();
-//                            rotateTransition = rotateImage(imageView);
-//                        }
-//                        rotateTransition.setOnFinished(e -> showVictory(victory));
-//                    }
-//                }
                 @Override
                 public  void  handle(MouseEvent mouseEvent){
                     imageClicked(imageView, stackPane);
@@ -171,16 +143,23 @@ public class GameController {
         });
     }
 
+    public void changeWhosTurn(TextField textField){
+        if (Objects.equals(language, "French"))
+            whosTurn.setText("Au Tour De " + textField.getText());
+        else
+            whosTurn.setText(textField.getText() + "'s Turn");
+    }
+
     public void imageClicked(ImageView imageView, StackPane stackPane){
         if(!finish) {
             int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
             placement[position] = turn ? 1 : -1;
             Image i;
             if (turn) {
-                whosTurn.setText(player2Name.getText() + "'s Turn");
+                changeWhosTurn(player2Name);
                 imageView.setImage(player1Image);
             } else {
-                whosTurn.setText(player1Name.getText() + "'s Turn");
+                changeWhosTurn(player1Name);
                 imageView.setImage(player2Image);
             }
             imageView.setOnMouseClicked(null);
@@ -327,11 +306,11 @@ public class GameController {
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
             turn = true;
-            whosTurn.setText(player1Name.getText() + "'s turn");
+            changeWhosTurn(player1Name);
         }
         else{
             turn = false;
-            whosTurn.setText(player2Name.getText() + "'s turn");
+            changeWhosTurn(player2Name);
         }
         whosTurn.setVisible(true);
         fadeInGridPane();
@@ -340,7 +319,7 @@ public class GameController {
     public void startPlayer2(ActionEvent actionEvent) {
         hideToStartGame();
         turn = false;
-        whosTurn.setText(player2Name.getText() + "'s turn");
+        changeWhosTurn(player2Name);
         whosTurn.setVisible(true);
         fadeInGridPane();
     }
@@ -348,7 +327,7 @@ public class GameController {
     public void startPlayer1(ActionEvent actionEvent) {
         hideToStartGame();
         turn = true;
-        whosTurn.setText(player1Name.getText() + "'s turn");
+        changeWhosTurn(player1Name);
         whosTurn.setVisible(true);
         fadeInGridPane();
     }
@@ -375,13 +354,22 @@ public class GameController {
 
     private void showVictory(int player){
         if(player == 1){
-            victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+            if(Objects.equals(language, "French"))
+                victoryLabel.setText("Et le Vainqueur Est " + player1Name.getText() + "!!!!");
+            else
+                victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
         }
         else if (player == -1){
-            victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
+            if(Objects.equals(language, "French"))
+                victoryLabel.setText("Et le Vainqueur Est " + player2Name.getText() + "!!!!");
+            else
+                victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
         }
         else{
-            victoryLabel.setText("Egality .....");
+            if(Objects.equals(language, "French"))
+                victoryLabel.setText("Et C'est Une Égalité ..... ");
+            else
+                victoryLabel.setText("And It's A Draw .....");
         }
 
         blur();
@@ -478,9 +466,41 @@ public class GameController {
         }
         finish = false;
         setClickListener();
-        victoryPlayer1.setText("Number of Victory : " + cptVictory[0]);
-        victoryPlayer2.setText("Number of Victory : " + cptVictory[1]);
+        if(Objects.equals(language, "French")) {
+            victoryPlayer1.setText("Nombre de Victoire : " + cptVictory[0]);
+            victoryPlayer2.setText("Nombre de Victoire : " + cptVictory[1]);
+        }
+        else{
+            victoryPlayer1.setText("Number of Victory : " + cptVictory[0]);
+            victoryPlayer2.setText("Number of Victory : " + cptVictory[1]);
+        }
         victoryPlayer1.setVisible(true);
         victoryPlayer2.setVisible(true);
+    }
+
+    public void setToFrench(){
+        partyState.setText("Partie en Cours");
+        chooseLabel.setText("Joueur 1 Choisissez Votre Forme");
+        startLabel.setText("Qui Commence ?");
+        startPlayer1.setText("Joueur 1");
+        startPlayer2.setText("Joueur 2");
+        startRandom.setText("Hasard");
+        revengeLabel.setText("N'Hesitez Pas a Prendre Votre Revanche !!");
+        revengeButton.setText("Revanche");
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
     }
 }
