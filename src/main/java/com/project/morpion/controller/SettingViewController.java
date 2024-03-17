@@ -205,6 +205,7 @@ public class SettingViewController {
                 writer.newLine();
             }
             writer.write("Z:"+diff);
+            writer.close();
         } catch (IOException ignored) { }
     }
 

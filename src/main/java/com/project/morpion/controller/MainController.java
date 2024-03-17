@@ -15,15 +15,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.util.Objects;
 
 public class MainController implements ModelUpdate {
     @FXML
-    public Button play;
+    public Button playButton;
     @FXML
     public VBox chooseGameMode;
     @FXML
@@ -36,6 +39,20 @@ public class MainController implements ModelUpdate {
     public Label timer;
     @FXML
     public Label timerMessage;
+    public Button homeButton;
+    public VBox settingVbox;
+    public Slider sliderVolume;
+    public Label volumeLabel;
+    public Slider sliderLuminosity;
+    public Label luminosityLabel;
+    public BorderPane borderPane;
+    public Button settingButton;
+    public Button exitButton;
+    public Button saveButton;
+    public Label title;
+    public Label chooseMode;
+    public Button btnSinglePlayer;
+    public SplitMenuButton languageButton;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -49,6 +66,8 @@ public class MainController implements ModelUpdate {
     private String modelName;
     int seconds = 3;
 
+    private String language = "English";
+
     @FXML
     private Stage stage;
     public void setStage(Stage stage) {
@@ -57,12 +76,25 @@ public class MainController implements ModelUpdate {
 
     @FXML
     public void initialize() {
+        if(isFrench())
+            setToFrench();
+        int lum = getLuminosity();
         playGame.setVisible(true);
         playGame.setManaged(true);
         difficultyGroup = new ToggleGroup();
         easyRadioButton.setToggleGroup(difficultyGroup);
         mediumRadioButton.setToggleGroup(difficultyGroup);
         hardRadioButton.setToggleGroup(difficultyGroup);
+        sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
+            volumeLabel.setText(String.valueOf(newValue.intValue()));
+        });
+        sliderLuminosity.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
+            luminosityLabel.setText(String.valueOf(newValue.intValue()));
+        });
+        sliderLuminosity.setValue(lum);
+        luminosityLabel.setText(String.valueOf(lum));
     }
     @Override
     public void onModelUpdated() {
@@ -112,10 +144,11 @@ public class MainController implements ModelUpdate {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/setting-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageSettings = new Stage();
+        stageSettings.initModality(Modality.APPLICATION_MODAL);
         stageSettings.setResizable(false);
         stageSettings.setTitle("Model Settings");
         stageSettings.setScene(scene);
-        stageSettings.show();
+        stageSettings.showAndWait();
     }
 
     public void openLearning(ActionEvent actionEvent) throws IOException {
@@ -134,15 +167,62 @@ public class MainController implements ModelUpdate {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/model-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageModel = new Stage();
+        stageModel.initModality(Modality.APPLICATION_MODAL);
         stageModel.setScene(scene);
-        stageModel.show();
+        stageModel.showAndWait();
+    }
+
+    public void setLuminosity(int lum){
+        double l = -0.9 + ((double) lum /100);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(l);
+        borderPane.setEffect(colorAdjust);
+    }
+
+    public void save(){
+        try{
+            FileWriter fileWriter = new FileWriter(new File("src/main/resources/com/project/morpion/settings.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            int lum = (int) sliderLuminosity.getValue();
+            bufferedWriter.write("L:"+lum);
+            bufferedWriter.newLine();
+            if(Objects.equals(language, "English")){
+                bufferedWriter.write("A:E");
+                setToEnglish();
+            }
+            else{
+                bufferedWriter.write("A:F");
+                setToFrench();
+            }
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            setLuminosity(lum);
+        }
+        catch (IOException ignored){}
+    }
+
+
+
+    public int getLuminosity(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            if(line.charAt(0) == 'L'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                int lum = Integer.parseInt(d);
+                setLuminosity(lum);
+                return lum;
+            }
+        }catch (IOException e){}
+        return 0;
     }
 
     @FXML
     public void play(ActionEvent actionEvent) {
         playGame.setVisible(false);
         playGame.setManaged(false);
-
+        homeButton.setVisible(true);
         chooseGameMode.setManaged(true);
         chooseGameMode.setVisible(true);
     }
@@ -201,45 +281,77 @@ public class MainController implements ModelUpdate {
         stageGame.setScene(scene);
         stageGame.show();
     }
-/*    private void loadModels(MenuButton menuButton, String path){
-        File dir = new File(path);
-        File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));
 
-        if (files != null){
-            menuButton.getItems().clear();
-            for (File file : files){
-                ItemModel item = new ItemModel(file.getAbsolutePath());
-                MenuItem menuItem = new MenuItem(item.getName());
-                menuItem.setOnAction(event -> {
-                    //gérer ce qui se passe quand on clique sur un modèle
-                    System.out.println("Modèle sélectionné : " + item.getFullPath());
-                });
-                menuButton.getItems().add(menuItem);
-            }
-            String level = menuButton.getId();
-            switch (level){
-                case "easyMenu":
-                    menuButton.getItems().add(F);
-                    break;
-                case "mediumMenu":
-                    menuButton.getItems().add(M);
-                    break;
-                case "hardMenu":
-                    menuButton.getItems().add(D);
-                    break;
-            }
+    public void back(ActionEvent actionEvent) {
+        System.out.println("apagnan");
+        if(chooseGameMode.isVisible()){
+            chooseGameMode.setVisible(false);
+            playGame.setVisible(true);
+            homeButton.setVisible(false);
+        } else if (chooseDifficulty.isVisible()) {
+            chooseDifficulty.setVisible(false);
+            chooseGameMode.setVisible(true);
+        } else if (settingVbox.isVisible()) {
+            settingVbox.setVisible(false);
+            playGame.setVisible(true);
+            homeButton.setVisible(false);
         }
-<<<<<<< HEAD
     }
 
-    public void startGame(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stageGame = new Stage();
-        stageGame.setScene(scene);
-        stageGame.show();
+    public void gameSettings(ActionEvent actionEvent) {
+        playGame.setVisible(false);
+        playGame.setManaged(false);
+        homeButton.setVisible(true);
+        settingVbox.setManaged(true);
+        settingVbox.setVisible(true);
     }
-=======
-    }*/
 
+    public void exit(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+    public void setToFrench(){
+        playButton.setText("Jouer");
+        settingButton.setText("Réglages");
+        exitButton.setText("Quitter");
+        saveButton.setText("Sauver");
+        title.setText("Lancement de la Partie");
+        chooseMode.setText("Choisir un Mode de Jeu");
+        btnSinglePlayer.setText("1 Joueur");
+    }
+
+    public void setToEnglish(){
+        playButton.setText("Play");
+        settingButton.setText("Settings");
+        exitButton.setText("Exit");
+        saveButton.setText("Save");
+        title.setText("Game Lauch");
+        chooseMode.setText("Choose Game Mode");
+        btnSinglePlayer.setText("SinglePlayer");
+    }
+
+    public void selectEnglish(ActionEvent actionEvent) {
+        language = "English";
+        languageButton.setText(language);
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
+    }
+
+    public void selectFrench(ActionEvent actionEvent) {
+        language = "French";
+        languageButton.setText(language);
+    }
 }

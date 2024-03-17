@@ -1,5 +1,41 @@
 .image-border {
-    -fx-border-color: white;
+    -fx-border-color: rgb(210, 210, 210) ;
     -fx-border-width: 10;
     -fx-background-color: transparent;
+}
+
+.blue-button {
+    -fx-background-color: rgb(1, 191, 200);
+    -fx-text-fill: white;
+}
+
+.blue-button:hover{
+    -fx-background-color: rgb(1, 191, 200);
+}
+
+.blue-button:pressed{
+    -fx-background-color: rgb(1, 191, 200);
+}
+
+.blue-menu-item {
+    -fx-text-fill: white;
+}
+.blue-menu-item:hover{
+    -fx-background-color: rgb(1, 191, 200);
+}
+
+.lumSlider .track{
+    -fx-background-color: rgb(1, 191, 200);
+}
+
+.lumSlider .thumb{
+    -fx-background-color: fc6c00;
+}
+
+.songSlider .track{
+    -fx-background-color: fc6c00;
+}
+
+.songSlider .thumb{
+    -fx-background-color: rgb(1, 191, 200);
 }
