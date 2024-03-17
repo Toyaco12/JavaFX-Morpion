@@ -283,7 +283,6 @@ public class MainController implements ModelUpdate {
     }
 
     public void back(ActionEvent actionEvent) {
-        System.out.println("apagnan");
         if(chooseGameMode.isVisible()){
             chooseGameMode.setVisible(false);
             playGame.setVisible(true);
