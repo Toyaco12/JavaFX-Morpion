@@ -9,7 +9,7 @@ public class Morpion {
     private double[] board;
     private int currentPlayer;
     private MultiLayerPerceptron model;
-    private int successWin = 0:
+    private int successWin = 0;
 
     public Morpion(MultiLayerPerceptron model,int startingPlayer) {
         this.board = new double[9];
