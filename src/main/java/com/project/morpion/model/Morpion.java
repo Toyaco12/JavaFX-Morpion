@@ -69,7 +69,7 @@ public class Morpion {
             System.err.println("IA is not set up.");
             return;
         }
-        // Conversion de l'état du plateau pour l'IA
+
         Coup actualBoard = new Coup(board.length,"Morpion");
         actualBoard.addInBoard(board);
         actualBoard.out = model.forwardPropagation(actualBoard.in);
