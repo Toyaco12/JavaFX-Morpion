@@ -209,56 +209,72 @@ public class GameController {
         }catch (IOException ignored){};
     }
 
-    public int victory(){
-        for(int i = 0; i < 7; i+=3){
-            if(placement[i] == placement[i+1] && placement[i] == placement[i+2]){
+    public int victory() {
+        // Vérifier chaque ligne
+        for (int i = 0; i <= 6; i += 3) {
+            if (placement[i] != 0 && placement[i] == placement[i + 1] && placement[i] == placement[i + 2]) {
                 return placement[i];
             }
         }
-        for(int i = 0; i < 3; i++){
-            if(placement[i] == placement[i+3] && placement[i] == placement[i+6]){
+
+        // Vérifier chaque colonne
+        for (int i = 0; i < 3; i++) {
+            if (placement[i] != 0 && placement[i] == placement[i + 3] && placement[i] == placement[i + 6]) {
                 return placement[i];
             }
         }
-        if(placement[0] == placement[4] && placement[0] == placement[8]){
+
+        // Vérifier les diagonales
+        if (placement[0] != 0 && placement[0] == placement[4] && placement[0] == placement[8]) {
             return placement[0];
         }
-        if(placement[2] == placement[4] && placement[2] == placement[6]){
+        if (placement[2] != 0 && placement[2] == placement[4] && placement[2] == placement[6]) {
             return placement[2];
         }
-        int cpt = 0;
-        for(int i : placement){
-          if(i != 0) cpt++;
+
+        // Vérifier l'état de l'égalité
+        boolean full = true;
+        for (int i : placement) {
+            if (i == 0) {
+                full = false;
+                break;
+            }
         }
-        if(cpt == 9)
-            return -2;
-        return 0;
+        if (full) {
+            return -2; // Code pour l'égalité
+        }
+
+        return 0; // Pas de vainqueur encore
     }
 
-    private int[] getVictory(){
-        int [] rowVictory = new int [3];
-        for(int i = 0; i < 7; i+=3){
-            if(placement[i] == placement[i+1] && placement[i] == placement[i+2]){
-                rowVictory = new int[]{i, i + 1, i + 2};
-                return rowVictory;
+
+    private int[] getVictory() {
+        // Vérifie chaque ligne
+        for (int i = 0; i <= 6; i += 3) {
+            if (placement[i] != 0 && placement[i] == placement[i + 1] && placement[i] == placement[i + 2]) {
+                return new int[]{i, i + 1, i + 2};
             }
         }
-        for(int i = 0; i < 3; i++){
-            if(placement[i] == placement[i+3] && placement[i] == placement[i+6]){
-                rowVictory = new int[]{i, i + 3, i + 6};
-                return rowVictory;
+
+        // Vérifie chaque colonne
+        for (int i = 0; i < 3; i++) {
+            if (placement[i] != 0 && placement[i] == placement[i + 3] && placement[i] == placement[i + 6]) {
+                return new int[]{i, i + 3, i + 6};
             }
         }
-        if(placement[0] == placement[4] && placement[0] == placement[8]){
-            rowVictory = new int[]{0, 4, 8};
-            return rowVictory;
+
+        // Vérifie les diagonales
+        if (placement[0] != 0 && placement[0] == placement[4] && placement[0] == placement[8]) {
+            return new int[]{0, 4, 8};
         }
-        if(placement[2] == placement[4] && placement[2] == placement[6]){
-            rowVictory = new int[]{2, 4, 6};
-            return rowVictory;
+        if (placement[2] != 0 && placement[2] == placement[4] && placement[2] == placement[6]) {
+            return new int[]{2, 4, 6};
         }
-        return rowVictory;
+
+        // Si aucune ligne gagnante n'est trouvée, retourne un tableau vide ou null
+        return new int[0];
     }
+
 
     private RotateTransition rotateImage(ImageView i){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);

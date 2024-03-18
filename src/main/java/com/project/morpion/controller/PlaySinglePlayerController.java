@@ -19,7 +19,7 @@ public class PlaySinglePlayerController {
         System.out.println(this.difficulty);
         MultiLayerPerceptron model = MultiLayerPerceptron.loadModel(difficulty, modelName);
         Morpion game = new Morpion(model, Coup.X);
-        game.startGame();
+        //game.startGame();
     }
     @FXML
     public void initialize() {
