@@ -114,6 +114,6 @@ public class Morpion {
         }
     }
 
-    // Getters et autres méthodes utiles peuvent être ajoutés ici
+    // Getters & Setters
 }
 

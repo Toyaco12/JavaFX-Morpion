@@ -75,6 +75,7 @@ public class GameController {
     private int[] cptVictory = new int[2];
     private String language = "English";
 
+    boolean playKeyBoard = false;
 
     @FXML
     public void initialize() {
@@ -413,6 +414,7 @@ public class GameController {
     }
 
     private void fadeOutGridPane() {
+        playKeyBoard = false;
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
@@ -425,6 +427,7 @@ public class GameController {
         fadeTransition.setFromValue(0.0);
         fadeTransition.setToValue(1.0);
         fadeTransition.play();
+        fadeTransition.setOnFinished(e -> playKeyBoard = true);
     }
 
     private void fadeInNode(Node node){
@@ -445,7 +448,7 @@ public class GameController {
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
-        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0")){
+        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0") && playKeyBoard){
             int index = Integer.parseInt(keyEvent.getText());
             if(placement[index-1] != 0) return;
             StackPane stackPane = (StackPane) morpionGrille.getChildren().get(index-1);
