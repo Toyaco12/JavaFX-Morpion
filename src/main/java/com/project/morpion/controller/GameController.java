@@ -1,7 +1,9 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.Morpion;
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
