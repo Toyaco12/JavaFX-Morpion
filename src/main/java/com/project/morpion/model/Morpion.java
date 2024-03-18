@@ -82,6 +82,26 @@ public class Morpion {
         }
         play(bestPlace);
     }
+    public int playIAGUI() {
+        if (model == null) {
+            System.err.println("IA is not set up.");
+            return -1;
+        }
+        // Conversion de l'état du plateau pour l'IA
+        Coup actualBoard = new Coup(board.length,"Morpion");
+        actualBoard.addInBoard(board);
+        actualBoard.out = model.forwardPropagation(actualBoard.in);
+        int bestPlace = 0;
+        double maxVal = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < actualBoard.out.length; i++) {
+            if (actualBoard.out[i] > maxVal && board[i] == Coup.EMPTY) {
+                maxVal = actualBoard.out[i];
+                bestPlace = i;
+            }
+        }
+        play(bestPlace);
+        return bestPlace;
+    }
     public void startGame() {
         Scanner scanner = new Scanner(System.in);
         while (!isWin() && !isDraw()) {
@@ -114,6 +134,24 @@ public class Morpion {
         }
     }
 
-    // Getters et autres méthodes utiles peuvent être ajoutés ici
+    public boolean isAvailable(int n){
+        if(board[n] == Coup.EMPTY){
+            return true;
+        }
+        return false;
+    }
+
+    public void playGUI(int place){
+        if(isWin() || isDraw()){
+            return;
+        }
+        play(place);
+    }
+    // Getters et Setters
+    public double[] getBoard(){
+        return this.board;
+    }
+
 }
+
 
