@@ -9,6 +9,7 @@ public class Morpion {
     private double[] board;
     private int currentPlayer;
     private MultiLayerPerceptron model;
+    private int successWin = 0:
 
     public Morpion(MultiLayerPerceptron model,int startingPlayer) {
         this.board = new double[9];
@@ -114,6 +115,20 @@ public class Morpion {
         }
     }
 
+    public void restart(){
+        board = new double[9];
+    }
+    public void addSuccessWin(){
+        this.successWin++;
+    }
     // Getters & Setters
+    public void setCurrentPlayer(int player){
+        this.currentPlayer = player;
+    }
+    public int getSuccessWin(){
+        return this.successWin;
+    }
+
+
 }
 
