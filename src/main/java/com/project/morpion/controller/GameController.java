@@ -10,9 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
@@ -79,12 +78,22 @@ public class GameController {
 
     boolean playKeyBoard = false;
 
-    @FXML
-    public void initialize() {
+    private Scene scene;
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+
+    public void initialization() {
+        Image cursor = new Image("file:src/main/resources/com/project/morpion/image/pattes.png");
+        Cursor custom = new ImageCursor(cursor);
+        scene.setCursor(custom);
         if(isFrench()){
             language = "French";
             setToFrench();
         }
+        getTheme();
         getLuminosity();
         setClickListener();
         fadeInNode(vboxChoice);
@@ -203,12 +212,22 @@ public class GameController {
     }
 
     @FXML
-    public void returnHome(ActionEvent actionEvent) {
-        try{
-            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
-            Scene scene = homeButton.getScene();
-            scene.setRoot(mainView);
-        }catch (IOException ignored){};
+    public void returnHome(ActionEvent actionEvent) throws IOException {
+//        try{
+//            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
+//            Scene scene = homeButton.getScene();
+//            scene.setRoot(mainView);
+//        }catch (IOException ignored){};
+
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            MainController controller = fxmlLoader.getController();
+            controller.setScene(scene);
+            controller.initialization();
+            Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stageGame.setScene(scene);
+            stageGame.show();
+
     }
 
     public int victory() {
@@ -522,5 +541,23 @@ public class GameController {
             }
         }catch (IOException ignored){}
         return false;
+    }
+    private void getTheme(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'T')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'T'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("W")){
+                    borderPane.setStyle("-fx-background-color: white;");
+                }
+                else{
+                    borderPane.setStyle("-fx-background-color: rgb(20,20,20);");
+                }
+            }
+        }catch (IOException ignored){}
     }
 }

@@ -11,11 +11,15 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.RadioButton?>
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.SettingViewController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="700.0" fx:id="mainVbox"
+      stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.SettingViewController">
    <children>
       <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
             <GridPane fx:id="settingsPane" hgap="5.0" vgap="5.0">
+                <VBox.margin>
+                    <Insets top="30"/>
+                </VBox.margin>
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.20001220703125" minWidth="10.0" prefWidth="61.39996337890625" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="180.0" />
@@ -30,37 +34,37 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="69.0" prefWidth="200.0" text="EASY" GridPane.rowIndex="1">
+                  <Label alignment="CENTER" prefHeight="69.0" prefWidth="200.0" style="-fx-text-fill: fc6c00;" text="EASY" GridPane.rowIndex="1">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="54.0" prefWidth="177.0" text="MEDIUM" GridPane.rowIndex="2">
+                  <Label alignment="CENTER" prefHeight="54.0" prefWidth="177.0" style="-fx-text-fill: rgb(1, 191, 200);" text="MEDIUM" GridPane.rowIndex="2">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="71.0" prefWidth="240.0" text="HARD" GridPane.rowIndex="3">
+                  <Label alignment="CENTER" prefHeight="71.0" prefWidth="240.0" style="-fx-text-fill: fc6c00;" text="HARD" GridPane.rowIndex="3">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="85.0" prefWidth="258.0" text="Hidden Layer Size" GridPane.columnIndex="1">
+                  <Label alignment="CENTER" prefHeight="85.0" prefWidth="258.0" style="-fx-text-fill: rgb(1, 191, 200);" text="Hidden Layer Size" GridPane.columnIndex="1">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="175.0" prefWidth="306.0" text="Number of Hidden Layers" GridPane.columnIndex="2">
+                  <Label alignment="CENTER" prefHeight="175.0" prefWidth="306.0" style="-fx-text-fill: fc6c00;" text="Number of Hidden Layers" GridPane.columnIndex="2">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" prefHeight="127.0" prefWidth="231.0" text="Learning Rate" GridPane.columnIndex="3">
+                  <Label alignment="CENTER" prefHeight="127.0" prefWidth="231.0" style="-fx-text-fill: rgb(1, 191, 200);" text="Learning Rate" GridPane.columnIndex="3">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                   <Label alignment="CENTER" text="Default" GridPane.columnIndex="4">
+                   <Label alignment="CENTER" text="Default" style="-fx-text-fill: fc6c00;" GridPane.columnIndex="4">
                        <font>
                            <Font size="13.0" />
                        </font>
@@ -73,13 +77,15 @@
          </children>
       </StackPane>
       <Label fx:id="errorLabel" focusTraversable="false" textFill="#fa0808" visible="false" />
-      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
+      <Button fx:id="saveButton" styleClass="blue-button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
          <VBox.margin>
             <Insets bottom="5.0" />
-         </VBox.margin></Button>
-      <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeModal" text="Close Settings">
+         </VBox.margin>
+      </Button>
+      <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" text="Close Settings">
          <VBox.margin>
             <Insets bottom="5.0" />
-         </VBox.margin></Button>
+         </VBox.margin>
+      </Button>
    </children>
 </VBox>
