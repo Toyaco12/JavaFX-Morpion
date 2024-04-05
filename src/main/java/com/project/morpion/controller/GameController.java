@@ -10,9 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
@@ -77,13 +76,24 @@ public class GameController {
     private int[] cptVictory = new int[2];
     private String language = "English";
 
+    boolean playKeyBoard = false;
 
-    @FXML
-    public void initialize() {
+    private Scene scene;
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+
+    public void initialization() {
+        Image cursor = new Image("file:src/main/resources/com/project/morpion/image/pattes.png");
+        Cursor custom = new ImageCursor(cursor);
+        scene.setCursor(custom);
         if(isFrench()){
             language = "French";
             setToFrench();
         }
+        getTheme();
         getLuminosity();
         setClickListener();
         fadeInNode(vboxChoice);
@@ -202,64 +212,90 @@ public class GameController {
     }
 
     @FXML
-    public void returnHome(ActionEvent actionEvent) {
-        try{
-            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
-            Scene scene = homeButton.getScene();
-            scene.setRoot(mainView);
-        }catch (IOException ignored){};
+    public void returnHome(ActionEvent actionEvent) throws IOException {
+//        try{
+//            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
+//            Scene scene = homeButton.getScene();
+//            scene.setRoot(mainView);
+//        }catch (IOException ignored){};
+
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            MainController controller = fxmlLoader.getController();
+            controller.setScene(scene);
+            controller.initialization();
+            Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stageGame.setScene(scene);
+            stageGame.show();
+
     }
 
-    public int victory(){
-        for(int i = 0; i < 7; i+=3){
-            if(placement[i] == placement[i+1] && placement[i] == placement[i+2]){
+    public int victory() {
+        // Vérifier chaque ligne
+        for (int i = 0; i <= 6; i += 3) {
+            if (placement[i] != 0 && placement[i] == placement[i + 1] && placement[i] == placement[i + 2]) {
                 return placement[i];
             }
         }
-        for(int i = 0; i < 3; i++){
-            if(placement[i] == placement[i+3] && placement[i] == placement[i+6]){
+
+        // Vérifier chaque colonne
+        for (int i = 0; i < 3; i++) {
+            if (placement[i] != 0 && placement[i] == placement[i + 3] && placement[i] == placement[i + 6]) {
                 return placement[i];
             }
         }
-        if(placement[0] == placement[4] && placement[0] == placement[8]){
+
+        // Vérifier les diagonales
+        if (placement[0] != 0 && placement[0] == placement[4] && placement[0] == placement[8]) {
             return placement[0];
         }
-        if(placement[2] == placement[4] && placement[2] == placement[6]){
+        if (placement[2] != 0 && placement[2] == placement[4] && placement[2] == placement[6]) {
             return placement[2];
         }
-        int cpt = 0;
-        for(int i : placement){
-          if(i != 0) cpt++;
+
+        // Vérifier l'état de l'égalité
+        boolean full = true;
+        for (int i : placement) {
+            if (i == 0) {
+                full = false;
+                break;
+            }
         }
-        if(cpt == 9)
-            return -2;
-        return 0;
+        if (full) {
+            return -2; // Code pour l'égalité
+        }
+
+        return 0; // Pas de vainqueur encore
     }
 
-    private int[] getVictory(){
-        int [] rowVictory = new int [3];
-        for(int i = 0; i < 7; i+=3){
-            if(placement[i] == placement[i+1] && placement[i] == placement[i+2]){
-                rowVictory = new int[]{i, i + 1, i + 2};
-                return rowVictory;
+
+    private int[] getVictory() {
+        // Vérifie chaque ligne
+        for (int i = 0; i <= 6; i += 3) {
+            if (placement[i] != 0 && placement[i] == placement[i + 1] && placement[i] == placement[i + 2]) {
+                return new int[]{i, i + 1, i + 2};
             }
         }
-        for(int i = 0; i < 3; i++){
-            if(placement[i] == placement[i+3] && placement[i] == placement[i+6]){
-                rowVictory = new int[]{i, i + 3, i + 6};
-                return rowVictory;
+
+        // Vérifie chaque colonne
+        for (int i = 0; i < 3; i++) {
+            if (placement[i] != 0 && placement[i] == placement[i + 3] && placement[i] == placement[i + 6]) {
+                return new int[]{i, i + 3, i + 6};
             }
         }
-        if(placement[0] == placement[4] && placement[0] == placement[8]){
-            rowVictory = new int[]{0, 4, 8};
-            return rowVictory;
+
+        // Vérifie les diagonales
+        if (placement[0] != 0 && placement[0] == placement[4] && placement[0] == placement[8]) {
+            return new int[]{0, 4, 8};
         }
-        if(placement[2] == placement[4] && placement[2] == placement[6]){
-            rowVictory = new int[]{2, 4, 6};
-            return rowVictory;
+        if (placement[2] != 0 && placement[2] == placement[4] && placement[2] == placement[6]) {
+            return new int[]{2, 4, 6};
         }
-        return rowVictory;
+
+        // Si aucune ligne gagnante n'est trouvée, retourne un tableau vide ou null
+        return new int[0];
     }
+
 
     private RotateTransition rotateImage(ImageView i){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);
@@ -415,6 +451,7 @@ public class GameController {
     }
 
     private void fadeOutGridPane() {
+        playKeyBoard = false;
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
@@ -427,6 +464,7 @@ public class GameController {
         fadeTransition.setFromValue(0.0);
         fadeTransition.setToValue(1.0);
         fadeTransition.play();
+        fadeTransition.setOnFinished(e -> playKeyBoard = true);
     }
 
     private void fadeInNode(Node node){
@@ -447,7 +485,7 @@ public class GameController {
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
-        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0")){
+        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0") && playKeyBoard){
             int index = Integer.parseInt(keyEvent.getText());
             if(placement[index-1] != 0) return;
             StackPane stackPane = (StackPane) morpionGrille.getChildren().get(index-1);
@@ -503,5 +541,23 @@ public class GameController {
             }
         }catch (IOException ignored){}
         return false;
+    }
+    private void getTheme(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'T')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'T'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("W")){
+                    borderPane.setStyle("-fx-background-color: white;");
+                }
+                else{
+                    borderPane.setStyle("-fx-background-color: rgb(20,20,20);");
+                }
+            }
+        }catch (IOException ignored){}
     }
 }

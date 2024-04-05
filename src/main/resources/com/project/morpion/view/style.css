@@ -25,7 +25,7 @@
 }
 
 .blue-button:hover {
-    -fx-background-color: fc6c00;
+    -fx-background-color: rgb(0, 150, 160);
 }
 
 .orange-button{
@@ -33,5 +33,13 @@
 }
 
 .orange-button:hover {
-    -fx-background-color: rgb(1, 191, 200);
+    -fx-background-color: e54a00;
+}
+
+.orange-radio {
+    -fx-mark-color:fc6c00;
+}
+
+.blue-radio {
+    -fx-mark-color:rgb(1, 191, 200);
 }

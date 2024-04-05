@@ -9,6 +9,8 @@ public class Morpion {
     private double[] board;
     private int currentPlayer;
     private MultiLayerPerceptron model;
+    private int successWinPlayer = 0;
+    private int successWinBot = 0;
 
     public Morpion(MultiLayerPerceptron model,int startingPlayer) {
         this.board = new double[9];
@@ -127,6 +129,33 @@ public class Morpion {
         }
     }
 
+    public int[] getVictory() {
+        // Vérifie chaque ligne
+        for (int i = 0; i <= 6; i += 3) {
+            if (board[i] != 0 && board[i] == board[i + 1] && board[i] == board[i + 2]) {
+                return new int[]{i, i + 1, i + 2};
+            }
+        }
+
+        // Vérifie chaque colonne
+        for (int i = 0; i < 3; i++) {
+            if (board[i] != 0 && board[i] == board[i + 3] && board[i] == board[i + 6]) {
+                return new int[]{i, i + 3, i + 6};
+            }
+        }
+
+        // Vérifie les diagonales
+        if (board[0] != 0 && board[0] == board[4] && board[0] == board[8]) {
+            return new int[]{0, 4, 8};
+        }
+        if (board[2] != 0 && board[2] == board[4] && board[2] == board[6]) {
+            return new int[]{2, 4, 6};
+        }
+
+        // Si aucune ligne gagnante n'est trouvée, retourne un tableau vide ou null
+        return new int[0];
+    }
+
     private void printBoard() {
         for (int i = 0; i < board.length; i++) {
             System.out.print(board[i] == Coup.X ? "X" : board[i] == Coup.O ? "O" : ".");
@@ -152,6 +181,25 @@ public class Morpion {
         return this.board;
     }
 
+    public void restart(){
+        board = new double[9];
+    }
+    public void addSuccessWinPlayer(){
+        this.successWinPlayer++;
+    }
+    public void addSuccessWinBot(){
+        this.successWinBot++;
+    }
+    // Getters & Setters
+    public void setCurrentPlayer(int player){
+        this.currentPlayer = player;
+    }
+    public int getSuccessWinPlayer(){
+        return this.successWinPlayer;
+    }
+    public int getSuccessWinBot(){
+        return this.successWinBot;
+    }
 }
 
 

@@ -2,10 +2,15 @@ package com.project.morpion.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.*;
 
 import java.io.*;
 import java.util.Arrays;
@@ -20,12 +25,22 @@ public class SettingViewController {
     public RadioButton easyRadioButton;
     public RadioButton mediumRadioButton;
     public RadioButton hardRadioButton;
+    public VBox mainVbox;
     private boolean save = false;
     private ToggleGroup difficulty;
+    private Scene scene;
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
 
 
-    @FXML
-    public void initialize() {
+
+
+    public void initialization() {
+        Image cursor = new Image("file:src/main/resources/com/project/morpion/image/pattes.png");
+        Cursor custom = new ImageCursor(cursor);
+        scene.setCursor(custom);
+        getTheme();
         difficulty = new ToggleGroup();
         easyRadioButton.setToggleGroup(difficulty);
         mediumRadioButton.setToggleGroup(difficulty);
@@ -122,8 +137,9 @@ public class SettingViewController {
             errorLabel.setVisible(false);
             setSettings(set, diff);
             save = true;
+            Stage stage = (Stage) saveButton.getScene().getWindow();
+            stage.close();
         }
-
     }
 
     private TextField createTextField(String setText){
@@ -210,5 +226,24 @@ public class SettingViewController {
     }
 
     public void selectDifficulty(ActionEvent actionEvent) {
+    }
+
+    private void getTheme(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'T')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'T'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("W")){
+                    mainVbox.setStyle("-fx-background-color: white;");
+                }
+                else{
+                    mainVbox.setStyle("-fx-background-color: rgb(20,20,20);");
+                }
+            }
+        }catch (IOException ignored){}
     }
 }
