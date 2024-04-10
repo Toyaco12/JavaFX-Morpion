@@ -89,7 +89,7 @@ public class MainController implements ModelUpdate {
         this.scene = scene;
     }
 
-//test
+//testttt
     public void initialization() {
         getCursor();
         if(isFrench())
