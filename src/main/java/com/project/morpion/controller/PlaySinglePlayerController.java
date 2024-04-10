@@ -1,29 +1,35 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
 import com.project.morpion.model.Morpion;
 import com.project.morpion.model.ai.Coup;
 import com.project.morpion.model.ai.MultiLayerPerceptron;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
 
@@ -52,14 +58,16 @@ public class PlaySinglePlayerController {
     public HBox hboxTop;
     public VBox vboxLeft;
     public VBox vboxRight;
+    public BorderPane borderPane;
+    public Button revengeButton;
     private String modelName;
     private String difficulty;
-    public Morpion game;
-
+    public Morpion game = null;
     private Image player1Image;
     private Image player2Image;
     MultiLayerPerceptron model;
-
+    private boolean readyToPlay;
+    ScaleTransition scaleTransition = null;
     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
     public void setModelName(String modelName){
         this.modelName = modelName;
@@ -67,6 +75,8 @@ public class PlaySinglePlayerController {
     public void setDifficulty(String difficulty){
         this.difficulty = difficulty;
     }
+
+    private String language = "English";
     public void initModel() {
         System.out.println(this.modelName);
         System.out.println(this.difficulty);
@@ -83,55 +93,75 @@ public class PlaySinglePlayerController {
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public  void  handle(MouseEvent mouseEvent){
-                    int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
-                    if(game.isAvailable(position)){
-                        game.playGUI(position);
-                        updateGridPane();
-                        if(game.isWin()){
-                            showVictory(1);
-                            System.out.println("huma  win");
+                    if(readyToPlay) {
+                        int position = GridPane.getRowIndex(stackPane) * morpionGrille.getColumnCount() + GridPane.getColumnIndex(stackPane);
+                        if (game.isAvailable(position)) {
+                            game.playGUI(position);
+                            readyToPlay = false;
+                            updateGridPane();
+                            if (game.isWin()) {
+                                showVictory(1);
+                            }
+                            else if (game.isDraw()) {
+                                showVictory(0);
+                            }
+                            else {
+                                game.playIAGUI();
+                                //updateGridPane();
+                                pauseTransition.play();
+                            }
                         }
-                        if(game.isDraw()){
-                            showVictory(0);
-                            System.out.println("huma  draw");
-                        }
-                        game.playIAGUI();
-                        //updateGridPane();
-                        pauseTransition.play();
-
-                    }
-                    else{
-
                     }
                 }
             });
         });
     }
 
-    private void lanchGame(){
-
-    }
-
     private void showVictory(int player){
-        if(player == 1){
-                victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+        restartButton.setDisable(true);
+        scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
+        int[] row = game.getVictory();
+        RotateTransition rotateTransition = null;
+        for (int a : row) {
+            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
+            ImageView imageView1 = (ImageView) s.getChildren().getFirst();
+            rotateTransition = rotateImage(imageView1);
         }
-        else if (player == -1){
-                victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
-        }
-        else{
-                victoryLabel.setText("And It's A Draw .....");
-        }
+        rotateTransition.setOnFinished(e -> {
+            restartButton.setDisable(false);
+            if(player == 1){
+                if(Objects.equals(language, "french"))
+                    victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
+                else
+                    victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+                game.addSuccessWinPlayer();
+            }
+            else if (player == -1){
+                if(Objects.equals(language, "french"))
+                    victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
+                else
+                    victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
+                game.addSuccessWinBot();
+            }
+            else{
+                if(Objects.equals(language, "french"))
+                    victoryLabel.setText("Et C'est Une Égalité ...");
+                else
+                    victoryLabel.setText("And It's A Draw .....");
 
-        blur();
-        fadeOutGridPane();
-        vBoxVictory.setVisible(true);
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
-        scaleTransition.setFromX(0.0); // Taille initiale en x
-        scaleTransition.setFromY(0.0); // Taille initiale en y
-        scaleTransition.setToX(1.0);   // Taille finale en x
-        scaleTransition.setToY(1.0);   // Taille finale en y
-        scaleTransition.play();
+            }
+
+            blur();
+            fadeOutGridPane();
+            vBoxVictory.setVisible(true);
+
+            scaleTransition.setFromX(0.0); // Taille initiale en x
+            scaleTransition.setFromY(0.0); // Taille initiale en y
+            scaleTransition.setToX(1.0);   // Taille finale en x
+            scaleTransition.setToY(1.0);   // Taille finale en y
+            scaleTransition.play();
+        });
+
 
     }
 
@@ -165,20 +195,25 @@ public class PlaySinglePlayerController {
         }
     }
 
-
     @FXML
     public void initialize() {
+        //game = new Morpion(model, Coup.O);
+        if(isFrench()){
+            setToFrench();
+            language = "french";
+        }
+        getLuminosity();
+        setToFrench();
         setClickListener();
         pauseTransition.setOnFinished(e->{
             updateGridPane();
             if(game.isWin()){
                 showVictory(-1);
-                System.out.println("pas huma  win");
             }
             if(game.isDraw()){
                 showVictory(0);
-                System.out.println("pas human  draw");
             }
+            readyToPlay = true;
         });
     }
 
@@ -186,9 +221,41 @@ public class PlaySinglePlayerController {
     }
 
     public void returnHome(ActionEvent actionEvent) {
+        try{
+            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
+            Scene scene = homeButton.getScene();
+            scene.setRoot(mainView);
+        }catch (IOException ignored){};
     }
 
     public void restartGame(ActionEvent actionEvent) {
+        setClickListener();
+        game.restart();
+        morpionGrille.setVisible(false);
+        hideVictory();
+        victoryPlayer1.setVisible(false);
+        victoryPlayer2.setVisible(false);
+    }
+
+    private void hideVictory(){
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
+        scaleTransition.setFromX(1.0); // Taille initiale en x
+        scaleTransition.setFromY(1.0); // Taille initiale en y
+        scaleTransition.setToX(0.0);   // Taille finale en x
+        scaleTransition.setToY(0.0);   // Taille finale en y
+        scaleTransition.play();
+        scaleTransition.setOnFinished(event ->{
+            vBoxVictory.setVisible(false);
+            vboxLeft.setEffect(null);
+            vboxRight.setEffect(null);
+            hboxTop.setEffect(null);
+            //
+            //fadeInGridPane();
+            //hideVictory();
+            fadeInNode(hboxStart);
+            fadeInNode(startLabel);
+            fadeInNode(vboxChoice);
+        });
     }
 
     public void chooseCross(MouseEvent mouseEvent) {
@@ -220,17 +287,26 @@ public class PlaySinglePlayerController {
 
     public void startPlayer1(ActionEvent actionEvent) {
         hideToStartGame();
-        game = new Morpion(model, Coup.O);
+        if(game == null)
+            game = new Morpion(model, Coup.O);
+        else
+            game.setCurrentPlayer(1);
         whosTurn.setVisible(true);
         fadeInGridPane();
+        readyToPlay = false;
+        readyToPlay = true;
     }
 
     public void startPlayer2(ActionEvent actionEvent) {
         hideToStartGame();
-        game = new Morpion(model, Coup.X);
-        whosTurn.setVisible(true);
+        if(game == null)
+            game = new Morpion(model, Coup.X);
+        else
+            game.setCurrentPlayer(-1);
+        //whosTurn.setVisible(true);
         fadeInGridPane();
         game.playIAGUI();
+        pauseTransition.play();
     }
 
     public void startRandom(ActionEvent actionEvent) {
@@ -238,11 +314,19 @@ public class PlaySinglePlayerController {
         Random random = new Random();
         int randomNumber = random.nextInt(2) + 1;
         if(randomNumber == 1){
-            game = new Morpion(model, Coup.O);
+            if(game == null)
+                game = new Morpion(model, Coup.O);
+            else
+                game.setCurrentPlayer(1);
+            readyToPlay = true;
         }
         else{
-            game = new Morpion(model, Coup.X);
+            if(game == null)
+                game = new Morpion(model, Coup.X);
+            else
+                game.setCurrentPlayer(-1);
             game.playIAGUI();
+            pauseTransition.play();
         }
         whosTurn.setVisible(true);
         fadeInGridPane();
@@ -280,7 +364,86 @@ public class PlaySinglePlayerController {
 
     private void checkEmptyField(){
         if(player1Name.getText().isEmpty()){
-            player1Name.setText("Player 1");
+            if(Objects.equals(language, "french"))
+                player1Name.setText("Joueur 1");
+            else
+                player1Name.setText("Player 1");
         }
     }
+
+    public void revenge(ActionEvent actionEvent) {
+        game.restart();
+        restartGame(null);
+        if(Objects.equals(language, "french")) {
+            victoryPlayer2.setText("Nombre de Victoire : " + game.getSuccessWinBot());
+            victoryPlayer1.setText("Nombre de Victoire : " + game.getSuccessWinPlayer());
+        }
+        else {
+            victoryPlayer2.setText("Number of Victory : " + game.getSuccessWinBot());
+            victoryPlayer1.setText("Number of Victory : " + game.getSuccessWinPlayer());
+        }
+        victoryPlayer2.setVisible(true);
+        victoryPlayer1.setVisible(true);
+    }
+
+    private RotateTransition rotateImage(ImageView i){
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(2);
+        rotateTransition.setAutoReverse(false);
+        rotateTransition.play();
+        return rotateTransition;
+    }
+
+    public int getLuminosity(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            if(line.charAt(0) == 'L'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                int lum = Integer.parseInt(d);
+                setLuminosity(lum);
+                return lum;
+            }
+        }catch (IOException e){}
+        return 0;
+    }
+
+    public void setLuminosity(int lum){
+        double l = -0.9 + ((double) lum /100);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(l);
+        borderPane.setEffect(colorAdjust);
+    }
+
+    public void setToFrench(){
+        partyState.setText("Partie en Cours");
+        chooseLabel.setText("Joueur 1 Choisissez Votre Forme");
+        startLabel.setText("Qui Commence ?");
+        startPlayer1.setText("Joueur 1");
+        startPlayer2.setText("Robot");
+        startRandom.setText("Hasard");
+        revengeLabel.setText("N'Hesitez Pas a Prendre Votre Revanche !!");
+        revengeButton.setText("Revanche");
+        player2Name.setText("Robot");
+        player1Name.setText("Joueur 1");
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
+    }
+
+
 }

@@ -17,7 +17,9 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         MainController controller = fxmlLoader.getController();
+        controller.setScene(scene);
         controller.setStage(stage);
+        controller.initialization();
         stage.setTitle("Morpion project");
         stage.getIcons().add(new Image("file:src/main/resources/com/project/morpion/image/morpionlogo.png"));
         stage.setScene(scene);
