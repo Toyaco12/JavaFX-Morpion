@@ -77,6 +77,7 @@ public class GameController {
     private String language = "English";
 
     boolean playKeyBoard = false;
+    private Cursor cursor;
 
     private Scene scene;
 
@@ -86,9 +87,7 @@ public class GameController {
 
 
     public void initialization() {
-        Image cursor = new Image("file:src/main/resources/com/project/morpion/image/pattes.png");
-        Cursor custom = new ImageCursor(cursor);
-        scene.setCursor(custom);
+        getCursor();
         if(isFrench()){
             language = "French";
             setToFrench();
@@ -213,12 +212,6 @@ public class GameController {
 
     @FXML
     public void returnHome(ActionEvent actionEvent) throws IOException {
-//        try{
-//            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
-//            Scene scene = homeButton.getScene();
-//            scene.setRoot(mainView);
-//        }catch (IOException ignored){};
-
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             MainController controller = fxmlLoader.getController();
@@ -227,7 +220,6 @@ public class GameController {
             Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stageGame.setScene(scene);
             stageGame.show();
-
     }
 
     public int victory() {
@@ -404,10 +396,14 @@ public class GameController {
                 victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
         }
         else{
-            if(Objects.equals(language, "French"))
+            if(Objects.equals(language, "French")) {
                 victoryLabel.setText("Et C'est Une Égalité ..... ");
-            else
+                revengeButton.setText("N'hesitez pas à vous départager !!");
+            }
+            else {
                 victoryLabel.setText("And It's A Draw .....");
+                revengeLabel.setText("Don't hesitate to settle the matter !!");
+            }
         }
 
         blur();
@@ -557,6 +553,32 @@ public class GameController {
                 else{
                     borderPane.setStyle("-fx-background-color: rgb(20,20,20);");
                 }
+            }
+        }catch (IOException ignored){}
+    }
+
+    private void getCursor(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'C')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'C'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("D")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+                    System.out.println("zob");
+                }
+                else if(d.equals("C")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+                    System.out.println("zab");
+                }
+                else{
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+                    System.out.println("zub");
+                }
+                scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
     }
