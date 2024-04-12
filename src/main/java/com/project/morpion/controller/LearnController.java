@@ -116,6 +116,8 @@ public class LearnController {
                     layers[layers.length-1] = size ;
                     //
                     double error = 0.0 ;
+                    double actualTrainError = error;
+                    double pastTrainError = Double.MAX_VALUE;
                     MultiLayerPerceptron net = new MultiLayerPerceptron(layers, lr, new SigmoidalTransferFunction());
 
                     if ( verbose ) {
@@ -137,7 +139,19 @@ public class LearnController {
 
                         error += net.backPropagate(c.in, c.out);
 
-                        if ( i % 1000 == 0 && verbose) updateMessage("Error at step "+i+" is "+ (error/(double)i));
+                        if ( i % 1000 == 0 && verbose) {
+                            actualTrainError = (error/(double)i);
+                            if(i==0) actualTrainError = Double.MIN_VALUE;
+                            if(actualTrainError > pastTrainError){
+                                updateMessage("Error at step "+i+" is increasing");
+                            } else if (actualTrainError < pastTrainError) {
+                                updateMessage("Error at step "+i+" is decreasing");
+                            }
+                            else {
+                                updateMessage("Error at step "+i+" is constant");
+                            }
+                            pastTrainError = actualTrainError;
+                        }
                         updateProgress(i, epochs);
                     }
                     if ( verbose ){

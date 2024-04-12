@@ -107,11 +107,14 @@ public class MultiLayerPerceptron implements Cloneable, Serializable {
 		ConfigFileLoader cfl = new ConfigFileLoader();
 		cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
 		Config config = cfl.get(difficulty);
-		modelToSave.save("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+		modelToSave.save("src/main/resources/com/project/morpion/ai/models/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+		//modelToSave.save("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
 	}
 
 	public static MultiLayerPerceptron loadModel(String difficulty,String modelName){
-		return MultiLayerPerceptron.load("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/"+modelName);
+		return MultiLayerPerceptron.load("src/main/resources/com/project/morpion/ai/models/"+modelName);
+		//return MultiLayerPerceptron.load("src/main/resources/com/project/morpion/ai/models/"+difficulty+"/"+modelName);
+
 	}
 	//CHAMPS ...
 	double			fLearningRate = 0.6;
