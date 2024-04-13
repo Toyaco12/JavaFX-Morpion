@@ -147,24 +147,24 @@
                          <Slider fx:id="sliderLuminosity" max="100" min="0" prefHeight="30" prefWidth="300" styleClass="lumSlider" value="50" />
                          <Label fx:id="luminosityLabel" style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="50" />
                      </HBox>
-                     <HBox alignment="CENTER" spacing="10">
+                     <HBox alignment="CENTER" spacing="10" styleClass="orange-theme">
                          <Label style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 16; -fx-font-weight: bold" text="Language : " />
-                         <SplitMenuButton fx:id="languageButton" styleClass="blue-button" text="English">
+                         <SplitMenuButton fx:id="languageButton" styleClass="orange-theme" text="English">
                              <items>
-                                 <MenuItem onAction="#selectEnglish" styleClass="blue-menu-item" text="English" />
-                                 <MenuItem onAction="#selectFrench" styleClass="blue-menu-item" text="French" />
+                                 <MenuItem onAction="#selectEnglish" styleClass="" text="English" />
+                                 <MenuItem onAction="#selectFrench" styleClass="" text="French" />
                              </items>
                          </SplitMenuButton>
                          <VBox.margin>
                              <Insets top="40" />
                          </VBox.margin>
                      </HBox>
-                     <HBox alignment="CENTER" spacing="10">
+                     <HBox alignment="CENTER" spacing="10" styleClass="blue-theme">
                          <Label style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="Theme : " />
-                         <SplitMenuButton fx:id="themeButton" styleClass="blue-button" text="White">
+                         <SplitMenuButton fx:id="themeButton" styleClass="blue-theme" text="White">
                              <items>
-                                 <MenuItem onAction="#selectWhite" styleClass="blue-menu-item" text="White" />
-                                 <MenuItem onAction="#selectBlack" styleClass="blue-menu-item" text="Black" />
+                                 <MenuItem onAction="#selectWhite" styleClass="" text="White" />
+                                 <MenuItem onAction="#selectBlack" styleClass="" text="Black" />
                              </items>
                          </SplitMenuButton>
                          <VBox.margin>

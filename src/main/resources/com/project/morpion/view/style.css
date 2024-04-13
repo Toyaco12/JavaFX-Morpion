@@ -29,7 +29,7 @@
 }
 
 .orange-button{
-    -fx-background-color: fc6c00;
+    -fx-background-color: #fc6c00;
 }
 
 .orange-button:hover {
@@ -43,3 +43,229 @@
 .blue-radio {
     -fx-mark-color:rgb(1, 191, 200);
 }
+
+.orange-theme .split-menu-button {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour tout le bouton */
+    -fx-text-fill: white; /* Couleur du texte */
+    -fx-border-color: transparent; /* Rendre les bordures transparentes */
+    -fx-border-width: 0; /* Supprimer la largeur des bordures */
+    -fx-padding: 0; /* Supprimer le padding autour du texte et des icônes */
+}
+
+.orange-theme .split-menu-button:hover {
+    -fx-background-color: #dca07c; /* Changement de couleur au survol */
+}
+
+.orange-theme .split-menu-button .label {
+    -fx-background-color: #fc6c00; /* Appliquer la couleur de fond au texte */
+}
+
+.orange-theme .split-menu-button .arrow-button {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour le bouton fléché */
+}
+
+.orange-theme .split-menu-button .arrow {
+    -fx-fill: white; /* Couleur de la flèche */
+}
+
+/* Supprimer le style par défaut lorsqu'on clique sur le bouton */
+.orange-theme .split-menu-button:pressed, .split-menu-button:focused, .split-menu-button:armed {
+    -fx-background-color: #fc6c00;
+}
+
+.orange-theme .split-menu-button:hover .context-menu {
+    -fx-background-color: #fc6c00; /* Fond du menu déroulant */
+}
+.orange-theme .split-menu-button .context-menu {
+    -fx-background-color: #fc6c00; /* Fond du menu déroulant */
+}
+
+.orange-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+}
+
+.orange-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Si vous avez également besoin de changer la couleur du texte dans les éléments de menu, vous pouvez le faire ici */
+.orange-theme .split-menu-button .context-menu .menu-item .text {
+    -fx-fill: white; /* Couleur de texte pour les éléments de menu */
+}
+/* Style par défaut pour les éléments du menu */
+.orange-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+    -fx-padding: 0; /* Supprimer le padding pour que le fond occupe tout l'espace */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu */
+    -fx-font-size: 12px; /* Augmente la taille de la police si nécessaire */
+
+}
+
+/* Style des éléments du menu au survol */
+.orange-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Il se peut que vous ayez également à réinitialiser le style des séparateurs si vous en avez */
+.orange-theme .split-menu-button .context-menu .separator .line {
+    -fx-border-color: transparent; /* Faire les séparateurs transparents */
+}
+
+/* Vérifier si les labels des menu-item ont un fond différent */
+.orange-theme .split-menu-button .context-menu .menu-item .label {
+    -fx-background-color: transparent; /* Assurez-vous que le fond des labels est transparent */
+}
+
+.orange-theme .split-menu-button {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour tout le bouton */
+    -fx-text-fill: white; /* Couleur du texte */
+    -fx-border-color: transparent; /* Rendre les bordures transparentes */
+    -fx-border-width: 0; /* Supprimer la largeur des bordures */
+    -fx-padding: 0; /* Supprimer le padding autour du texte et des icônes */
+}
+
+.orange-theme .split-menu-button:hover {
+    -fx-background-color: #dca07c; /* Changement de couleur au survol */
+}
+
+.orange-theme .split-menu-button .label {
+    -fx-background-color: #fc6c00; /* Appliquer la couleur de fond au texte */
+}
+
+.orange-theme .split-menu-button .arrow-button {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour le bouton fléché */
+}
+
+.orange-theme .split-menu-button .arrow {
+    -fx-fill: white; /* Couleur de la flèche */
+}
+
+/* Supprimer le style par défaut lorsqu'on clique sur le bouton */
+.orange-theme .split-menu-button:pressed, .split-menu-button:focused, .split-menu-button:armed {
+    -fx-background-color: #fc6c00;
+}
+
+.orange-theme .split-menu-button:hover .context-menu {
+    -fx-background-color: #fc6c00; /* Fond du menu déroulant */
+}
+.orange-theme .split-menu-button .context-menu {
+    -fx-background-color: #fc6c00; /* Fond du menu déroulant */
+}
+
+.orange-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+}
+
+.orange-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Si vous avez également besoin de changer la couleur du texte dans les éléments de menu, vous pouvez le faire ici */
+.orange-theme .split-menu-button .context-menu .menu-item .text {
+    -fx-fill: white; /* Couleur de texte pour les éléments de menu */
+}
+/* Style par défaut pour les éléments du menu */
+.orange-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #fc6c00; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+    -fx-padding: 0; /* Supprimer le padding pour que le fond occupe tout l'espace */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu */
+    -fx-font-size: 12px; /* Augmente la taille de la police si nécessaire */
+
+}
+
+/* Style des éléments du menu au survol */
+.orange-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Il se peut que vous ayez également à réinitialiser le style des séparateurs si vous en avez */
+.orange-theme .split-menu-button .context-menu .separator .line {
+    -fx-border-color: transparent; /* Faire les séparateurs transparents */
+}
+
+/* Vérifier si les labels des menu-item ont un fond différent */
+.orange-theme .split-menu-button .context-menu .menu-item .label {
+    -fx-background-color: transparent; /* Assurez-vous que le fond des labels est transparent */
+}
+
+.blue-theme .split-menu-button {
+    -fx-background-color: #01BFC8FF; /* Couleur de fond pour tout le bouton */
+    -fx-text-fill: white; /* Couleur du texte */
+    -fx-border-color: transparent; /* Rendre les bordures transparentes */
+    -fx-border-width: 0; /* Supprimer la largeur des bordures */
+    -fx-padding: 0; /* Supprimer le padding autour du texte et des icônes */
+}
+
+
+.blue-theme .split-menu-button:hover {
+    -fx-background-color: #dca07c; /* Changement de couleur au survol */
+}
+
+.blue-theme .split-menu-button .label {
+    -fx-background-color: #01BFC8FF; /* Appliquer la couleur de fond au texte */
+}
+
+.blue-theme .split-menu-button .arrow-button {
+    -fx-background-color: #01BFC8FF; /* Couleur de fond pour le bouton fléché */
+}
+
+.blue-theme .split-menu-button .arrow {
+    -fx-fill: white; /* Couleur de la flèche */
+}
+
+/* Supprimer le style par défaut lorsqu'on clique sur le bouton */
+.blue-theme .split-menu-button:pressed, .split-menu-button:focused, .split-menu-button:armed {
+    -fx-background-color: #01BFC8FF;
+}
+
+.blue-theme .split-menu-button:hover .context-menu {
+    -fx-background-color: #01BFC8FF; /* Fond du menu déroulant */
+}
+.blue-theme .split-menu-button .context-menu {
+    -fx-background-color: #01BFC8FF; /* Fond du menu déroulant */
+}
+
+.blue-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #01BFC8FF; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+}
+
+.blue-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Si vous avez également besoin de changer la couleur du texte dans les éléments de menu, vous pouvez le faire ici */
+.blue-theme .split-menu-button .context-menu .menu-item .text {
+    -fx-fill: white; /* Couleur de texte pour les éléments de menu */
+}
+/* Style par défaut pour les éléments du menu */
+.blue-theme .split-menu-button .context-menu .menu-item {
+    -fx-background-color: #01BFC8FF; /* Couleur de fond pour les éléments de menu non-sélectionnés */
+    -fx-padding: 0; /* Supprimer le padding pour que le fond occupe tout l'espace */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu */
+    -fx-font-size: 12px; /* Augmente la taille de la police si nécessaire */
+
+}
+
+/* Style des éléments du menu au survol */
+.blue-theme .split-menu-button .context-menu .menu-item:hover {
+    -fx-background-color: #dca07c; /* Couleur de fond pour les éléments de menu au survol */
+    -fx-text-fill: white; /* Couleur de texte pour les éléments de menu au survol */
+}
+
+/* Il se peut que vous ayez également à réinitialiser le style des séparateurs si vous en avez */
+.blue-theme .split-menu-button .context-menu .separator .line {
+    -fx-border-color: transparent; /* Faire les séparateurs transparents */
+}
+
+/* Vérifier si les labels des menu-item ont un fond différent */
+.blue-theme .split-menu-button .context-menu .menu-item .label {
+    -fx-background-color: transparent; /* Assurez-vous que le fond des labels est transparent */
+}
+
+
+
