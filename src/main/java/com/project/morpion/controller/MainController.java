@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -64,6 +65,7 @@ public class MainController implements ModelUpdate {
     public Label brightnessTitle;
     public Label cursorLabel;
     public Button helpButton;
+    public ImageView difficultyImage;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -320,6 +322,15 @@ public class MainController implements ModelUpdate {
     public void selectDifficulty(ActionEvent actionEvent) {
         RadioButton selectedRadioButton = (RadioButton) actionEvent.getSource();
         selectDifficulty = selectedRadioButton.getText();
+        if(easyRadioButton.isSelected()){
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+        }
+        else if (mediumRadioButton.isSelected()) {
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+        }
+        else{
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+        }
     }
 
     @FXML

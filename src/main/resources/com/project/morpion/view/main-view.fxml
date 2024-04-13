@@ -56,7 +56,13 @@
                      <children>
                          <VBox alignment="TOP_CENTER" spacing="10">
                              <children>
-                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#handleSubmit" minHeight="80" minWidth="164" prefHeight="80.0" prefWidth="164.0" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold" styleClass="orange-button" text="Singleplayer" />
+                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#handleSubmit" minHeight="80" minWidth="164" prefHeight="80.0" prefWidth="164.0" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold" styleClass="orange-button" text="Singleplayer">
+                                     <graphic>
+                                         <ImageView fx:id="difficultyImage" fitHeight="40.0" fitWidth="40.0">
+                                             <Image url="@../image/catcursor.png"/>
+                                         </ImageView>
+                                     </graphic>
+                                 </Button>
                                  <RadioButton fx:id="easyRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;" text="Easy" />
                                  <RadioButton fx:id="mediumRadioButton" styleClass="blue-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Medium" />
                                  <RadioButton fx:id="hardRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold" text="Hard" />

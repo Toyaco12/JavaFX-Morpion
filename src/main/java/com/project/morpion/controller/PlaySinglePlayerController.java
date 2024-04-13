@@ -125,37 +125,55 @@ public class PlaySinglePlayerController {
     private void showVictory(int player){
         restartButton.setDisable(true);
         scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
-        int[] row = game.getVictory();
-        RotateTransition rotateTransition = null;
-        for (int a : row) {
-            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
-            ImageView imageView1 = (ImageView) s.getChildren().getFirst();
-            rotateTransition = rotateImage(imageView1);
+        if(player != 0){
+            int[] row = game.getVictory();
+            RotateTransition rotateTransition = null;
+            for (int a : row) {
+                StackPane s = (StackPane) morpionGrille.getChildren().get(a);
+                ImageView imageView1 = (ImageView) s.getChildren().getFirst();
+                rotateTransition = rotateImage(imageView1);
+            }
+            rotateTransition.setOnFinished(e -> {
+                restartButton.setDisable(false);
+                if(player == 1){
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
+                    else
+                        victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+                    game.addSuccessWinPlayer();
+                }
+                else if (player == -1){
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
+                    else
+                        victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
+                    game.addSuccessWinBot();
+                }
+                else{
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et C'est Une Égalité ...");
+                    else
+                        victoryLabel.setText("And It's A Draw .....");
+
+                }
+
+                blur();
+                fadeOutGridPane();
+                vBoxVictory.setVisible(true);
+
+                scaleTransition.setFromX(0.0); // Taille initiale en x
+                scaleTransition.setFromY(0.0); // Taille initiale en y
+                scaleTransition.setToX(1.0);   // Taille finale en x
+                scaleTransition.setToY(1.0);   // Taille finale en y
+                scaleTransition.play();
+            });
         }
-        rotateTransition.setOnFinished(e -> {
+        else{
             restartButton.setDisable(false);
-            if(player == 1){
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
-                else
-                    victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
-                game.addSuccessWinPlayer();
-            }
-            else if (player == -1){
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
-                else
-                    victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
-                game.addSuccessWinBot();
-            }
-            else{
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et C'est Une Égalité ...");
-                else
-                    victoryLabel.setText("And It's A Draw .....");
-
-            }
-
+            if(Objects.equals(language, "french"))
+                victoryLabel.setText("Et C'est Une Égalité ...");
+            else
+                victoryLabel.setText("And It's A Draw .....");
             blur();
             fadeOutGridPane();
             vBoxVictory.setVisible(true);
@@ -165,7 +183,9 @@ public class PlaySinglePlayerController {
             scaleTransition.setToX(1.0);   // Taille finale en x
             scaleTransition.setToY(1.0);   // Taille finale en y
             scaleTransition.play();
-        });
+        }
+
+
 
 
     }
@@ -218,7 +238,7 @@ public class PlaySinglePlayerController {
             if(game.isWin()){
                 showVictory(-1);
             }
-            if(game.isDraw()){
+            else if(game.isDraw()){
                 showVictory(0);
             }
             readyToPlay = true;

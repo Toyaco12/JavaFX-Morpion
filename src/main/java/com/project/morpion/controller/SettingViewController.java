@@ -30,6 +30,9 @@ public class SettingViewController {
     private ToggleGroup difficulty;
     private Scene scene;
     private Cursor cursor;
+    private String[] optionnalLevel = null;
+
+
     public void setScene(Scene scene) {
         this.scene = scene;
     }
@@ -267,5 +270,20 @@ public class SettingViewController {
                 scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
+    }
+
+    private void getOptionnalLevel() throws IOException {
+        FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String line = bufferedReader.readLine();
+        while(line.charAt(0) != 'S')
+            line = bufferedReader.readLine();
+        if(line.charAt(0) == 'S'){
+            String[]lvl = line.split(":");
+            if(lvl.length > 1){
+                optionnalLevel = new String[lvl.length-1];
+                System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length-1);
+            }
+        }
     }
 }
