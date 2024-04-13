@@ -351,7 +351,8 @@ public class MainController implements ModelUpdate {
             ConfigFileLoader cfl = new ConfigFileLoader();
             cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
             Config config = cfl.get(letterDifficulty);
-            File model = new File("src/main/resources/com/project/morpion/ai/models/"+letterDifficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+            File model = new File("src/main/resources/com/project/morpion/ai/models/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+            //File model = new File("src/main/resources/com/project/morpion/ai/models/"+letterDifficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
             this.modelName = model.getName();
             if(!model.exists()){
                 openLearning(event);

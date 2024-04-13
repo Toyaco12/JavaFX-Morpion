@@ -122,6 +122,10 @@ public class PlaySinglePlayerController {
         });
     }
 
+    private void lanchGame(){
+
+    }
+
     private void showVictory(int player){
         restartButton.setDisable(true);
         scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
@@ -237,9 +241,11 @@ public class PlaySinglePlayerController {
             updateGridPane();
             if(game.isWin()){
                 showVictory(-1);
+                System.out.println("pas huma  win");
             }
             else if(game.isDraw()){
                 showVictory(0);
+                System.out.println("pas human  draw");
             }
             readyToPlay = true;
         });

@@ -142,6 +142,7 @@ public class SettingViewController {
             Stage stage = (Stage) saveButton.getScene().getWindow();
             stage.close();
         }
+
     }
 
     private TextField createTextField(String setText){
