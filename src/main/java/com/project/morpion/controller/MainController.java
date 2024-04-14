@@ -66,6 +66,7 @@ public class MainController implements ModelUpdate {
     public Label cursorLabel;
     public Button helpButton;
     public ImageView difficultyImage;
+    public VBox singleVbox;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -96,6 +97,7 @@ public class MainController implements ModelUpdate {
 
 //testttt
     public void initialization() {
+        setOptionnalLevel();
         getCursor();
         if(isFrench())
             setToFrench();
@@ -683,5 +685,31 @@ public class MainController implements ModelUpdate {
                 }
             }
         }catch (IOException ignored){}
+    }
+
+    private void setOptionnalLevel(){
+        try {
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while (line.charAt(0) != 'S')
+                line = bufferedReader.readLine();
+            if (line.charAt(0) == 'S') {
+                String[] lvl = line.split(":");
+                String[] data = new String[lvl.length-1];
+                System.arraycopy(lvl, 1, data, 0, data.length);
+                if (lvl.length > 1) {
+                    for(String a : data){
+                        RadioButton radioButton = new RadioButton(a);
+                        radioButton.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
+                        radioButton.setOnAction(this::selectDifficulty);
+                        radioButton.setPrefWidth(70.0);
+                        radioButton.setToggleGroup(difficultyGroup);
+                        singleVbox.getChildren().add(radioButton);
+                    }
+                }
+            }
+        }
+        catch (IOException ignored){}
     }
 }

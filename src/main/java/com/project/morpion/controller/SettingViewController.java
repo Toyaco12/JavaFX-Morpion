@@ -2,12 +2,14 @@ package com.project.morpion.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.*;
@@ -27,6 +29,9 @@ public class SettingViewController {
     public RadioButton mediumRadioButton;
     public RadioButton hardRadioButton;
     public VBox mainVbox;
+    public TextField createTextField;
+    public Button createButton;
+    public HBox createHbox;
     private boolean save = false;
     private ToggleGroup difficulty;
     private Scene scene;
@@ -48,10 +53,25 @@ public class SettingViewController {
         easyRadioButton.setToggleGroup(difficulty);
         mediumRadioButton.setToggleGroup(difficulty);
         hardRadioButton.setToggleGroup(difficulty);
-        easyRadioButton.setSelected(true);
+        //easyRadioButton.setSelected(true);
         initialSettings = getSettings();
 
         for(int i = 0; i < initialSettings.length; i++){
+            if(i >= 3){
+                Label l = new Label(optionnalLevel[i%3]);
+                l.setAlignment(Pos.CENTER);
+                l.setPrefHeight(69.0);
+                l.setPrefWidth(200);
+                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
+                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                settingsPane.add(l, 0, i+1);
+                RadioButton radioButton = new RadioButton();
+                radioButton.setUserData("C" + (i%3+1));
+                System.out.println("C"+(i%3+1));
+                radioButton.setToggleGroup(difficulty);
+                settingsPane.add(radioButton, 4, i+1);
+
+            }
             for(int j = 0; j < 3; j++){
                 TextField textField;
                 if(j == 2){
@@ -60,9 +80,7 @@ public class SettingViewController {
                 else{
                     textField = createTextField(initialSettings[i][j]);
                 }
-                if(i >= 3){
-                    settingsPane.add(new Label(optionnalLevel[i%3]), 0, i+1);
-                }
+
                 settingsPane.add(textField, j+1, i+1);
             }
         }
@@ -227,21 +245,30 @@ public class SettingViewController {
                 }
                 else{
                     String d = line.substring(line.lastIndexOf(":") + 1);
-                    if(d.matches("E")){
-                        easyRadioButton.setSelected(true);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else if(d.matches("M")){
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(true);
-                        hardRadioButton.setSelected(false);
-                    }
-                    else{
-                        easyRadioButton.setSelected(false);
-                        mediumRadioButton.setSelected(false);
-                        hardRadioButton.setSelected(true);
-                    }
+                    System.out.println(d);
+                    difficulty.getToggles().forEach(toggle -> {
+                        RadioButton radioButton = (RadioButton) toggle;
+                        System.out.println(radioButton.getUserData());
+                        if(radioButton.getUserData().equals(d)){
+
+                            difficulty.selectToggle(radioButton);
+                        }
+                    });
+//                    if(d.matches("E")){
+//                        easyRadioButton.setSelected(true);
+//                        mediumRadioButton.setSelected(false);
+//                        hardRadioButton.setSelected(false);
+//                    }
+//                    else if(d.matches("M")){
+//                        easyRadioButton.setSelected(false);
+//                        mediumRadioButton.setSelected(true);
+//                        hardRadioButton.setSelected(false);
+//                    }
+//                    else{
+//                        easyRadioButton.setSelected(false);
+//                        mediumRadioButton.setSelected(false);
+//                        hardRadioButton.setSelected(true);
+//                    }
                 }
             }
 //            for(int ii = 0; ii < setting.length; ii++){
@@ -345,6 +372,9 @@ public class SettingViewController {
                     System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length - 1);
                 }
             }
+            if(optionnalLevel.length == 3){
+                createHbox.setVisible(false);
+            }
         }
         catch (IOException ignored){}
     }
@@ -361,5 +391,83 @@ public class SettingViewController {
             }
         }
         return true;
+    }
+
+    public void addLevel(ActionEvent actionEvent) {
+        if(!createTextField.getText().isEmpty()){
+            String newLvl = createTextField.getText();
+            if(optionnalLevel == null){
+                Label la = new Label(newLvl);
+                la.setAlignment(Pos.CENTER);
+                la.setPrefHeight(69.0);
+                la.setPrefWidth(200);
+                la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                settingsPane.add(la, 0, 4);
+                for(int i = 0; i < 3; i++){
+                    if(i==2){
+                        settingsPane.add(createDecimalTextField("1"), i+1, 4);
+                    }
+                    else{
+                        settingsPane.add(createTextField("1"), i+1, 4);
+                    }
+                }
+                writeOptionnalLevel("S:" + newLvl);
+            }
+            else{
+                int l = optionnalLevel.length;
+                Label la = new Label(newLvl);
+                la.setAlignment(Pos.CENTER);
+                la.setPrefHeight(69.0);
+                la.setPrefWidth(200);
+                if(l%2 != 1) la.setStyle("-fx-text-fill: fc6c00;");
+                else la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                settingsPane.add(la, 0, l+4);
+                for(int i = 0; i < 3; i++){
+                    if(i==2){
+                        settingsPane.add(createDecimalTextField("1"), i+1, l+4);
+                    }
+                    else{
+                        settingsPane.add(createTextField("1"), i+1, l+4);
+                    }
+                }
+                String lvl = "S:";
+                for (String i : optionnalLevel){
+                    lvl += i + ":";
+                }
+                writeOptionnalLevel(lvl + newLvl);
+            }
+            getOptionnalLevel();
+        }
+    }
+
+    private void writeOptionnalLevel(String lvl){
+        try{
+            File file = new File("src/main/resources/com/project/morpion/settings.txt");
+            //File tmp = new File("src/main/resources/com/project/morpion/tmp.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            //BufferedWriter writer = new BufferedWriter(new FileWriter(tmp));
+            String[] tmp = new String[5];
+            String line;
+            int i = 0;
+            while ((line = reader.readLine()) != null) {
+                // Vérifier si la ligne commence par "S"
+                if (line.startsWith("S")) {
+                    tmp[i] = lvl;
+                } else {
+                    tmp[i] = line;
+                }
+                i++;
+            }
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            for(String j : tmp){
+                writer.write(j);
+                writer.newLine();
+            }
+            writer.close();
+        }
+        catch (IOException ignored){}
     }
 }

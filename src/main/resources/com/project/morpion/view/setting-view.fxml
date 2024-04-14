@@ -13,10 +13,10 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="700.0" fx:id="mainVbox"
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" fx:id="mainVbox"
       stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.SettingViewController">
    <children>
-      <StackPane prefHeight="150.0" prefWidth="200.0">
+      <StackPane prefHeight="600.0" prefWidth="200.0">
          <children>
             <GridPane fx:id="settingsPane" hgap="5.0" vgap="5.0">
                 <VBox.margin>
@@ -79,10 +79,10 @@
          </children>
       </StackPane>
       <Label fx:id="errorLabel" focusTraversable="false" textFill="#fa0808" visible="false" />
-       <HBox>
+       <HBox fx:id="createHbox">
            <Label text="Créer un niveau : "/>
            <TextField fx:id="createTextField"/>
-           <Button fx:id="createButton" text="Créer"/>
+           <Button fx:id="createButton" text="Créer" onAction="#addLevel"/>
        </HBox>
       <Button fx:id="saveButton" styleClass="blue-button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
          <VBox.margin>

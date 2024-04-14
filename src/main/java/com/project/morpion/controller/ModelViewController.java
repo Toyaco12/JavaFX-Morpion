@@ -39,9 +39,9 @@ public class ModelViewController {
         Cursor custom = new ImageCursor(cursor);
         scene.setCursor(custom);
         getTheme();
-        easyListView.setCellFactory(param -> new SupressCell());
+        //easyListView.setCellFactory(param -> new SupressCell());
         mediumListView.setCellFactory(param -> new SupressCell());
-        hardListView.setCellFactory(param -> new SupressCell());
+        //hardListView.setCellFactory(param -> new SupressCell());
 //        loadModels("src/main/resources/com/project/morpion/ai/models/F", easyListView);
 //        loadModels("src/main/resources/com/project/morpion/ai/models/M", mediumListView);
 //        loadModels("src/main/resources/com/project/morpion/ai/models/D", hardListView);
