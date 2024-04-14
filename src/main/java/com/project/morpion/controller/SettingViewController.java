@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.*;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -31,16 +32,16 @@ public class SettingViewController {
     private Scene scene;
     private Cursor cursor;
     private String[] optionnalLevel = null;
+    private String[][] initialSettings;
+    private String[] levelName;
 
 
     public void setScene(Scene scene) {
         this.scene = scene;
     }
 
-
-
-
     public void initialization() {
+        getOptionnalLevel();
         getCursor();
         getTheme();
         difficulty = new ToggleGroup();
@@ -48,19 +49,21 @@ public class SettingViewController {
         mediumRadioButton.setToggleGroup(difficulty);
         hardRadioButton.setToggleGroup(difficulty);
         easyRadioButton.setSelected(true);
-        String[][] settings = getSettings();
+        initialSettings = getSettings();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for(int i = 0; i < initialSettings.length; i++){
+            for(int j = 0; j < 3; j++){
                 TextField textField;
                 if(j == 2){
-                    textField = createDecimalTextField(settings[i][j+1]);
+                    textField = createDecimalTextField(initialSettings[i][j]);
                 }
                 else{
-                    textField = createTextField(settings[i][j+1]);
+                    textField = createTextField(initialSettings[i][j]);
                 }
-
-                settingsPane.add(textField, j + 1, i + 1);
+                if(i >= 3){
+                    settingsPane.add(new Label(optionnalLevel[i%3]), 0, i+1);
+                }
+                settingsPane.add(textField, j+1, i+1);
             }
         }
     }
@@ -68,21 +71,35 @@ public class SettingViewController {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         String[][] settings = getSettings();
         String[] set = {"F:", "M:", "D:"};
+        String[][] current = new String[settings.length][3];
+        int i = 0, j = 0;
         for(Node n : settingsPane.getChildren()){
             if(n instanceof TextField){
                 TextField tmp = (TextField) n;
-                int rowIndex = GridPane.getRowIndex(tmp);
-                int colIndex = GridPane.getColumnIndex(tmp);
-                if(colIndex == 3){
-                    set[rowIndex - 1] += tmp.getText();
+//                int rowIndex = GridPane.getRowIndex(tmp);
+//                int colIndex = GridPane.getColumnIndex(tmp);
+//                if(colIndex == 3){
+//                    set[rowIndex - 1] += tmp.getText();
+//                }
+//                else{
+//                    set[rowIndex - 1] += tmp.getText() + ":";
+//                }
+                if(j != 2){
+                    current[i][j] = tmp.getText();
+                    j++;
                 }
                 else{
-                    set[rowIndex - 1] += tmp.getText() + ":";
+                    current[i][j] = tmp.getText();
+                    i++;
+                    j = 0;
                 }
             }
         }
-        String[] prev = {"F:" + settings[0][1] + ":" + settings[0][2] + ":" + settings[0][3], "M:" + settings[1][1] + ":" + settings[1][2] + ":" + settings[1][3], "D:" + settings[2][1] + ":" + settings[2][2] + ":" + settings[2][3]};
-        if(Arrays.equals(set, prev)){
+        //String[] prev = {"F:" + settings[0][1] + ":" + settings[0][2] + ":" + settings[0][3], "M:" + settings[1][1] + ":" + settings[1][2] + ":" + settings[1][3], "D:" + settings[2][1] + ":" + settings[2][2] + ":" + settings[2][3]};
+//        if(Arrays.equals(set, prev)){
+//            stage.close();
+//        }
+        if(areMatricesEquals(settings, current)){
             stage.close();
         }
         else if (!save){
@@ -104,7 +121,10 @@ public class SettingViewController {
 
     public void saveSettings(ActionEvent actionEvent) {
         boolean error = false;
-        String[] set = {"F:", "M:", "D:"};
+        ArrayList<String> set = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+        String ligne = "";
         for(Node n : settingsPane.getChildren()){
             if(n instanceof TextField){
                 TextField tmp = (TextField) n;
@@ -125,11 +145,15 @@ public class SettingViewController {
                 else{
                     tmp.setStyle("-fx-text-box-border: transparent;");
                 }
-                if(colIndex == 3){
-                    set[rowIndex - 1] += tmp.getText();
+                if(j != 2){
+                    ligne += tmp.getText() + ":";
+                    j++;
                 }
                 else{
-                    set[rowIndex - 1] += tmp.getText() + ":";
+                    ligne += tmp.getText();
+                    set.add(ligne);
+                    ligne = "";
+                    j = 0;
                 }
             }
         }
@@ -181,14 +205,24 @@ public class SettingViewController {
 
     public String[][] getSettings() {
         try {
-            FileReader settingFile = new FileReader("src/main/resources/com/project/morpion/ai/config.txt");
-            BufferedReader reader = new BufferedReader(settingFile);
+            File settingFile = new File("src/main/resources/com/project/morpion/ai/config.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(settingFile));
+            int nbRow = countLines(settingFile);
+            //System.out.println(nbRow);
+            reader.close();
+            reader = new BufferedReader(new FileReader(settingFile));
             String line;
-            String[][] setting = new String[4][4];
+            String[][] setting = new String[nbRow-1][3];
             int i =0;
             while ((line = reader.readLine()) != null) {
+                //System.out.println("a");
                 if(line.charAt(0) != 'Z'){
-                    setting[i] = line.split(":");
+                    String[] parts = line.split(":");
+//                    for(String a : parts)
+//                        System.out.println(a);
+                    String[] data = new String[parts.length-1];
+                    System.arraycopy(parts, 1, data, 0, data.length);
+                    setting[i] = data;
                     i++;
                 }
                 else{
@@ -210,18 +244,42 @@ public class SettingViewController {
                     }
                 }
             }
+//            for(int ii = 0; ii < setting.length; ii++){
+//                for(int jj = 0; jj < setting[ii].length; jj++){
+//                    System.out.println(setting[ii][jj]);
+//                }
+//            }
+            reader.close();
             return setting;
-        } catch (IOException ignored) {
-        }
-
+        } catch (IOException ignored) {}
         return null;
     }
 
-    public void setSettings(String[] settings, String diff){
+    private int countLines(File file) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            int lines = 0;
+            while (reader.readLine() != null) lines++;
+            reader.close();
+            return lines;
+        } catch (IOException ignored) {}
+        return 0;
+    }
+
+    public void setSettings(ArrayList<String> settings, String diff){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/com/project/morpion/ai/config.txt"))) {
-            for(int i =0; i < 3 ; i++){
-                writer.write(settings[i]);
+            int i = 0;
+            for(String tmp : settings){
+                String lvl = "";
+                if(i == 0) lvl = "F";
+                else if(i == 1) lvl = "M";
+                else if(i == 2) lvl = "D";
+                else if(i == 3) lvl = "C1";
+                else if(i == 4) lvl = "C2";
+                else if(i == 5) lvl = "C3";
+                writer.write(lvl + ":" +tmp);
                 writer.newLine();
+                i++;
             }
             writer.write("Z:"+diff);
             writer.close();
@@ -273,18 +331,35 @@ public class SettingViewController {
         }catch (IOException ignored){}
     }
 
-    private void getOptionnalLevel() throws IOException {
-        FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line = bufferedReader.readLine();
-        while(line.charAt(0) != 'S')
-            line = bufferedReader.readLine();
-        if(line.charAt(0) == 'S'){
-            String[]lvl = line.split(":");
-            if(lvl.length > 1){
-                optionnalLevel = new String[lvl.length-1];
-                System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length-1);
+    private void getOptionnalLevel() {
+        try {
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while (line.charAt(0) != 'S')
+                line = bufferedReader.readLine();
+            if (line.charAt(0) == 'S') {
+                String[] lvl = line.split(":");
+                if (lvl.length > 1) {
+                    optionnalLevel = new String[lvl.length - 1];
+                    System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length - 1);
+                }
             }
         }
+        catch (IOException ignored){}
+    }
+
+    private boolean areMatricesEquals(String[][] a, String[][] b){
+        if(a.length != b.length || a[0].length != b[0].length){
+            return false;
+        }
+        for(int i = 0; i < a.length; i++){
+            for(int j = 0; j < a[0].length; j++){
+                if(!a[i][j].equals(b[i][j])){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

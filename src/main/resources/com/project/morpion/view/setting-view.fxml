@@ -11,6 +11,8 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="700.0" fx:id="mainVbox"
       stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.SettingViewController">
    <children>
@@ -77,6 +79,11 @@
          </children>
       </StackPane>
       <Label fx:id="errorLabel" focusTraversable="false" textFill="#fa0808" visible="false" />
+       <HBox>
+           <Label text="Créer un niveau : "/>
+           <TextField fx:id="createTextField"/>
+           <Button fx:id="createButton" text="Créer"/>
+       </HBox>
       <Button fx:id="saveButton" styleClass="blue-button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
          <VBox.margin>
             <Insets bottom="5.0" />
