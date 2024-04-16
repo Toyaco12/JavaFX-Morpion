@@ -131,44 +131,31 @@ public class MainController implements ModelUpdate {
         });
     }
     private void loadPlay1v1View(String modelName) throws IOException {
-        timer.setVisible(true);
-        timer.setManaged(true);
-        timerMessage.setVisible(true);
-        timerMessage.setManaged(true);
-        timer.setText(String.valueOf(seconds));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            seconds--;
-            timer.setText(String.valueOf(seconds));
-            if (seconds == 0) {
-                FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
 //                Parent root = null;
 //                try {
 //                    root = fxmlLoader.load();
 //                } catch (IOException e) {
 //                    throw new RuntimeException(e);
 //                }
-                Scene scene = null;
-                try {
-                    scene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                PlaySinglePlayerController controller = fxmlLoader.getController();
-                controller.setScene(scene);
-                controller.initialization();
-                controller.setModelName(this.modelName);
-                controller.setDifficulty(letterDifficulty);
-                controller.initModel();
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PlaySinglePlayerController controller = fxmlLoader.getController();
+        controller.setScene(scene);
+        controller.initialization();
+        controller.setModelName(this.modelName);
+        controller.setDifficulty(letterDifficulty);
+        controller.initModel();
 
-                //Scene scene = new Scene(root);
-                Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
-                s.setScene(scene);
+        //Scene scene = new Scene(root);
+        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+        stage.setScene(scene);
 
-                s.show();
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        stage.show();
     }
 
     public void startGame(ActionEvent actionEvent) throws IOException {
@@ -208,6 +195,9 @@ public class MainController implements ModelUpdate {
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
+        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+
+        controller.getPreviousStage(stage);
         stageLearn.show();
     }
 
