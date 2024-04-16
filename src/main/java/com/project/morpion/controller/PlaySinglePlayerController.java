@@ -12,9 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
@@ -68,6 +67,8 @@ public class PlaySinglePlayerController {
     MultiLayerPerceptron model;
     private boolean readyToPlay;
     ScaleTransition scaleTransition = null;
+    private Cursor cursor;
+    private Scene scene;
     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
     public void setModelName(String modelName){
         this.modelName = modelName;
@@ -77,6 +78,10 @@ public class PlaySinglePlayerController {
     }
 
     private String language = "English";
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
     public void initModel() {
         System.out.println(this.modelName);
         System.out.println(this.difficulty);
@@ -117,40 +122,62 @@ public class PlaySinglePlayerController {
         });
     }
 
+    private void lanchGame(){
+
+    }
+
     private void showVictory(int player){
         restartButton.setDisable(true);
         scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
-        int[] row = game.getVictory();
-        RotateTransition rotateTransition = null;
-        for (int a : row) {
-            StackPane s = (StackPane) morpionGrille.getChildren().get(a);
-            ImageView imageView1 = (ImageView) s.getChildren().getFirst();
-            rotateTransition = rotateImage(imageView1);
+        if(player != 0){
+            int[] row = game.getVictory();
+            RotateTransition rotateTransition = null;
+            for (int a : row) {
+                StackPane s = (StackPane) morpionGrille.getChildren().get(a);
+                ImageView imageView1 = (ImageView) s.getChildren().getFirst();
+                rotateTransition = rotateImage(imageView1);
+            }
+            rotateTransition.setOnFinished(e -> {
+                restartButton.setDisable(false);
+                if(player == 1){
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
+                    else
+                        victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
+                    game.addSuccessWinPlayer();
+                }
+                else if (player == -1){
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
+                    else
+                        victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
+                    game.addSuccessWinBot();
+                }
+                else{
+                    if(Objects.equals(language, "french"))
+                        victoryLabel.setText("Et C'est Une Égalité ...");
+                    else
+                        victoryLabel.setText("And It's A Draw .....");
+
+                }
+
+                blur();
+                fadeOutGridPane();
+                vBoxVictory.setVisible(true);
+
+                scaleTransition.setFromX(0.0); // Taille initiale en x
+                scaleTransition.setFromY(0.0); // Taille initiale en y
+                scaleTransition.setToX(1.0);   // Taille finale en x
+                scaleTransition.setToY(1.0);   // Taille finale en y
+                scaleTransition.play();
+            });
         }
-        rotateTransition.setOnFinished(e -> {
+        else{
             restartButton.setDisable(false);
-            if(player == 1){
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
-                else
-                    victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
-                game.addSuccessWinPlayer();
-            }
-            else if (player == -1){
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
-                else
-                    victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
-                game.addSuccessWinBot();
-            }
-            else{
-                if(Objects.equals(language, "french"))
-                    victoryLabel.setText("Et C'est Une Égalité ...");
-                else
-                    victoryLabel.setText("And It's A Draw .....");
-
-            }
-
+            if(Objects.equals(language, "french"))
+                victoryLabel.setText("Et C'est Une Égalité ...");
+            else
+                victoryLabel.setText("And It's A Draw .....");
             blur();
             fadeOutGridPane();
             vBoxVictory.setVisible(true);
@@ -160,7 +187,9 @@ public class PlaySinglePlayerController {
             scaleTransition.setToX(1.0);   // Taille finale en x
             scaleTransition.setToY(1.0);   // Taille finale en y
             scaleTransition.play();
-        });
+        }
+
+
 
 
     }
@@ -195,23 +224,28 @@ public class PlaySinglePlayerController {
         }
     }
 
-    @FXML
-    public void initialize() {
+
+    public void initialization() {
         //game = new Morpion(model, Coup.O);
+
+        getCursor();
         if(isFrench()){
             setToFrench();
             language = "french";
         }
+
+        getTheme();
         getLuminosity();
-        setToFrench();
         setClickListener();
         pauseTransition.setOnFinished(e->{
             updateGridPane();
             if(game.isWin()){
                 showVictory(-1);
+                System.out.println("pas huma  win");
             }
-            if(game.isDraw()){
+            else if(game.isDraw()){
                 showVictory(0);
+                System.out.println("pas human  draw");
             }
             readyToPlay = true;
         });
@@ -220,12 +254,15 @@ public class PlaySinglePlayerController {
     public void handleKeyPressed(KeyEvent keyEvent) {
     }
 
-    public void returnHome(ActionEvent actionEvent) {
-        try{
-            Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/main-view.fxml")));
-            Scene scene = homeButton.getScene();
-            scene.setRoot(mainView);
-        }catch (IOException ignored){};
+    public void returnHome(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        MainController controller = fxmlLoader.getController();
+        controller.setScene(scene);
+        controller.initialization();
+        Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stageGame.setScene(scene);
+        stageGame.show();
     }
 
     public void restartGame(ActionEvent actionEvent) {
@@ -443,6 +480,48 @@ public class PlaySinglePlayerController {
             }
         }catch (IOException ignored){}
         return false;
+    }
+
+    private void getTheme(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'T')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'T'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("W")){
+                    borderPane.setStyle("-fx-background-color: white;");
+                }
+                else{
+                    borderPane.setStyle("-fx-background-color: rgb(20,20,20);");
+                }
+            }
+        }catch (IOException ignored){}
+    }
+
+    private void getCursor(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'C')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'C'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("D")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+                }
+                else if(d.equals("C")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+                }
+                else{
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+                }
+                scene.setCursor(cursor);
+            }
+        }catch (IOException ignored){}
     }
 
 

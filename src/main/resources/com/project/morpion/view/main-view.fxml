@@ -54,9 +54,15 @@
                   </Label>
                   <HBox fx:id="hboxMode" alignment="TOP_CENTER" prefHeight="142.0" prefWidth="108.0" spacing="70.0">
                      <children>
-                         <VBox alignment="TOP_CENTER" spacing="10">
+                         <VBox alignment="TOP_CENTER" spacing="10" fx:id="singleVbox">
                              <children>
-                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#handleSubmit" minHeight="80" minWidth="164" prefHeight="80.0" prefWidth="164.0" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold" styleClass="orange-button" text="Singleplayer" />
+                                 <Button fx:id="btnSinglePlayer" mnemonicParsing="false" onAction="#handleSubmit" minHeight="80" minWidth="164" prefHeight="80.0" prefWidth="164.0" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold" styleClass="orange-button" text="Singleplayer">
+                                     <graphic>
+                                         <ImageView fx:id="difficultyImage" fitHeight="40.0" fitWidth="40.0">
+                                             <Image url="@../image/catcursor.png"/>
+                                         </ImageView>
+                                     </graphic>
+                                 </Button>
                                  <RadioButton fx:id="easyRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;" text="Easy" />
                                  <RadioButton fx:id="mediumRadioButton" styleClass="blue-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Medium" />
                                  <RadioButton fx:id="hardRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold" text="Hard" />
@@ -143,9 +149,9 @@
                          </VBox.margin>
                      </HBox>
                      <HBox alignment="CENTER" spacing="10">
-                         <Label style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="Luminosity : " />
-                         <Slider fx:id="sliderLuminosity" max="100" min="0" prefHeight="30" prefWidth="300" styleClass="lumSlider" value="50" />
-                         <Label fx:id="luminosityLabel" style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="50" />
+                         <Label fx:id="brightnessTitle" style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="Brightness : " />
+                         <Slider fx:id="sliderBrightness" max="100" min="0" prefHeight="30" prefWidth="300" styleClass="lumSlider" value="50" />
+                         <Label fx:id="brightnessLabel" style="-fx-text-fill: fc6c00; -fx-font-size: 16; -fx-font-weight: bold" text="50" />
                      </HBox>
                      <HBox alignment="CENTER" spacing="10" styleClass="orange-theme">
                          <Label style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 16; -fx-font-weight: bold" text="Language : " />
@@ -172,7 +178,7 @@
                          </VBox.margin>
                      </HBox>
                      <HBox alignment="CENTER" spacing="10">
-                         <Label style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 16; -fx-font-weight: bold" text="Cursor : " />
+                         <Label fx:id="cursorLabel" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 16; -fx-font-weight: bold" text="Cursor : " />
                          <Button prefHeight="50.0" prefWidth="100.0" styleClass="orange-button" onAction="#setCursor">
                              <graphic>
                                  <ImageView fitHeight="30.0" fitWidth="30.0">
@@ -214,12 +220,17 @@
                          </VBox.margin>
                      </ImageView>
                      <HBox alignment="TOP_CENTER">
-                         <Button fx:id="rulesButton" text="Section 1" onAction="#showRules"/>
-                         <Button fx:id="iaButton" text="Section 2" onAction="#showIA"/>
-                     </HBox>
-                     <Label fx:id="helpTitle"  />
-                     <Text fx:id="helpText" />
+                         <Button fx:id="rulesButton" mnemonicParsing="false" onAction="#showRules" prefHeight="50.0" prefWidth="100.0" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold" styleClass="orange-button" text="Rules">
 
+                         </Button>
+                         <Button fx:id="iaButton" mnemonicParsing="false" onAction="#showIA" prefHeight="50.0" prefWidth="100.0" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold" styleClass="blue-button" text="IA">
+                             <HBox.margin>
+                                 <Insets left="50"/>
+                             </HBox.margin>
+                         </Button>
+                     </HBox>
+                     <Label fx:id="helpTitle"/>
+                     <Text fx:id="helpText"/>
                  </children>
              </VBox>
          </children>

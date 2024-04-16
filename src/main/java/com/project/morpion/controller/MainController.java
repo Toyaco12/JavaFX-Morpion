@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -45,8 +46,8 @@ public class MainController implements ModelUpdate {
     public VBox settingVbox;
     public Slider sliderVolume;
     public Label volumeLabel;
-    public Slider sliderLuminosity;
-    public Label luminosityLabel;
+    public Slider sliderBrightness;
+    public Label brightnessLabel;
     public BorderPane borderPane;
     public Button settingButton;
     public Button exitButton;
@@ -61,6 +62,11 @@ public class MainController implements ModelUpdate {
     public Label helpTitle;
     public Button rulesButton;
     public Button iaButton;
+    public Label brightnessTitle;
+    public Label cursorLabel;
+    public Button helpButton;
+    public ImageView difficultyImage;
+    public VBox singleVbox;
     @FXML
     private RadioButton easyRadioButton;
     @FXML
@@ -91,11 +97,12 @@ public class MainController implements ModelUpdate {
 
 //testttt
     public void initialization() {
+        setOptionnalLevel();
         getCursor();
         if(isFrench())
             setToFrench();
         getTheme();
-        int lum = getLuminosity();
+        int lum = getBrightness();
         playGame.setVisible(true);
         playGame.setManaged(true);
         difficultyGroup = new ToggleGroup();
@@ -106,12 +113,12 @@ public class MainController implements ModelUpdate {
             // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
             volumeLabel.setText(String.valueOf(newValue.intValue()));
         });
-        sliderLuminosity.valueProperty().addListener((observable, oldValue, newValue) -> {
+        sliderBrightness.valueProperty().addListener((observable, oldValue, newValue) -> {
             // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
-            luminosityLabel.setText(String.valueOf(newValue.intValue()));
+            brightnessLabel.setText(String.valueOf(newValue.intValue()));
         });
-        sliderLuminosity.setValue(lum);
-        luminosityLabel.setText(String.valueOf(lum));
+        sliderBrightness.setValue(lum);
+        brightnessLabel.setText(String.valueOf(lum));
     }
     @Override
     public void onModelUpdated() {
@@ -134,18 +141,26 @@ public class MainController implements ModelUpdate {
             timer.setText(String.valueOf(seconds));
             if (seconds == 0) {
                 FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
-                Parent root = null;
+//                Parent root = null;
+//                try {
+//                    root = fxmlLoader.load();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+                Scene scene = null;
                 try {
-                    root = fxmlLoader.load();
+                    scene = new Scene(fxmlLoader.load());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 PlaySinglePlayerController controller = fxmlLoader.getController();
+                controller.setScene(scene);
+                controller.initialization();
                 controller.setModelName(this.modelName);
                 controller.setDifficulty(letterDifficulty);
                 controller.initModel();
 
-                Scene scene = new Scene(root);
+                //Scene scene = new Scene(root);
                 Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
                 s.setScene(scene);
 
@@ -154,6 +169,17 @@ public class MainController implements ModelUpdate {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    public void startGame(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        GameController controller = fxmlLoader.getController();
+        controller.setScene(scene);
+        controller.initialization();
+        Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stageGame.setScene(scene);
+        stageGame.show();
     }
 
 
@@ -199,7 +225,7 @@ public class MainController implements ModelUpdate {
         stageModel.showAndWait();
     }
 
-    public void setLuminosity(int lum){
+    public void setBrightness(int lum){
         double l = -0.9 + ((double) lum /100);
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(l);
@@ -210,7 +236,7 @@ public class MainController implements ModelUpdate {
         try{
             FileWriter fileWriter = new FileWriter(new File("src/main/resources/com/project/morpion/settings.txt"));
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            int lum = (int) sliderLuminosity.getValue();
+            int lum = (int) sliderBrightness.getValue();
             bufferedWriter.write("L:"+lum);
             bufferedWriter.newLine();
             if(Objects.equals(language, "English")){
@@ -242,7 +268,8 @@ public class MainController implements ModelUpdate {
             }
             bufferedWriter.flush();
             bufferedWriter.close();
-            setLuminosity(lum);
+            setBrightness(lum);
+            back(null);
         }
         catch (IOException ignored){
         }
@@ -259,7 +286,7 @@ public class MainController implements ModelUpdate {
     }
 
 
-    public int getLuminosity(){
+    public int getBrightness(){
         try{
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -267,7 +294,7 @@ public class MainController implements ModelUpdate {
             if(line.charAt(0) == 'L'){
                 String d = line.substring(line.lastIndexOf(":") + 1);
                 int lum = Integer.parseInt(d);
-                setLuminosity(lum);
+                setBrightness(lum);
                 return lum;
             }
         }catch (IOException e){}
@@ -297,6 +324,15 @@ public class MainController implements ModelUpdate {
     public void selectDifficulty(ActionEvent actionEvent) {
         RadioButton selectedRadioButton = (RadioButton) actionEvent.getSource();
         selectDifficulty = selectedRadioButton.getText();
+        if(easyRadioButton.isSelected()){
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+        }
+        else if (mediumRadioButton.isSelected()) {
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+        }
+        else{
+            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+        }
     }
 
     @FXML
@@ -332,16 +368,7 @@ public class MainController implements ModelUpdate {
         }
     }
 
-    public void startGame(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        GameController controller = fxmlLoader.getController();
-        controller.setScene(scene);
-        controller.initialization();
-        Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stageGame.setScene(scene);
-        stageGame.show();
-    }
+
 
     public void back(ActionEvent actionEvent) {
         if(chooseGameMode.isVisible()){
@@ -383,6 +410,14 @@ public class MainController implements ModelUpdate {
         title.setText("Lancement de la Partie");
         chooseMode.setText("Choisir un Mode de Jeu");
         btnSinglePlayer.setText("1 Joueur");
+        easyRadioButton.setText("Facile");
+        mediumRadioButton.setText("Moyen");
+        hardRadioButton.setText("Difficile");
+        brightnessTitle.setText("Luminosité : ");
+        cursorLabel.setText("Curseur : ");
+        rulesButton.setText("Règles");
+        iaButton.setText("Entainement IA");
+        helpButton.setText("Aide");
     }
 
     public void setToEnglish(){
@@ -393,6 +428,14 @@ public class MainController implements ModelUpdate {
         title.setText("Game Lauch");
         chooseMode.setText("Choose Game Mode");
         btnSinglePlayer.setText("SinglePlayer");
+        easyRadioButton.setText("Easy");
+        mediumRadioButton.setText("Medium");
+        hardRadioButton.setText("Hard");
+        brightnessTitle.setText("Brightness : ");
+        cursorLabel.setText("Cursor : ");
+        rulesButton.setText("Rules");
+        iaButton.setText("IA Training");
+        helpButton.setText("Help");
     }
 
     public void selectEnglish(ActionEvent actionEvent) {
@@ -452,9 +495,18 @@ public class MainController implements ModelUpdate {
             if (line.charAt(0) == 'Z') {
                 String d = line.substring(line.lastIndexOf(":") + 1);
                 switch (d) {
-                    case "E" -> easyRadioButton.setSelected(true);
-                    case "M" -> mediumRadioButton.setSelected(true);
-                    case "H" -> hardRadioButton.setSelected(true);
+                    case "E" -> {
+                        easyRadioButton.setSelected(true);
+                        selectDifficulty = easyRadioButton.getText();
+                    }
+                    case "M" -> {
+                        mediumRadioButton.setSelected(true);
+                        selectDifficulty = mediumRadioButton.getText();
+                    }
+                    case "H" -> {
+                        hardRadioButton.setSelected(true);
+                        selectDifficulty = hardRadioButton.getText();
+                    }
                 }
             }
         }catch (IOException ignored){}
@@ -487,29 +539,55 @@ public class MainController implements ModelUpdate {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(1), helpText);
         transition.setToX(-helpText.getLayoutBounds().getWidth());
         transition.setOnFinished(event -> {
-        helpTitle.setText("Rules !");
-        helpTitle.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 22px;");
-        helpText.setText("Matériel :\n" +
-                "\n" +
-                "Le jeu se joue sur une grille de 3x3 cases.\n" +
-                "Deux joueurs participent, habituellement représentés par deux symboles différents, souvent \"X\" et \"O\".\n" +
-                "But du jeu :\n" +
-                "\n" +
-                "Le but pour chaque joueur est d'aligner trois de ses symboles (X ou O) horizontalement, verticalement ou en diagonale.\n" +
-                "Déroulement du jeu :\n" +
-                "\n" +
-                "Le jeu commence avec une grille vide.\n" +
-                "Les joueurs jouent à tour de rôle en plaçant leur symbole dans une case vide.\n" +
-                "Le joueur qui commence est souvent déterminé par un tirage au sort.\n" +
-                "Déroulement des tours :\n" +
-                "\n" +
-                "À son tour, chaque joueur place son symbole dans une case vide de la grille.\n" +
-                "Une fois qu'un joueur a placé son symbole, c'est au tour de l'autre joueur de jouer.\n" +
-                "Victoire :\n" +
-                "\n" +
-                "Si un joueur parvient à aligner trois de ses symboles horizontalement, verticalement ou en diagonale, il remporte la partie.\n" +
-                "Si la grille est remplie sans qu'aucun joueur n'aligne trois symboles, la partie est déclarée nulle.\n");
+            if(!Objects.equals(language, "English")){
+                helpTitle.setText("Règles du Jeu !");
+                helpText.setText("Matériel :\n" +
+                        "\n" +
+                        "Le jeu se joue sur une grille de 3x3 cases.\n" +
+                        "Deux joueurs participent, habituellement représentés par deux symboles différents, souvent \"X\" et \"O\".\n" +
+                        "But du jeu :\n" +
+                        "\n" +
+                        "Le but pour chaque joueur est d'aligner trois de ses symboles (X ou O) horizontalement, verticalement ou en diagonale.\n" +
+                        "Déroulement du jeu :\n" +
+                        "\n" +
+                        "Le jeu commence avec une grille vide.\n" +
+                        "Les joueurs jouent à tour de rôle en plaçant leur symbole dans une case vide.\n" +
+                        "Le joueur qui commence est souvent déterminé par un tirage au sort.\n" +
+                        "Déroulement des tours :\n" +
+                        "\n" +
+                        "À son tour, chaque joueur place son symbole dans une case vide de la grille.\n" +
+                        "Une fois qu'un joueur a placé son symbole, c'est au tour de l'autre joueur de jouer.\n" +
+                        "Victoire :\n" +
+                        "\n" +
+                        "Si un joueur parvient à aligner trois de ses symboles horizontalement, verticalement ou en diagonale, il remporte la partie.\n" +
+                        "Si la grille est remplie sans qu'aucun joueur n'aligne trois symboles, la partie est déclarée nulle.\n");
+            }
+            else{
+                helpTitle.setText("Rules of the Game !");
+                helpText.setText("Materials :\n" +
+                        "\n" +
+                        "The game is played on a 3x3 grid. \n" +
+                        "Two players participate, typically represented by two different symbols, often  \"X\" and \"O\".\n" +
+                        "Objective :\n" +
+                        "\n" +
+                        "The goal for each player is to align three of their symbols (X or O) horizontally, vertically, or diagonally.\n" +
+                        "Gameplay :\n" +
+                        "\n" +
+                        "The game begins with an empty grid.\n" +
+                        "Players take turns placing their symbol in an empty square.\n" +
+                        "The player who starts is often determined by a random draw.\n" +
+                        "Turn Progression :\n" +
+                        "\n" +
+                        "On their turn, each player places their symbol in an empty square on the grid.\n" +
+                        "Once a player has placed their symbol, it's the other player's turn to play. \n" +
+                        "Victory :\n" +
+                        "\n" +
+                        "If a player manages to align three of their symbols horizontally, vertically, or diagonally, they win the game.\n" +
+                        "If the grid is filled without any player aligning three symbols, the game is declared a draw.\n");
+            }
+
             helpText.setStyle("-fx-fill: fc6c00; -fx-font-size: 14px;");
+            helpTitle.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 22px;");
             TranslateTransition reverse = new TranslateTransition(Duration.seconds(1), helpText);
             reverse.setFromX(helpText.getLayoutBounds().getWidth());
             reverse.setToX(0);
@@ -530,17 +608,31 @@ public class MainController implements ModelUpdate {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(1), helpText);
         transition.setToX(-helpText.getLayoutBounds().getWidth());
         transition.setOnFinished(event -> {
-            helpTitle.setText("IA Training !");
+            if(!Objects.equals(language, "English")){
+                helpTitle.setText("Entrainement de l'IA !");
+                helpText.setText("Pour jouer contre notre IA au Morpion, commencez par entraîner notre modèle. Lorsque vous lancez une partie contre l'IA, l'entraînement vous sera automatiquement proposé. \n Cliquez simplement sur 'Entraîner' pour débuter.\n" +
+                        "\n" +
+                        "L'entraînement vous permettra de mieux comprendre le fonctionnement de notre IA et de vous familiariser avec ses stratégies de jeu.\n Vous pourrez ainsi affiner vos propres compétences et anticiper les mouvements de votre adversaire.\n" +
+                        "\n" +
+                        "Une fois que vous vous sentirez prêt, lancez-vous dans une partie officielle contre l'IA. Testez vos compétences et voyez si vous pouvez remporter la victoire !\n" +
+                        "\n" +
+                        "N'oubliez pas que vous pouvez également personnaliser l'IA en ajustant les paramètres dans 'Fichier' puis 'Paramètres'. \n Cela vous permettra de personnaliser l'expérience de jeu selon vos préférences, que ce soit en modifiant le niveau de difficulté ou en choisissant un style visuel qui vous convient.\n" +
+                        "\n" +
+                        "Bonne chance et amusez-vous bien ! Nous espérons que vous apprécierez cette expérience de jeu contre notre IA au Morpion.");
+            }
+            else{
+                helpTitle.setText("IA Training !");
+                helpText.setText("To play against our Tic-Tac-Toe AI, start by training our model. When you start a game against the AI, training will be automatically offered to you. \n Simply click on 'Train' to begin. \n" +
+                        "\n" +
+                        "Training will help you better understand how our AI works and familiarize yourself with its gameplay strategies. \n You can refine your own skills and anticipate your opponent's moves. \n" +
+                        "\n" +
+                        "Once you feel ready, dive into an official game against the AI. Test your skills and see if you can emerge victorious! \n" +
+                        "\n" +
+                        "Remember that you can also customize the AI by adjusting settings in 'File' then 'Settings'. \n This will allow you to tailor the gaming experience to your preferences, whether by changing the difficulty level or selecting a visual style that suits you. \n" +
+                        "\n" +
+                        "Good luck and have fun! We hope you enjoy this Tic-Tac-Toe AI gaming experience.");
+            }
             helpTitle.setStyle("-fx-text-fill: fc6c00; -fx-font-size: 22px;");
-            helpText.setText("Pour jouer contre notre IA au Morpion, commencez par entraîner notre modèle. Lorsque vous lancez une partie contre l'IA, l'entraînement vous sera automatiquement proposé. \n Cliquez simplement sur 'Entraîner' pour débuter.\n" +
-                    "\n" +
-                    "L'entraînement vous permettra de mieux comprendre le fonctionnement de notre IA et de vous familiariser avec ses stratégies de jeu.\n Vous pourrez ainsi affiner vos propres compétences et anticiper les mouvements de votre adversaire.\n" +
-                    "\n" +
-                    "Une fois que vous vous sentirez prêt, lancez-vous dans une partie officielle contre l'IA. Testez vos compétences et voyez si vous pouvez remporter la victoire !\n" +
-                    "\n" +
-                    "N'oubliez pas que vous pouvez également personnaliser l'IA en ajustant les paramètres dans 'Fichier' puis 'Paramètres'. \n Cela vous permettra de personnaliser l'expérience de jeu selon vos préférences, que ce soit en modifiant le niveau de difficulté ou en choisissant un style visuel qui vous convient.\n" +
-                    "\n" +
-                    "Bonne chance et amusez-vous bien ! Nous espérons que vous apprécierez cette expérience de jeu contre notre IA au Morpion.");
             helpText.setStyle("-fx-fill: rgb(1, 191, 200); -fx-font-size: 14px;");
             TranslateTransition reverse = new TranslateTransition(Duration.seconds(1), helpText);
             reverse.setFromX(helpText.getLayoutBounds().getWidth());
@@ -593,5 +685,31 @@ public class MainController implements ModelUpdate {
                 }
             }
         }catch (IOException ignored){}
+    }
+
+    private void setOptionnalLevel(){
+        try {
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while (line.charAt(0) != 'S')
+                line = bufferedReader.readLine();
+            if (line.charAt(0) == 'S') {
+                String[] lvl = line.split(":");
+                String[] data = new String[lvl.length-1];
+                System.arraycopy(lvl, 1, data, 0, data.length);
+                if (lvl.length > 1) {
+                    for(String a : data){
+                        RadioButton radioButton = new RadioButton(a);
+                        radioButton.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
+                        radioButton.setOnAction(this::selectDifficulty);
+                        radioButton.setPrefWidth(70.0);
+                        radioButton.setToggleGroup(difficultyGroup);
+                        singleVbox.getChildren().add(radioButton);
+                    }
+                }
+            }
+        }
+        catch (IOException ignored){}
     }
 }
