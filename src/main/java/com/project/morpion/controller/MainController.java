@@ -26,6 +26,7 @@ import javafx.util.Duration;
 
 import java.io.*;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MainController implements ModelUpdate {
     @FXML
@@ -86,7 +87,7 @@ public class MainController implements ModelUpdate {
     private String cursorSett;
 
     @FXML
-    private Stage stage = null;
+    private static Stage stage = null;
     private Scene scene = null;
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -123,13 +124,31 @@ public class MainController implements ModelUpdate {
     @Override
     public void onModelUpdated() {
         Platform.runLater(() -> {
-            try {
-                loadPlay1v1View(modelName);
-            } catch (IOException e) {
-                e.printStackTrace(); // Gérer l'exception comme vous le souhaitez
+            // Création de l'alert
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Modèle Prêt");
+            alert.setHeaderText("Votre IA est prête !");
+            alert.setContentText("Voulez-vous commencer la partie contre l'IA maintenant ? \nLe nouveau modèle sera enregistré dans les deux cas.");
+
+            // Définition des boutons
+            ButtonType buttonTypeYes = new ButtonType("Oui", ButtonBar.ButtonData.YES);
+            ButtonType buttonTypeNo = new ButtonType("Non", ButtonBar.ButtonData.NO);
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+            // Affichage de l'alerte et attente de la réponse
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == buttonTypeYes) {
+                try {
+                    loadPlay1v1View(modelName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
+
+
     private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
 //                Parent root = null;
@@ -149,6 +168,7 @@ public class MainController implements ModelUpdate {
         controller.initialization();
         controller.setModelName(this.modelName);
         controller.setDifficulty(letterDifficulty);
+        controller.setStage(stage);
         controller.initModel();
 
         //Scene scene = new Scene(root);
@@ -164,6 +184,7 @@ public class MainController implements ModelUpdate {
         GameController controller = fxmlLoader.getController();
         controller.setScene(scene);
         controller.initialization();
+        //controller.setStage(stage);
         Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();

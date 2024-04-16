@@ -81,6 +81,11 @@ public class GameController {
 
     private Scene scene;
 
+    private Stage stage;
+    public void setStage(Stage s){
+        this.stage = s;
+    }
+
     public void setScene(Scene scene) {
         this.scene = scene;
     }
