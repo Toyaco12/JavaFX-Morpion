@@ -68,13 +68,13 @@ public class MainController implements ModelUpdate {
     public Button helpButton;
     public ImageView difficultyImage;
     public VBox singleVbox;
-    @FXML
-    private RadioButton easyRadioButton;
-    @FXML
-    private RadioButton mediumRadioButton;
-    @FXML
-    private RadioButton hardRadioButton;
-    @FXML
+//    @FXML
+//    private RadioButton easyRadioButton;
+//    @FXML
+//    private RadioButton mediumRadioButton;
+//    @FXML
+//    private RadioButton hardRadioButton;
+
     private ToggleGroup difficultyGroup;
     private String selectDifficulty;
     private String letterDifficulty ="F";
@@ -98,6 +98,7 @@ public class MainController implements ModelUpdate {
 
 //testttt
     public void initialization() {
+        difficultyGroup = new ToggleGroup();
         setOptionnalLevel();
         getCursor();
         if(isFrench())
@@ -106,10 +107,7 @@ public class MainController implements ModelUpdate {
         int lum = getBrightness();
         playGame.setVisible(true);
         playGame.setManaged(true);
-        difficultyGroup = new ToggleGroup();
-        easyRadioButton.setToggleGroup(difficultyGroup);
-        mediumRadioButton.setToggleGroup(difficultyGroup);
-        hardRadioButton.setToggleGroup(difficultyGroup);
+
         sliderVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
             // Mettre à jour le texte du Label avec la nouvelle valeur du curseur
             volumeLabel.setText(String.valueOf(newValue.intValue()));
@@ -147,8 +145,6 @@ public class MainController implements ModelUpdate {
             }
         });
     }
-
-
     private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
 //                Parent root = null;
@@ -204,6 +200,9 @@ public class MainController implements ModelUpdate {
         stageSettings.setResizable(false);
         stageSettings.setTitle("Model Settings");
         stageSettings.setScene(scene);
+        stageSettings.setOnHidden(event -> {
+            getDefaultDifficulty();
+        });
         stageSettings.showAndWait();
     }
 
@@ -335,35 +334,43 @@ public class MainController implements ModelUpdate {
     public void selectDifficulty(ActionEvent actionEvent) {
         RadioButton selectedRadioButton = (RadioButton) actionEvent.getSource();
         selectDifficulty = selectedRadioButton.getText();
-        if(easyRadioButton.isSelected()){
-            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
-        }
-        else if (mediumRadioButton.isSelected()) {
-            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
-        }
-        else{
-            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
-        }
+        String userData = (String) selectedRadioButton.getUserData();
+
+
+
+//        if(easyRadioButton.isSelected()){
+//            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+//        }
+//        else if (mediumRadioButton.isSelected()) {
+//            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+//        }
+//        else{
+//            difficultyImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+//        }
     }
 
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
-        if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
+        //if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
+        RadioButton radioButton = (RadioButton) difficultyGroup.getSelectedToggle();
+         String diff = (String) radioButton.getUserData();
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
-            switch (selectDifficulty){
-                case "Easy":
-                    letterDifficulty = "F";
-                    break;
-                case "Medium":
-                    letterDifficulty = "M";
-                    break;
-                case "Hard":
-                    letterDifficulty ="D";
-                    break;
-            }
+//            switch (selectDifficulty){
+//                case "Easy":
+//                    letterDifficulty = "F";
+//                    break;
+//                case "Medium":
+//                    letterDifficulty = "M";
+//                    break;
+//                case "Hard":
+//                    letterDifficulty ="D";
+//                    break;
+//                case diff:
+//            }
+            System.out.println("dif :           " + diff);
             ConfigFileLoader cfl = new ConfigFileLoader();
             cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
-            Config config = cfl.get(letterDifficulty);
+            Config config = cfl.get(diff);
             File model = new File("src/main/resources/com/project/morpion/ai/models/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
             //File model = new File("src/main/resources/com/project/morpion/ai/models/"+letterDifficulty+"/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
             this.modelName = model.getName();
@@ -374,9 +381,9 @@ public class MainController implements ModelUpdate {
                 loadPlay1v1View(model.getName());
             }
 
-        } else {
-            System.out.println("Aucune difficulté sélectionnée.");
-        }
+//        } else {
+//            System.out.println("Aucune difficulté sélectionnée.");
+//        }
     }
 
 
@@ -421,9 +428,9 @@ public class MainController implements ModelUpdate {
         title.setText("Lancement de la Partie");
         chooseMode.setText("Choisir un Mode de Jeu");
         btnSinglePlayer.setText("1 Joueur");
-        easyRadioButton.setText("Facile");
-        mediumRadioButton.setText("Moyen");
-        hardRadioButton.setText("Difficile");
+//        easyRadioButton.setText("Facile");
+//        mediumRadioButton.setText("Moyen");
+//        hardRadioButton.setText("Difficile");
         brightnessTitle.setText("Luminosité : ");
         cursorLabel.setText("Curseur : ");
         rulesButton.setText("Règles");
@@ -439,9 +446,9 @@ public class MainController implements ModelUpdate {
         title.setText("Game Lauch");
         chooseMode.setText("Choose Game Mode");
         btnSinglePlayer.setText("SinglePlayer");
-        easyRadioButton.setText("Easy");
-        mediumRadioButton.setText("Medium");
-        hardRadioButton.setText("Hard");
+//        easyRadioButton.setText("Easy");
+//        mediumRadioButton.setText("Medium");
+//        hardRadioButton.setText("Hard");
         brightnessTitle.setText("Brightness : ");
         cursorLabel.setText("Cursor : ");
         rulesButton.setText("Rules");
@@ -505,20 +512,26 @@ public class MainController implements ModelUpdate {
             }
             if (line.charAt(0) == 'Z') {
                 String d = line.substring(line.lastIndexOf(":") + 1);
-                switch (d) {
-                    case "E" -> {
-                        easyRadioButton.setSelected(true);
-                        selectDifficulty = easyRadioButton.getText();
-                    }
-                    case "M" -> {
-                        mediumRadioButton.setSelected(true);
-                        selectDifficulty = mediumRadioButton.getText();
-                    }
-                    case "H" -> {
-                        hardRadioButton.setSelected(true);
-                        selectDifficulty = hardRadioButton.getText();
+                for(Toggle toggle : difficultyGroup.getToggles()){
+                    RadioButton radioButton = (RadioButton) toggle;
+                    if(radioButton.getUserData().equals(d)){
+                        difficultyGroup.selectToggle(radioButton);
                     }
                 }
+//                switch (d) {
+//                    case "E" -> {
+//                        easyRadioButton.setSelected(true);
+//                        selectDifficulty = easyRadioButton.getText();
+//                    }
+//                    case "M" -> {
+//                        mediumRadioButton.setSelected(true);
+//                        selectDifficulty = mediumRadioButton.getText();
+//                    }
+//                    case "H" -> {
+//                        hardRadioButton.setSelected(true);
+//                        selectDifficulty = hardRadioButton.getText();
+//                    }
+//                }
             }
         }catch (IOException ignored){}
     }
@@ -699,6 +712,18 @@ public class MainController implements ModelUpdate {
     }
 
     private void setOptionnalLevel(){
+        String[] basic = {"Easy", "Medium", "Hard"};
+        String[] userData = {"F", "M", "D", "C1", "C2", "C3"};
+        int i =0;
+        for(; i < 3; i++) {
+            RadioButton r = new RadioButton(basic[i]);
+            r.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
+            r.setOnAction(this::selectDifficulty);
+            r.setPrefWidth(70.0);
+            r.setUserData(userData[i]);
+            r.setToggleGroup(difficultyGroup);
+            singleVbox.getChildren().add(r);
+        }
         try {
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -715,12 +740,18 @@ public class MainController implements ModelUpdate {
                         radioButton.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
                         radioButton.setOnAction(this::selectDifficulty);
                         radioButton.setPrefWidth(70.0);
+                        radioButton.setUserData(userData[i]);
                         radioButton.setToggleGroup(difficultyGroup);
                         singleVbox.getChildren().add(radioButton);
+                        i++;
                     }
                 }
             }
         }
         catch (IOException ignored){}
+    }
+
+    private void setLevelButton(){
+
     }
 }
