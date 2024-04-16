@@ -196,6 +196,7 @@ public class MainController implements ModelUpdate {
         stageSettings.setScene(scene);
         stageSettings.setOnHidden(event -> {
             getDefaultDifficulty();
+            setOptionnalLevel();
         });
         stageSettings.showAndWait();
     }
@@ -703,6 +704,7 @@ public class MainController implements ModelUpdate {
     }
 
     private void setOptionnalLevel(){
+        singleVbox.getChildren().removeIf(node -> node instanceof RadioButton);
         String[] basic = {"Easy", "Medium", "Hard"};
         String[] userData = {"F", "M", "D", "C1", "C2", "C3"};
         int i =0;
