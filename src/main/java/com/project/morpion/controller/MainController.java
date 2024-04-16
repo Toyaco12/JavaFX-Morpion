@@ -195,8 +195,8 @@ public class MainController implements ModelUpdate {
         stageSettings.setTitle("Model Settings");
         stageSettings.setScene(scene);
         stageSettings.setOnHidden(event -> {
-            getDefaultDifficulty();
             setOptionnalLevel();
+            getDefaultDifficulty();
         });
         stageSettings.showAndWait();
     }
@@ -236,6 +236,13 @@ public class MainController implements ModelUpdate {
 
     public void save(){
         try{
+            FileReader fileReader = new FileReader(new File("src/main/resources/com/project/morpion/settings.txt"));
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String l = bufferedReader.readLine();
+            while (l.charAt(0) != 'S')
+                l = bufferedReader.readLine();
+
+
             FileWriter fileWriter = new FileWriter(new File("src/main/resources/com/project/morpion/settings.txt"));
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             int lum = (int) sliderBrightness.getValue();
@@ -268,6 +275,8 @@ public class MainController implements ModelUpdate {
             else{
                 bufferedWriter.write("C:D");
             }
+            bufferedWriter.newLine();
+            bufferedWriter.write(l);
             bufferedWriter.flush();
             bufferedWriter.close();
             setBrightness(lum);
@@ -506,6 +515,7 @@ public class MainController implements ModelUpdate {
                 String d = line.substring(line.lastIndexOf(":") + 1);
                 for(Toggle toggle : difficultyGroup.getToggles()){
                     RadioButton radioButton = (RadioButton) toggle;
+                    //System.out.println(radioButton.getUserData());
                     if(radioButton.getUserData().equals(d)){
                         difficultyGroup.selectToggle(radioButton);
                     }

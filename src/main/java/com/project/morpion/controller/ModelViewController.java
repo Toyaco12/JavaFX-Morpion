@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,8 @@ import java.io.IOException;
 public class ModelViewController {
     public Button closeButton;
     public BorderPane mainPane;
+    public Label title;
+    public Label subtitle;
     @FXML
     private ListView<ItemModel> easyListView;
     @FXML
@@ -35,6 +38,11 @@ public class ModelViewController {
     }
 
     public void initialization(){
+        if(isFrench()){
+            title.setText("Gestion des modèles");
+            subtitle.setText("Modèles Crées");
+            closeButton.setText("Fermer");
+        }
         getCursor();
         getTheme();
         //easyListView.setCellFactory(param -> new SupressCell());
@@ -103,5 +111,20 @@ public class ModelViewController {
                 scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
     }
 }

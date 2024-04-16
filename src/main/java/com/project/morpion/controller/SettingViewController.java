@@ -32,6 +32,7 @@ public class SettingViewController {
     public TextField createTextField;
     public Button createButton;
     public HBox createHbox;
+    public Label createLabel;
     private boolean save = false;
     private ToggleGroup difficulty;
     private Scene scene;
@@ -48,7 +49,13 @@ public class SettingViewController {
     }
 
     public void initialization() {
-        if(isFrench()) language = "Français";
+        if(isFrench()){
+            language = "Français";
+            createLabel.setText("Créer un niveau");
+            createButton.setText("Créer");
+            saveButton.setText("Sauvegarder");
+            closeButton.setText("Fermer");
+        }
         else language = "English";
         getOptionnalLevel();
         getCursor();
@@ -142,10 +149,16 @@ public class SettingViewController {
         }
         else if (!save){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Quitter sans Sauvegarder");
-            alert.setHeaderText("Confirmation nécessaire");
-            alert.setContentText("Êtes-vous sûr de vouloir quiter sans sauvegarder ?");
-
+            if(Objects.equals(language, "Français")) {
+                alert.setTitle("Quitter sans Sauvegarder");
+                alert.setHeaderText("Confirmation nécessaire");
+                alert.setContentText("Êtes-vous sûr de vouloir quiter sans sauvegarder ?");
+            }
+            else{
+                alert.setTitle("Quit Without Saving");
+                alert.setHeaderText("Confirmation Required");
+                alert.setContentText("Are you sure you want to exit without saving ?");
+            }
             alert.showAndWait().ifPresent(response -> {
                 if(response == ButtonType.OK){
                     stage.close();
@@ -170,7 +183,10 @@ public class SettingViewController {
                 int colIndex = GridPane.getColumnIndex(tmp);
                 if(tmp.getText().isEmpty()){
                     errorLabel.setVisible(true);
-                    errorLabel.setText("Champs Vides");
+                    if(Objects.equals(language, "Français"))
+                        errorLabel.setText("Champs Vides");
+                    else
+                        errorLabel.setText("Empty Fields");
                     tmp.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
                     error = true;
                 }
@@ -465,6 +481,7 @@ public class SettingViewController {
             }
             getOptionnalLevel();
             setLevel();
+            createTextField.clear();
         }
     }
 
@@ -637,7 +654,7 @@ public class SettingViewController {
                         label1.setText("FACILE");
                     else
                         label1.setText("EASY");
-                    r.setUserData("E");
+                    r.setUserData("F");
                 }
                 else if(i == 2){
                     if(Objects.equals(language, "Français"))
@@ -651,7 +668,7 @@ public class SettingViewController {
                         label1.setText("DIFICILE");
                     else
                         label1.setText("HARD");
-                    r.setUserData("H");
+                    r.setUserData("D");
                 }
                 label1.setAlignment(Pos.CENTER);
                 label1.setPrefHeight(69.0);

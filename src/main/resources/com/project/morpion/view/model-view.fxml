@@ -15,7 +15,7 @@
       <HBox alignment="CENTER" spacing="30.0">
          <children>
               <VBox>
-                  <Label alignment="CENTER" prefHeight="31.0" prefWidth="246.0" text="Modèles Crées" style="-fx-text-fill: fc6c00; ">
+                  <Label fx:id="subtitle" alignment="CENTER" prefHeight="31.0" prefWidth="246.0" text="Models Created" style="-fx-text-fill: fc6c00; ">
                   <padding>
                      <Insets bottom="10.0" />
                   </padding>
@@ -28,7 +28,7 @@
       </HBox>
     </center>
    <top>
-      <Label text="Gestion des models" BorderPane.alignment="CENTER" style="-fx-text-fill: fc6c00; -fx-font-weight: bold;">
+      <Label fx:id="title" text="Model Management" BorderPane.alignment="CENTER" style="-fx-text-fill: fc6c00; -fx-font-weight: bold;">
          <font>
             <Font size="25.0" />
          </font>

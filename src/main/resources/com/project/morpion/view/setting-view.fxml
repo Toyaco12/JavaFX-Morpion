@@ -41,10 +41,13 @@
          </children>
       </StackPane>
       <Label fx:id="errorLabel" focusTraversable="false" textFill="#fa0808" visible="false" />
-       <HBox fx:id="createHbox">
-           <Label text="Créer un niveau : "/>
+       <HBox fx:id="createHbox" alignment="CENTER" spacing="10">
+           <Label fx:id="createLabel" text="Create a Level : " style="-fx-text-fill: fc6c00;"/>
            <TextField fx:id="createTextField"/>
-           <Button fx:id="createButton" text="Créer" onAction="#addLevel"/>
+           <Button fx:id="createButton" text="Create" onAction="#addLevel" style="-fx-background-color: rgb(1, 191, 200); -fx-text-fill: black;"/>
+           <VBox.margin>
+               <Insets bottom="15.0" />
+           </VBox.margin>
        </HBox>
       <Button fx:id="saveButton" styleClass="blue-button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveSettings" text="Save Settings">
          <VBox.margin>
