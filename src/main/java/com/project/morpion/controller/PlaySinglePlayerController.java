@@ -29,6 +29,7 @@ import javafx.util.Duration;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -59,6 +60,7 @@ public class PlaySinglePlayerController {
     public VBox vboxRight;
     public BorderPane borderPane;
     public Button revengeButton;
+    public HBox changeHbox;
     private String modelName;
     private String difficulty;
     public Morpion game = null;
@@ -163,6 +165,24 @@ public class PlaySinglePlayerController {
                     else
                         victoryLabel.setText("And It's A Draw .....");
 
+                }
+                String[] level = getLevel();
+                int i = 0;
+                for(String lvl : level){
+                    Button button = new Button(lvl);
+                    if(i%2 == 0)
+                        button.getStyleClass().add("orange-button");
+                    else
+                        button.getStyleClass().add("blue-button");
+                    button.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+                    button.prefWidth(80);
+                    button.prefHeight(80);
+                    int finalI = i;
+                    button.setOnAction(event->{
+                        changeLevel(finalI);
+                    });
+                    changeHbox.getChildren().add(button);
+                    i++;
                 }
 
                 blur();
@@ -526,6 +546,38 @@ public class PlaySinglePlayerController {
                 scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
+    }
+
+    private String[] getLevel(){
+        try {
+            String[] optionnalLevel = new String[0];
+            String[] base = {"Easy", "Medium", "Hard"};
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while (line.charAt(0) != 'S')
+                line = bufferedReader.readLine();
+            if (line.charAt(0) == 'S') {
+                String[] lvl = line.split(":");
+                if (lvl.length > 1) {
+                    optionnalLevel = new String[lvl.length - 1];
+                    System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length - 1);
+                }
+                else {
+                    optionnalLevel = new String[0];
+                }
+            }
+            String[] level = Arrays.copyOf(base, base.length + optionnalLevel.length);
+            System.arraycopy(optionnalLevel, 0, level, base.length, optionnalLevel.length);
+
+            return level;
+        }
+        catch (IOException ignored){}
+        return null;
+    }
+
+    private void changeLevel(int i){
+        System.out.println(i);
     }
 
 
