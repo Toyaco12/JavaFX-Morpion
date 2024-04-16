@@ -37,9 +37,16 @@ public class LearnController {
     @FXML
     private Task<Void> learningTask;
 
+    private Stage PreviousStage;
+
     public void setUpdateListener(ModelUpdate updateModel) {
         this.updateModel = updateModel;
     }
+
+    public void getPreviousStage(Stage stage) {
+        this.PreviousStage = stage;
+    }
+
     public void trainingCompleted() {
         if (updateModel != null) {
             updateModel.onModelUpdated();

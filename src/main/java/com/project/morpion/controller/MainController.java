@@ -26,6 +26,7 @@ import javafx.util.Duration;
 
 import java.io.*;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MainController implements ModelUpdate {
     @FXML
@@ -86,7 +87,7 @@ public class MainController implements ModelUpdate {
     private String cursorSett;
 
     @FXML
-    private Stage stage = null;
+    private static Stage stage = null;
     private Scene scene = null;
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -121,52 +122,56 @@ public class MainController implements ModelUpdate {
     @Override
     public void onModelUpdated() {
         Platform.runLater(() -> {
-            try {
-                loadPlay1v1View(modelName);
-            } catch (IOException e) {
-                e.printStackTrace(); // Gérer l'exception comme vous le souhaitez
+            // Création de l'alert
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Modèle Prêt");
+            alert.setHeaderText("Votre IA est prête !");
+            alert.setContentText("Voulez-vous commencer la partie contre l'IA maintenant ? \nLe nouveau modèle sera enregistré dans les deux cas.");
+
+            // Définition des boutons
+            ButtonType buttonTypeYes = new ButtonType("Oui", ButtonBar.ButtonData.YES);
+            ButtonType buttonTypeNo = new ButtonType("Non", ButtonBar.ButtonData.NO);
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+            // Affichage de l'alerte et attente de la réponse
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == buttonTypeYes) {
+                try {
+                    loadPlay1v1View(modelName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
     private void loadPlay1v1View(String modelName) throws IOException {
-        timer.setVisible(true);
-        timer.setManaged(true);
-        timerMessage.setVisible(true);
-        timerMessage.setManaged(true);
-        timer.setText(String.valueOf(seconds));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            seconds--;
-            timer.setText(String.valueOf(seconds));
-            if (seconds == 0) {
-                FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
 //                Parent root = null;
 //                try {
 //                    root = fxmlLoader.load();
 //                } catch (IOException e) {
 //                    throw new RuntimeException(e);
 //                }
-                Scene scene = null;
-                try {
-                    scene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                PlaySinglePlayerController controller = fxmlLoader.getController();
-                controller.setScene(scene);
-                controller.initialization();
-                controller.setModelName(this.modelName);
-                controller.setDifficulty(letterDifficulty);
-                controller.initModel();
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PlaySinglePlayerController controller = fxmlLoader.getController();
+        controller.setScene(scene);
+        controller.initialization();
+        controller.setModelName(this.modelName);
+        controller.setDifficulty(letterDifficulty);
+        controller.setStage(stage);
+        controller.initModel();
 
-                //Scene scene = new Scene(root);
-                Stage s  = (Stage) ((Node) btnSinglePlayer).getScene().getWindow();
-                s.setScene(scene);
+        //Scene scene = new Scene(root);
+        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+        stage.setScene(scene);
 
-                s.show();
-            }
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        stage.show();
     }
 
     public void startGame(ActionEvent actionEvent) throws IOException {
@@ -175,6 +180,7 @@ public class MainController implements ModelUpdate {
         GameController controller = fxmlLoader.getController();
         controller.setScene(scene);
         controller.initialization();
+        //controller.setStage(stage);
         Stage stageGame = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stageGame.setScene(scene);
         stageGame.show();
@@ -210,6 +216,9 @@ public class MainController implements ModelUpdate {
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
+        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+
+        controller.getPreviousStage(stage);
         stageLearn.show();
     }
 
@@ -354,7 +363,9 @@ public class MainController implements ModelUpdate {
     private void handleSubmit(ActionEvent event) throws IOException {
         //if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
         RadioButton radioButton = (RadioButton) difficultyGroup.getSelectedToggle();
-         String diff = (String) radioButton.getUserData();
+        if (radioButton !=null) {
+            String diff = (String) radioButton.getUserData();
+            letterDifficulty = diff;
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
 //            switch (selectDifficulty){
 //                case "Easy":
@@ -382,9 +393,10 @@ public class MainController implements ModelUpdate {
                 loadPlay1v1View(model.getName());
             }
 
-//        } else {
-//            System.out.println("Aucune difficulté sélectionnée.");
-//        }
+        }
+        else {
+            System.out.println("Aucune difficulté sélectionnée.");
+        }
     }
 
 

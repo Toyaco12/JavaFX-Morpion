@@ -78,6 +78,10 @@ public class PlaySinglePlayerController {
     }
 
     private String language = "English";
+    private Stage stage;
+    public void setStage(Stage s){
+        this.stage = stage;
+    }
 
     public void setScene(Scene scene) {
         this.scene = scene;
