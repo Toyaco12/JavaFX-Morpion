@@ -1,7 +1,7 @@
 package com.project.morpion.controller;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -16,7 +16,7 @@ import javafx.scene.*;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
@@ -53,37 +53,42 @@ public class SettingViewController {
         easyRadioButton.setToggleGroup(difficulty);
         mediumRadioButton.setToggleGroup(difficulty);
         hardRadioButton.setToggleGroup(difficulty);
+        setLevel();
         //easyRadioButton.setSelected(true);
-        initialSettings = getSettings();
-
-        for(int i = 0; i < initialSettings.length; i++){
-            if(i >= 3){
-                Label l = new Label(optionnalLevel[i%3]);
-                l.setAlignment(Pos.CENTER);
-                l.setPrefHeight(69.0);
-                l.setPrefWidth(200);
-                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
-                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-                settingsPane.add(l, 0, i+1);
-                RadioButton radioButton = new RadioButton();
-                radioButton.setUserData("C" + (i%3+1));
-                System.out.println("C"+(i%3+1));
-                radioButton.setToggleGroup(difficulty);
-                settingsPane.add(radioButton, 4, i+1);
-
-            }
-            for(int j = 0; j < 3; j++){
-                TextField textField;
-                if(j == 2){
-                    textField = createDecimalTextField(initialSettings[i][j]);
-                }
-                else{
-                    textField = createTextField(initialSettings[i][j]);
-                }
-
-                settingsPane.add(textField, j+1, i+1);
-            }
-        }
+//        initialSettings = getSettings();
+//
+//        for(int i = 0; i < initialSettings.length; i++){
+//            if(i >= 3){
+//                final int index = i;
+//                Label l = new Label(optionnalLevel[i%3]);
+//                l.setAlignment(Pos.CENTER);
+//                l.setPrefHeight(69.0);
+//                l.setPrefWidth(200);
+//                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
+//                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+//                settingsPane.add(l, 0, i+1);
+//                RadioButton radioButton = new RadioButton();
+//                radioButton.setUserData("C" + (i%3+1));
+//                //System.out.println("C"+(i%3+1));
+//                radioButton.setToggleGroup(difficulty);
+//                settingsPane.add(radioButton, 4, i+1);
+//                Button delete = new Button("D");
+//                delete.setFocusTraversable(true);
+//                delete.setOnAction(e -> deletelevel(index%3));
+//                settingsPane.add(delete, 5, i+1);
+//            }
+//            for(int j = 0; j < 3; j++){
+//                TextField textField;
+//                if(j == 2){
+//                    textField = createDecimalTextField(initialSettings[i][j]);
+//                }
+//                else{
+//                    textField = createTextField(initialSettings[i][j]);
+//                }
+//
+//                settingsPane.add(textField, j+1, i+1);
+//            }
+//        }
     }
     public void closeModal(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -245,10 +250,10 @@ public class SettingViewController {
                 }
                 else{
                     String d = line.substring(line.lastIndexOf(":") + 1);
-                    System.out.println(d);
+                    //System.out.println(d);
                     difficulty.getToggles().forEach(toggle -> {
                         RadioButton radioButton = (RadioButton) toggle;
-                        System.out.println(radioButton.getUserData());
+                        //System.out.println(radioButton.getUserData());
                         if(radioButton.getUserData().equals(d)){
 
                             difficulty.selectToggle(radioButton);
@@ -469,5 +474,125 @@ public class SettingViewController {
             writer.close();
         }
         catch (IOException ignored){}
+    }
+
+    private void deletelevel(int lvl){
+        System.out.println(lvl);
+        String deleteLvl = optionnalLevel[lvl];
+        String option = "S";
+        for(String i : optionnalLevel){
+            if(!Objects.equals(i, deleteLvl)){
+                option += ":" + i;
+            }
+        }
+        try{
+            File file = new File("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String[] tmp = new String[5];
+            String line;
+            int i = 0;
+            while ((line = reader.readLine()) != null) {
+                // Vérifier si la ligne commence par "S"
+                if (line.startsWith("S")) {
+                    tmp[i] = option;
+                } else {
+                    tmp[i] = line;
+                }
+                i++;
+            }
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            for(String j : tmp){
+                writer.write(j);
+                writer.newLine();
+            }
+            writer.close();
+
+
+            File config = new File("src/main/resources/com/project/morpion/ai/config.txt");
+            BufferedReader r = new BufferedReader(new FileReader(config));
+            String l;
+            String[] temp = new String[7];
+            int j = 0;
+            while ((l = r.readLine()) != null){
+                if(l.startsWith("C")){
+                    if(Character.getNumericValue(l.charAt(1)) < lvl + 1){
+                        System.out.println("PETIT   " + l);
+                        temp[j] = l;
+                    }
+                    else if(Character.getNumericValue(l.charAt(1)) > lvl + 1){
+                        System.out.println("GRAND   " + l);
+                        int a = Character.getNumericValue(l.charAt(1)) - 1;
+                        String first = l.substring(0,1);
+                        String reste = l.substring(2);
+                        temp[j] = first + a + reste;
+                    }
+                }
+                else{
+                    temp[j] = l;
+                }
+                j++;
+            }
+            r.close();
+            BufferedWriter w = new BufferedWriter(new FileWriter(config));
+            for(String a : temp){
+                if(a != null){
+                    System.out.println(a);
+                    w.write(a);
+                    w.newLine();
+                }
+            }
+            w.close();
+
+            getOptionnalLevel();
+            setLevel();
+        }
+        catch (IOException ignored){}
+
+    }
+
+    private void setLevel(){
+        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 4);
+
+// Supprimer tous les nœuds de la ligne 5
+        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 5);
+
+// Supprimer tous les nœuds de la ligne 6
+        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 6);
+        initialSettings = getSettings();
+
+        for(int i = 0; i < initialSettings.length; i++){
+            if(i >= 3){
+                final int index = i;
+                Label l = new Label(optionnalLevel[i%3]);
+                l.setAlignment(Pos.CENTER);
+                l.setPrefHeight(69.0);
+                l.setPrefWidth(200);
+                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
+                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                settingsPane.add(l, 0, i+1);
+                RadioButton radioButton = new RadioButton();
+                radioButton.setUserData("C" + (i%3+1));
+                //System.out.println("C"+(i%3+1));
+                radioButton.setToggleGroup(difficulty);
+                settingsPane.add(radioButton, 4, i+1);
+                Button delete = new Button("D");
+                delete.setFocusTraversable(true);
+                delete.setOnAction(e -> deletelevel(index%3));
+                settingsPane.add(delete, 5, i+1);
+            }
+            for(int j = 0; j < 3; j++){
+                TextField textField;
+                if(j == 2){
+                    textField = createDecimalTextField(initialSettings[i][j]);
+                }
+                else{
+                    textField = createTextField(initialSettings[i][j]);
+                }
+
+                settingsPane.add(textField, j+1, i+1);
+            }
+        }
     }
 }

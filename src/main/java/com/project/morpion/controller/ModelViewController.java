@@ -28,16 +28,14 @@ public class ModelViewController {
     @FXML
     private ListView<ItemModel> hardListView;
     private String[] settings = new String[4];
-
+    private Cursor cursor;
     private Scene scene;
     public void setScene(Scene scene) {
         this.scene = scene;
     }
 
     public void initialization(){
-        Image cursor = new Image("file:src/main/resources/com/project/morpion/image/pattes.png");
-        Cursor custom = new ImageCursor(cursor);
-        scene.setCursor(custom);
+        getCursor();
         getTheme();
         //easyListView.setCellFactory(param -> new SupressCell());
         mediumListView.setCellFactory(param -> new SupressCell());
@@ -80,6 +78,29 @@ public class ModelViewController {
                 else{
                     mainPane.setStyle("-fx-background-color: rgb(20,20,20);");
                 }
+            }
+        }catch (IOException ignored){}
+    }
+
+    private void getCursor(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'C')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'C'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                if(d.equals("D")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
+                }
+                else if(d.equals("C")){
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
+                }
+                else{
+                    cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
+                }
+                scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
     }
