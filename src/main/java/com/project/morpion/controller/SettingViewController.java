@@ -40,6 +40,7 @@ public class SettingViewController {
     private String[][] initialSettings;
     private String[] levelName;
     private String radio;
+    private String language;
 
 
     public void setScene(Scene scene) {
@@ -47,6 +48,8 @@ public class SettingViewController {
     }
 
     public void initialization() {
+        if(isFrench()) language = "Français";
+        else language = "English";
         getOptionnalLevel();
         getCursor();
         getTheme();
@@ -56,6 +59,16 @@ public class SettingViewController {
 //        hardRadioButton.setToggleGroup(difficulty);
         setLevel();
         getSelectedLevel();
+
+        TextFormatter<String> textFormatter = new TextFormatter<>(change -> {
+            if(change.getControlNewText().length() <=10){
+                return change;
+            }
+            else{
+                return null;
+            }
+        });
+        createTextField.setTextFormatter(textFormatter);
         //easyRadioButton.setSelected(true);
 //        initialSettings = getSettings();
 //
@@ -169,6 +182,9 @@ public class SettingViewController {
                 }
                 else{
                     tmp.setStyle("-fx-text-box-border: transparent;");
+                }
+                if(difficulty.getSelectedToggle() == null){
+                    difficulty.getToggles().getFirst().setSelected(true);
                 }
                 if(j != 2){
                     ligne += tmp.getText() + ":";
@@ -591,10 +607,18 @@ public class SettingViewController {
         initialSettings = getSettings();
         for(int i = 0; i < 4; i++){
             Label label = new Label();
-            if(i == 0) label.setText("Hidden Layer Size");
-            else if(i == 1) label.setText("Number of Hidden Layers");
-            else if(i == 2) label.setText("Learning Rate");
-            else label.setText("Default");
+            if(Objects.equals(language, "Français")) {
+                if (i == 0) label.setText("Taille de la couche cachée");
+                else if (i == 1) label.setText("Nombre de couche cachée");
+                else if (i == 2) label.setText("Taux d'apprentissage");
+                else label.setText("Défaut");
+            }
+            else{
+                if (i == 0) label.setText("Hidden Layer Size");
+                else if (i == 1) label.setText("Number of Hidden Layers");
+                else if (i == 2) label.setText("Learning Rate");
+                else label.setText("Default");
+            }
             label.setAlignment(Pos.CENTER);
             if(i != 3){
                 label.setPrefHeight(69.0);
@@ -609,15 +633,24 @@ public class SettingViewController {
                 //settingsPane.add(r, 4, i);
                 Label label1 = new Label();
                 if(i == 1){
-                    label1.setText("EASY");
+                    if(Objects.equals(language, "Français"))
+                        label1.setText("FACILE");
+                    else
+                        label1.setText("EASY");
                     r.setUserData("E");
                 }
                 else if(i == 2){
-                    label1.setText("MEDIUM");
+                    if(Objects.equals(language, "Français"))
+                        label1.setText("MOYEN");
+                    else
+                        label1.setText("MEDIUM");
                     r.setUserData("M");
                 }
                 else{
-                    label1.setText("HARD");
+                    if(Objects.equals(language, "Français"))
+                        label1.setText("DIFICILE");
+                    else
+                        label1.setText("HARD");
                     r.setUserData("H");
                 }
                 label1.setAlignment(Pos.CENTER);
@@ -637,8 +670,8 @@ public class SettingViewController {
                 l.setAlignment(Pos.CENTER);
                 l.setPrefHeight(69.0);
                 l.setPrefWidth(200);
-                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
-                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                if(i%2 != 1) l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                else l.setStyle("-fx-text-fill: fc6c00;");
                 settingsPane.add(l, 0, i+1);
                 RadioButton radioButton = new RadioButton();
                 radioButton.setUserData("C" + (i%3+1));
@@ -683,5 +716,20 @@ public class SettingViewController {
                 difficulty.selectToggle(radioButton);
             }
         }
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
     }
 }

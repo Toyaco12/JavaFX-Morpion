@@ -63,10 +63,7 @@
                                          </ImageView>
                                      </graphic>
                                  </Button>
-                                 <RadioButton fx:id="easyRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;" text="Easy" />
-                                 <RadioButton fx:id="mediumRadioButton" styleClass="blue-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Medium" />
-                                 <RadioButton fx:id="hardRadioButton" styleClass="orange-radio" onAction="#selectDifficulty" prefWidth="70.0" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold" text="Hard" />
-                             </children>
+                                 </children>
                          </VBox>
                          <Button fx:id="btn1vs1" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="164.0" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold" styleClass="blue-button" text="1vs1" />
                      </children>
