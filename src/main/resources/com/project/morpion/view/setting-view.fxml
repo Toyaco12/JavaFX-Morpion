@@ -36,45 +36,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="CENTER" prefHeight="69.0" prefWidth="200.0" style="-fx-text-fill: fc6c00;" text="EASY" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="54.0" prefWidth="177.0" style="-fx-text-fill: rgb(1, 191, 200);" text="MEDIUM" GridPane.rowIndex="2">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="71.0" prefWidth="240.0" style="-fx-text-fill: fc6c00;" text="HARD" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="85.0" prefWidth="258.0" style="-fx-text-fill: rgb(1, 191, 200);" text="Hidden Layer Size" GridPane.columnIndex="1">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="175.0" prefWidth="306.0" style="-fx-text-fill: fc6c00;" text="Number of Hidden Layers" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" prefHeight="127.0" prefWidth="231.0" style="-fx-text-fill: rgb(1, 191, 200);" text="Learning Rate" GridPane.columnIndex="3">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                   <Label alignment="CENTER" text="Default" style="-fx-text-fill: fc6c00;" GridPane.columnIndex="4">
-                       <font>
-                           <Font size="13.0" />
-                       </font>
-                   </Label>
-                   <RadioButton fx:id="easyRadioButton" userData="E" onAction="#selectDifficulty" prefWidth="64.0" style="-fx-text-fill: white" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                   <RadioButton fx:id="mediumRadioButton" userData="M" onAction="#selectDifficulty" prefWidth="64.0" style="-fx-text-fill: white" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
-                   <RadioButton fx:id="hardRadioButton" userData="H" onAction="#selectDifficulty" prefWidth="64.0" style="-fx-text-fill: white" GridPane.columnIndex="4" GridPane.rowIndex="3"/>
-               </children>
+                  </children>
             </GridPane>
          </children>
       </StackPane>

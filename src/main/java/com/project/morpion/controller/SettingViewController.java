@@ -39,6 +39,7 @@ public class SettingViewController {
     private String[] optionnalLevel = null;
     private String[][] initialSettings;
     private String[] levelName;
+    private String radio;
 
 
     public void setScene(Scene scene) {
@@ -50,10 +51,11 @@ public class SettingViewController {
         getCursor();
         getTheme();
         difficulty = new ToggleGroup();
-        easyRadioButton.setToggleGroup(difficulty);
-        mediumRadioButton.setToggleGroup(difficulty);
-        hardRadioButton.setToggleGroup(difficulty);
+//        easyRadioButton.setToggleGroup(difficulty);
+//        mediumRadioButton.setToggleGroup(difficulty);
+//        hardRadioButton.setToggleGroup(difficulty);
         setLevel();
+        getSelectedLevel();
         //easyRadioButton.setSelected(true);
 //        initialSettings = getSettings();
 //
@@ -180,8 +182,8 @@ public class SettingViewController {
                 }
             }
         }
-        RadioButton tmp = (RadioButton) difficulty.getSelectedToggle();
-        String diff = (String) tmp.getUserData();
+        RadioButton selected = (RadioButton) difficulty.getSelectedToggle();
+        String diff = (String) selected.getUserData();
         if(!error){
             errorLabel.setVisible(false);
             setSettings(set, diff);
@@ -249,16 +251,16 @@ public class SettingViewController {
                     i++;
                 }
                 else{
-                    String d = line.substring(line.lastIndexOf(":") + 1);
-                    //System.out.println(d);
-                    difficulty.getToggles().forEach(toggle -> {
-                        RadioButton radioButton = (RadioButton) toggle;
-                        //System.out.println(radioButton.getUserData());
-                        if(radioButton.getUserData().equals(d)){
+                    radio = line.substring(line.lastIndexOf(":") + 1);
 
-                            difficulty.selectToggle(radioButton);
-                        }
-                    });
+//                    difficulty.getToggles().forEach(toggle -> {
+//                        System.out.println("aaaaa");
+//                        RadioButton radioButton = (RadioButton) toggle;
+//                        System.out.println("a  : " + radioButton.getUserData());
+//                        if(radioButton.getUserData().equals(d)){
+//                            difficulty.selectToggle(radioButton);
+//                        }
+//                    });
 //                    if(d.matches("E")){
 //                        easyRadioButton.setSelected(true);
 //                        mediumRadioButton.setSelected(false);
@@ -377,7 +379,10 @@ public class SettingViewController {
                     System.arraycopy(lvl, 1, optionnalLevel, 0, lvl.length - 1);
                 }
             }
-            if(optionnalLevel.length == 3){
+            if(optionnalLevel == null || optionnalLevel.length != 3){
+                createHbox.setVisible(true);
+            }
+            else {
                 createHbox.setVisible(false);
             }
         }
@@ -402,50 +407,52 @@ public class SettingViewController {
         if(!createTextField.getText().isEmpty()){
             String newLvl = createTextField.getText();
             if(optionnalLevel == null){
-                Label la = new Label(newLvl);
-                la.setAlignment(Pos.CENTER);
-                la.setPrefHeight(69.0);
-                la.setPrefWidth(200);
-                la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-                settingsPane.add(la, 0, 4);
-                for(int i = 0; i < 3; i++){
-                    if(i==2){
-                        settingsPane.add(createDecimalTextField("1"), i+1, 4);
-                    }
-                    else{
-                        settingsPane.add(createTextField("1"), i+1, 4);
-                    }
-                }
-                writeOptionnalLevel("S:" + newLvl);
+//                Label la = new Label(newLvl);
+//                la.setAlignment(Pos.CENTER);
+//                la.setPrefHeight(69.0);
+//                la.setPrefWidth(200);
+//                la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+//                settingsPane.add(la, 0, 4);
+//                for(int i = 0; i < 3; i++){
+//                    if(i==2){
+//                        settingsPane.add(createDecimalTextField("1"), i+1, 4);
+//                    }
+//                    else{
+//                        settingsPane.add(createTextField("1"), i+1, 4);
+//                    }
+//                }
+                writeOptionnalLevel("S:" + newLvl, 1);
             }
             else{
                 int l = optionnalLevel.length;
-                Label la = new Label(newLvl);
-                la.setAlignment(Pos.CENTER);
-                la.setPrefHeight(69.0);
-                la.setPrefWidth(200);
-                if(l%2 != 1) la.setStyle("-fx-text-fill: fc6c00;");
-                else la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-                settingsPane.add(la, 0, l+4);
-                for(int i = 0; i < 3; i++){
-                    if(i==2){
-                        settingsPane.add(createDecimalTextField("1"), i+1, l+4);
-                    }
-                    else{
-                        settingsPane.add(createTextField("1"), i+1, l+4);
-                    }
-                }
+//                System.out.println(l);
+//                Label la = new Label(newLvl);
+//                la.setAlignment(Pos.CENTER);
+//                la.setPrefHeight(69.0);
+//                la.setPrefWidth(200);
+//                if(l%2 != 1) la.setStyle("-fx-text-fill: fc6c00;");
+//                else la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+//                settingsPane.add(la, 0, l+4);
+//                for(int i = 0; i < 3; i++){
+//                    if(i==2){
+//                        settingsPane.add(createDecimalTextField("1"), i+1, l+4);
+//                    }
+//                    else{
+//                        settingsPane.add(createTextField("1"), i+1, l+4);
+//                    }
+//                }
                 String lvl = "S:";
                 for (String i : optionnalLevel){
                     lvl += i + ":";
                 }
-                writeOptionnalLevel(lvl + newLvl);
+                writeOptionnalLevel(lvl + newLvl, l+1);
             }
             getOptionnalLevel();
+            setLevel();
         }
     }
 
-    private void writeOptionnalLevel(String lvl){
+    private void writeOptionnalLevel(String lvl, int index){
         try{
             File file = new File("src/main/resources/com/project/morpion/settings.txt");
             //File tmp = new File("src/main/resources/com/project/morpion/tmp.txt");
@@ -472,12 +479,39 @@ public class SettingViewController {
                 writer.newLine();
             }
             writer.close();
+
+
+            File config = new File("src/main/resources/com/project/morpion/ai/config.txt");
+            BufferedReader r = new BufferedReader(new FileReader(config));
+            String l;
+            String[] temp = new String[7];
+            int j = 0;
+            while ((l = r.readLine()) != null){
+                if(l.startsWith("Z")){
+                    temp[j] = "C" + index + ":1:1:1";
+                    j++;
+                    temp[j] = l;
+                }
+                else{
+                    temp[j] = l;
+                }
+                j++;
+            }
+            r.close();
+
+            BufferedWriter w = new BufferedWriter(new FileWriter(config));
+            for(String a : temp){
+                if(a != null){
+                    w.write(a);
+                    w.newLine();
+                }
+            }
+            w.close();
         }
         catch (IOException ignored){}
     }
 
     private void deletelevel(int lvl){
-        System.out.println(lvl);
         String deleteLvl = optionnalLevel[lvl];
         String option = "S";
         for(String i : optionnalLevel){
@@ -518,11 +552,9 @@ public class SettingViewController {
             while ((l = r.readLine()) != null){
                 if(l.startsWith("C")){
                     if(Character.getNumericValue(l.charAt(1)) < lvl + 1){
-                        System.out.println("PETIT   " + l);
                         temp[j] = l;
                     }
                     else if(Character.getNumericValue(l.charAt(1)) > lvl + 1){
-                        System.out.println("GRAND   " + l);
                         int a = Character.getNumericValue(l.charAt(1)) - 1;
                         String first = l.substring(0,1);
                         String reste = l.substring(2);
@@ -538,13 +570,14 @@ public class SettingViewController {
             BufferedWriter w = new BufferedWriter(new FileWriter(config));
             for(String a : temp){
                 if(a != null){
-                    System.out.println(a);
                     w.write(a);
                     w.newLine();
                 }
             }
             w.close();
-
+            if(optionnalLevel.length == 1){
+                optionnalLevel = null;
+            }
             getOptionnalLevel();
             setLevel();
         }
@@ -553,14 +586,49 @@ public class SettingViewController {
     }
 
     private void setLevel(){
-        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 4);
+        settingsPane.getChildren().clear();
 
-// Supprimer tous les nœuds de la ligne 5
-        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 5);
-
-// Supprimer tous les nœuds de la ligne 6
-        settingsPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == 6);
         initialSettings = getSettings();
+        for(int i = 0; i < 4; i++){
+            Label label = new Label();
+            if(i == 0) label.setText("Hidden Layer Size");
+            else if(i == 1) label.setText("Number of Hidden Layers");
+            else if(i == 2) label.setText("Learning Rate");
+            else label.setText("Default");
+            label.setAlignment(Pos.CENTER);
+            if(i != 3){
+                label.setPrefHeight(69.0);
+                label.setPrefWidth(200);
+            }
+            if(i%2 != 1) label.setStyle("-fx-text-fill: fc6c00;");
+            else label.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+            settingsPane.add(label, i+1, 0);
+            if(i > 0){
+                RadioButton r = new RadioButton();
+                r.setToggleGroup(difficulty);
+                //settingsPane.add(r, 4, i);
+                Label label1 = new Label();
+                if(i == 1){
+                    label1.setText("EASY");
+                    r.setUserData("E");
+                }
+                else if(i == 2){
+                    label1.setText("MEDIUM");
+                    r.setUserData("M");
+                }
+                else{
+                    label1.setText("HARD");
+                    r.setUserData("H");
+                }
+                label1.setAlignment(Pos.CENTER);
+                label1.setPrefHeight(69.0);
+                label1.setPrefWidth(200);
+                if(i%2 != 1) label1.setStyle("-fx-text-fill: fc6c00;");
+                else label1.setStyle("-fx-text-fill: rgb(1, 191, 200);");
+                settingsPane.add(r, 4, i);
+                settingsPane.add(label1, 0, i);
+            }
+        }
 
         for(int i = 0; i < initialSettings.length; i++){
             if(i >= 3){
@@ -574,7 +642,7 @@ public class SettingViewController {
                 settingsPane.add(l, 0, i+1);
                 RadioButton radioButton = new RadioButton();
                 radioButton.setUserData("C" + (i%3+1));
-                //System.out.println("C"+(i%3+1));
+                //System.out.println(radioButton.getUserData());
                 radioButton.setToggleGroup(difficulty);
                 settingsPane.add(radioButton, 4, i+1);
                 Button delete = new Button("D");
@@ -582,16 +650,37 @@ public class SettingViewController {
                 delete.setOnAction(e -> deletelevel(index%3));
                 settingsPane.add(delete, 5, i+1);
             }
-            for(int j = 0; j < 3; j++){
-                TextField textField;
-                if(j == 2){
+            for(int j = 0; j < 4; j++){
+                TextField textField = null;
+                if(j == 3){
+//                    RadioButton radioButton = new RadioButton();
+//
+//                    radioButton.setToggleGroup(difficulty);
+//                    settingsPane.add(radioButton, 4, i+1);
+                }
+                else if(j == 2){
                     textField = createDecimalTextField(initialSettings[i][j]);
                 }
                 else{
                     textField = createTextField(initialSettings[i][j]);
                 }
+                if(textField!=null)
+                    settingsPane.add(textField, j+1, i+1);
+            }
+        }
+        if(optionnalLevel == null || optionnalLevel.length != 3){
+            createHbox.setVisible(true);
+        }
+        else {
+            createHbox.setVisible(false);
+        }
+    }
 
-                settingsPane.add(textField, j+1, i+1);
+    private void getSelectedLevel(){
+        for(Toggle toggle : difficulty.getToggles()){
+            RadioButton radioButton = (RadioButton) toggle;
+            if(radioButton.getUserData().equals(radio)){
+                difficulty.selectToggle(radioButton);
             }
         }
     }
