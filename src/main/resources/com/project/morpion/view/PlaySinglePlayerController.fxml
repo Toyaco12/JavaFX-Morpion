@@ -239,17 +239,39 @@
                         </Label>
                         <Label fx:id="revengeLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="Don't hesitate to get your revenge!!">
                             <font>
-                                <Font size="30" />
+                                <Font size="25" />
                             </font>
                             <VBox.margin>
-                                <Insets top="50" />
+                                <Insets top="35" />
                             </VBox.margin>
                         </Label>
                         <Button fx:id="revengeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="110.0" text="Revenge">
                             <VBox.margin >
-                                <Insets top="40" bottom="40"/>
+                                <Insets top="30"/>
                             </VBox.margin>
                         </Button>
+                        <Label fx:id="changeLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="You can change the difficulty!!">
+                            <font>
+                                <Font size="25" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="30"/>
+                            </VBox.margin>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="15">
+                            <Button fx:id="a" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="30.0" prefWidth="80.0" text="Revenge">
+
+                            </Button>
+                            <Button fx:id="c" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="30.0" prefWidth="80.0" text="Revenge">
+
+                            </Button>
+                            <Button fx:id="d" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="30.0" prefWidth="80.0" text="Revenge">
+
+                            </Button>
+                            <VBox.margin>
+                                <Insets top="20"/>
+                            </VBox.margin>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Button mnemonicParsing="false" styleClass="orange-button" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">
