@@ -353,7 +353,9 @@ public class MainController implements ModelUpdate {
     private void handleSubmit(ActionEvent event) throws IOException {
         //if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
         RadioButton radioButton = (RadioButton) difficultyGroup.getSelectedToggle();
-         String diff = (String) radioButton.getUserData();
+        if (radioButton !=null) {
+            String diff = (String) radioButton.getUserData();
+            letterDifficulty = diff;
             System.out.println("Difficulté sélectionnée: " + selectDifficulty);
 //            switch (selectDifficulty){
 //                case "Easy":
@@ -381,9 +383,10 @@ public class MainController implements ModelUpdate {
                 loadPlay1v1View(model.getName());
             }
 
-//        } else {
-//            System.out.println("Aucune difficulté sélectionnée.");
-//        }
+        }
+        else {
+            System.out.println("Aucune difficulté sélectionnée.");
+        }
     }
 
 
