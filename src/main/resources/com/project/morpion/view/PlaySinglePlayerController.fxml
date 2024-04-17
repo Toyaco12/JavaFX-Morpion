@@ -261,9 +261,10 @@
                         <HBox fx:id="changeHbox" alignment="CENTER" spacing="15">
 
                             <VBox.margin>
-                                <Insets top="20"/>
+                                <Insets top="20" bottom="20"/>
                             </VBox.margin>
                         </HBox>
+                        <Label fx:id="selectedDiff" style="-fx-text-fill: rgb(1, 191, 200)"/>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Button mnemonicParsing="false" styleClass="orange-button" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">

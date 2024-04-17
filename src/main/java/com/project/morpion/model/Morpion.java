@@ -176,7 +176,6 @@ public class Morpion {
         }
         play(place);
     }
-    // Getters et Setters
     public double[] getBoard(){
         return this.board;
     }
@@ -199,6 +198,9 @@ public class Morpion {
     }
     public int getSuccessWinBot(){
         return this.successWinBot;
+    }
+    public void setModel(MultiLayerPerceptron model){
+        this.model = model;
     }
 }
 

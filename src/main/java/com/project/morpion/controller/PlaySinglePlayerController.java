@@ -1,21 +1,23 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.Morpion;
+import com.project.morpion.model.ai.Config;
+import com.project.morpion.model.ai.ConfigFileLoader;
 import com.project.morpion.model.ai.Coup;
 import com.project.morpion.model.ai.MultiLayerPerceptron;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -27,13 +29,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
-public class PlaySinglePlayerController {
+public class PlaySinglePlayerController implements ModelUpdate {
     public GridPane morpionGrille;
     public Label chooseLabel;
     public Label startLabel;
@@ -61,8 +65,10 @@ public class PlaySinglePlayerController {
     public BorderPane borderPane;
     public Button revengeButton;
     public HBox changeHbox;
+    public Label selectedDiff;
     private String modelName;
     private String difficulty;
+    private String newLetterDifficulty;
     public Morpion game = null;
     private Image player1Image;
     private Image player2Image;
@@ -84,7 +90,6 @@ public class PlaySinglePlayerController {
     public void setStage(Stage s){
         this.stage = stage;
     }
-
     public void setScene(Scene scene) {
         this.scene = scene;
     }
@@ -166,6 +171,7 @@ public class PlaySinglePlayerController {
                         victoryLabel.setText("And It's A Draw .....");
 
                 }
+                changeHbox.getChildren().clear();
                 String[] level = getLevel();
                 int i = 0;
                 for(String lvl : level){
@@ -179,7 +185,11 @@ public class PlaySinglePlayerController {
                     button.prefHeight(80);
                     int finalI = i;
                     button.setOnAction(event->{
-                        changeLevel(finalI);
+                        try {
+                            changeLevel(finalI);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     });
                     changeHbox.getChildren().add(button);
                     i++;
@@ -333,6 +343,7 @@ public class PlaySinglePlayerController {
     }
 
     public void chooseCircle(MouseEvent mouseEvent) {
+        System.out.println(modelName);
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
         player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
 
@@ -576,8 +587,77 @@ public class PlaySinglePlayerController {
         return null;
     }
 
-    private void changeLevel(int i){
+    public void onModelUpdated() {
+        ConfigFileLoader cfl = new ConfigFileLoader();
+        cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
+        Config config = cfl.get(newLetterDifficulty);
+        File newModel = new File("src/main/resources/com/project/morpion/ai/models/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+        model = MultiLayerPerceptron.loadModel(newLetterDifficulty, newModel.getName());
+        modelName = newModel.getName();
+        difficulty = newLetterDifficulty;
+        game.setModel(model);
+
+    }
+
+    public void openLearning(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stageLearn = new Stage();
+        stageLearn.setScene(scene);
+        LearnController controller = fxmlLoader.getController();
+        controller.setDifficulty(newLetterDifficulty);
+        controller.processStart();
+        controller.setUpdateListener(this);
+        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
+
+        controller.getPreviousStage(stage);
+        stageLearn.show();
+    }
+    private void changeLevel(int i) throws IOException {
         System.out.println(i);
+        String newDiff = "F";
+        String selectedMode = "";
+        switch (i){
+            case 0:
+                newLetterDifficulty = "F";
+                selectedMode = "Easy";
+                break;
+            case 1:
+                newLetterDifficulty = "M";
+                selectedMode = "Medium";
+                break;
+            case 2:
+                newLetterDifficulty = "D";
+                selectedMode = "Hard";
+                break;
+            case 3:
+                newLetterDifficulty = "C1";
+                selectedMode = "Custom1";
+                break;
+            case 4:
+                newLetterDifficulty = "C2";
+                selectedMode = "Custom2";
+                break;
+            case 5:
+                newLetterDifficulty = "C3";
+                selectedMode = "Custom3";
+                break;
+        }
+        selectedDiff.setText("Difficulty for the next round : "+selectedMode);
+        ConfigFileLoader cfl = new ConfigFileLoader();
+        cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
+        Config config = cfl.get(newLetterDifficulty);
+        File newModel = new File("src/main/resources/com/project/morpion/ai/models/model_"+config.hiddenLayerSize+"_"+config.learningRate+"_"+config.numberOfhiddenLayers+".srl");
+        if(!newModel.exists()){
+            ActionEvent event = new ActionEvent();
+            openLearning(event);
+        }
+        else{
+            modelName = newModel.getName();
+            model = MultiLayerPerceptron.loadModel(newLetterDifficulty, newModel.getName());
+            difficulty = newLetterDifficulty;
+            game.setModel(model);
+        }
     }
 
 
