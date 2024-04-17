@@ -66,6 +66,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     public Button revengeButton;
     public HBox changeHbox;
     public Label selectedDiff;
+    public Label changeLabel;
     private String modelName;
     private String difficulty;
     private String newLetterDifficulty;
@@ -97,8 +98,6 @@ public class PlaySinglePlayerController implements ModelUpdate {
         System.out.println(this.modelName);
         System.out.println(this.difficulty);
         model = MultiLayerPerceptron.loadModel(difficulty, modelName);
-        //game = new Morpion(model, Coup.X);
-        //game.startGame();
     }
 
     private void setClickListener(){
@@ -123,7 +122,6 @@ public class PlaySinglePlayerController implements ModelUpdate {
                             }
                             else {
                                 game.playIAGUI();
-                                //updateGridPane();
                                 pauseTransition.play();
                             }
                         }
@@ -139,6 +137,30 @@ public class PlaySinglePlayerController implements ModelUpdate {
 
     private void showVictory(int player){
         restartButton.setDisable(true);
+        selectedDiff.setVisible(false);
+        changeHbox.getChildren().clear();
+        String[] level = getLevel();
+        int i = 0;
+        for(String lvl : level){
+            Button button = new Button(lvl);
+            if(i%2 == 0)
+                button.getStyleClass().add("orange-button");
+            else
+                button.getStyleClass().add("blue-button");
+            button.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+            button.prefWidth(80);
+            button.prefHeight(80);
+            int finalI = i;
+            button.setOnAction(event->{
+                try {
+                    changeLevel(finalI);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            changeHbox.getChildren().add(button);
+            i++;
+        }
         scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
         if(player != 0){
             int[] row = game.getVictory();
@@ -171,29 +193,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
                         victoryLabel.setText("And It's A Draw .....");
 
                 }
-                changeHbox.getChildren().clear();
-                String[] level = getLevel();
-                int i = 0;
-                for(String lvl : level){
-                    Button button = new Button(lvl);
-                    if(i%2 == 0)
-                        button.getStyleClass().add("orange-button");
-                    else
-                        button.getStyleClass().add("blue-button");
-                    button.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
-                    button.prefWidth(80);
-                    button.prefHeight(80);
-                    int finalI = i;
-                    button.setOnAction(event->{
-                        try {
-                            changeLevel(finalI);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    });
-                    changeHbox.getChildren().add(button);
-                    i++;
-                }
+
 
                 blur();
                 fadeOutGridPane();
@@ -500,6 +500,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
         revengeButton.setText("Revanche");
         player2Name.setText("Robot");
         player1Name.setText("Joueur 1");
+        changeLabel.setText("Vous pouvez changer la difficulté !!");
     }
 
     private boolean isFrench(){
@@ -562,7 +563,11 @@ public class PlaySinglePlayerController implements ModelUpdate {
     private String[] getLevel(){
         try {
             String[] optionnalLevel = new String[0];
-            String[] base = {"Easy", "Medium", "Hard"};
+            String[] base = new String[3];
+            if(Objects.equals(language, "french"))
+                base = new String[]{"Facile", "Moyen", "Difficile"};
+            else
+                base = new String[]{"Easy", "Medium", "Hard"};
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = bufferedReader.readLine();
@@ -608,42 +613,37 @@ public class PlaySinglePlayerController implements ModelUpdate {
         controller.setDifficulty(newLetterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
-        //Stage s  = (Stage) ((Node) easyRadioButton).getScene().getWindow();
 
         controller.getPreviousStage(stage);
         stageLearn.show();
     }
     private void changeLevel(int i) throws IOException {
-        System.out.println(i);
-        String newDiff = "F";
-        String selectedMode = "";
+        String[] diff = getLevel();
         switch (i){
             case 0:
                 newLetterDifficulty = "F";
-                selectedMode = "Easy";
                 break;
             case 1:
                 newLetterDifficulty = "M";
-                selectedMode = "Medium";
                 break;
             case 2:
                 newLetterDifficulty = "D";
-                selectedMode = "Hard";
                 break;
             case 3:
                 newLetterDifficulty = "C1";
-                selectedMode = "Custom1";
                 break;
             case 4:
                 newLetterDifficulty = "C2";
-                selectedMode = "Custom2";
                 break;
             case 5:
                 newLetterDifficulty = "C3";
-                selectedMode = "Custom3";
                 break;
         }
-        selectedDiff.setText("Difficulty for the next round : "+selectedMode);
+        if(Objects.equals(language, "french"))
+            selectedDiff.setText("Difficulté pour la prochaine manche : "+ diff[i]);
+        else
+            selectedDiff.setText("Difficulty for the next round : "+ diff[i]);
+        selectedDiff.setVisible(true);
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
         Config config = cfl.get(newLetterDifficulty);

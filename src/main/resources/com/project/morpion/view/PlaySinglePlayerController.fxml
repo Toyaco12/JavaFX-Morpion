@@ -250,7 +250,7 @@
                                 <Insets top="30"/>
                             </VBox.margin>
                         </Button>
-                        <Label fx:id="changeLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="You can change the difficulty!!">
+                        <Label fx:id="changeLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="You can change the difficulty !!">
                             <font>
                                 <Font size="25" />
                             </font>

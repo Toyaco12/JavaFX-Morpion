@@ -25,9 +25,6 @@ public class SettingViewController {
     public Button saveButton;
     public Button closeButton;
     public Label errorLabel;
-    public RadioButton easyRadioButton;
-    public RadioButton mediumRadioButton;
-    public RadioButton hardRadioButton;
     public VBox mainVbox;
     public TextField createTextField;
     public Button createButton;
@@ -39,7 +36,6 @@ public class SettingViewController {
     private Cursor cursor;
     private String[] optionnalLevel = null;
     private String[][] initialSettings;
-    private String[] levelName;
     private String radio;
     private String language;
 
@@ -61,9 +57,6 @@ public class SettingViewController {
         getCursor();
         getTheme();
         difficulty = new ToggleGroup();
-//        easyRadioButton.setToggleGroup(difficulty);
-//        mediumRadioButton.setToggleGroup(difficulty);
-//        hardRadioButton.setToggleGroup(difficulty);
         setLevel();
         getSelectedLevel();
 
@@ -76,41 +69,6 @@ public class SettingViewController {
             }
         });
         createTextField.setTextFormatter(textFormatter);
-        //easyRadioButton.setSelected(true);
-//        initialSettings = getSettings();
-//
-//        for(int i = 0; i < initialSettings.length; i++){
-//            if(i >= 3){
-//                final int index = i;
-//                Label l = new Label(optionnalLevel[i%3]);
-//                l.setAlignment(Pos.CENTER);
-//                l.setPrefHeight(69.0);
-//                l.setPrefWidth(200);
-//                if(i%2 != 1) l.setStyle("-fx-text-fill: fc6c00;");
-//                else l.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-//                settingsPane.add(l, 0, i+1);
-//                RadioButton radioButton = new RadioButton();
-//                radioButton.setUserData("C" + (i%3+1));
-//                //System.out.println("C"+(i%3+1));
-//                radioButton.setToggleGroup(difficulty);
-//                settingsPane.add(radioButton, 4, i+1);
-//                Button delete = new Button("D");
-//                delete.setFocusTraversable(true);
-//                delete.setOnAction(e -> deletelevel(index%3));
-//                settingsPane.add(delete, 5, i+1);
-//            }
-//            for(int j = 0; j < 3; j++){
-//                TextField textField;
-//                if(j == 2){
-//                    textField = createDecimalTextField(initialSettings[i][j]);
-//                }
-//                else{
-//                    textField = createTextField(initialSettings[i][j]);
-//                }
-//
-//                settingsPane.add(textField, j+1, i+1);
-//            }
-//        }
     }
     public void closeModal(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -121,14 +79,6 @@ public class SettingViewController {
         for(Node n : settingsPane.getChildren()){
             if(n instanceof TextField){
                 TextField tmp = (TextField) n;
-//                int rowIndex = GridPane.getRowIndex(tmp);
-//                int colIndex = GridPane.getColumnIndex(tmp);
-//                if(colIndex == 3){
-//                    set[rowIndex - 1] += tmp.getText();
-//                }
-//                else{
-//                    set[rowIndex - 1] += tmp.getText() + ":";
-//                }
                 if(j != 2){
                     current[i][j] = tmp.getText();
                     j++;
@@ -140,10 +90,7 @@ public class SettingViewController {
                 }
             }
         }
-        //String[] prev = {"F:" + settings[0][1] + ":" + settings[0][2] + ":" + settings[0][3], "M:" + settings[1][1] + ":" + settings[1][2] + ":" + settings[1][3], "D:" + settings[2][1] + ":" + settings[2][2] + ":" + settings[2][3]};
-//        if(Arrays.equals(set, prev)){
-//            stage.close();
-//        }
+
         if(areMatricesEquals(settings, current)){
             stage.close();
         }
@@ -265,18 +212,14 @@ public class SettingViewController {
             File settingFile = new File("src/main/resources/com/project/morpion/ai/config.txt");
             BufferedReader reader = new BufferedReader(new FileReader(settingFile));
             int nbRow = countLines(settingFile);
-            //System.out.println(nbRow);
             reader.close();
             reader = new BufferedReader(new FileReader(settingFile));
             String line;
             String[][] setting = new String[nbRow-1][3];
             int i =0;
             while ((line = reader.readLine()) != null) {
-                //System.out.println("a");
                 if(line.charAt(0) != 'Z'){
                     String[] parts = line.split(":");
-//                    for(String a : parts)
-//                        System.out.println(a);
                     String[] data = new String[parts.length-1];
                     System.arraycopy(parts, 1, data, 0, data.length);
                     setting[i] = data;
@@ -284,37 +227,8 @@ public class SettingViewController {
                 }
                 else{
                     radio = line.substring(line.lastIndexOf(":") + 1);
-
-//                    difficulty.getToggles().forEach(toggle -> {
-//                        System.out.println("aaaaa");
-//                        RadioButton radioButton = (RadioButton) toggle;
-//                        System.out.println("a  : " + radioButton.getUserData());
-//                        if(radioButton.getUserData().equals(d)){
-//                            difficulty.selectToggle(radioButton);
-//                        }
-//                    });
-//                    if(d.matches("E")){
-//                        easyRadioButton.setSelected(true);
-//                        mediumRadioButton.setSelected(false);
-//                        hardRadioButton.setSelected(false);
-//                    }
-//                    else if(d.matches("M")){
-//                        easyRadioButton.setSelected(false);
-//                        mediumRadioButton.setSelected(true);
-//                        hardRadioButton.setSelected(false);
-//                    }
-//                    else{
-//                        easyRadioButton.setSelected(false);
-//                        mediumRadioButton.setSelected(false);
-//                        hardRadioButton.setSelected(true);
-//                    }
                 }
             }
-//            for(int ii = 0; ii < setting.length; ii++){
-//                for(int jj = 0; jj < setting[ii].length; jj++){
-//                    System.out.println(setting[ii][jj]);
-//                }
-//            }
             reader.close();
             return setting;
         } catch (IOException ignored) {}
@@ -350,9 +264,6 @@ public class SettingViewController {
             writer.write("Z:"+diff);
             writer.close();
         } catch (IOException ignored) { }
-    }
-
-    public void selectDifficulty(ActionEvent actionEvent) {
     }
 
     private void getTheme(){
@@ -439,40 +350,10 @@ public class SettingViewController {
         if(!createTextField.getText().isEmpty()){
             String newLvl = createTextField.getText();
             if(optionnalLevel == null){
-//                Label la = new Label(newLvl);
-//                la.setAlignment(Pos.CENTER);
-//                la.setPrefHeight(69.0);
-//                la.setPrefWidth(200);
-//                la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-//                settingsPane.add(la, 0, 4);
-//                for(int i = 0; i < 3; i++){
-//                    if(i==2){
-//                        settingsPane.add(createDecimalTextField("1"), i+1, 4);
-//                    }
-//                    else{
-//                        settingsPane.add(createTextField("1"), i+1, 4);
-//                    }
-//                }
                 writeOptionnalLevel("S:" + newLvl, 1);
             }
             else{
                 int l = optionnalLevel.length;
-//                System.out.println(l);
-//                Label la = new Label(newLvl);
-//                la.setAlignment(Pos.CENTER);
-//                la.setPrefHeight(69.0);
-//                la.setPrefWidth(200);
-//                if(l%2 != 1) la.setStyle("-fx-text-fill: fc6c00;");
-//                else la.setStyle("-fx-text-fill: rgb(1, 191, 200);");
-//                settingsPane.add(la, 0, l+4);
-//                for(int i = 0; i < 3; i++){
-//                    if(i==2){
-//                        settingsPane.add(createDecimalTextField("1"), i+1, l+4);
-//                    }
-//                    else{
-//                        settingsPane.add(createTextField("1"), i+1, l+4);
-//                    }
-//                }
                 String lvl = "S:";
                 for (String i : optionnalLevel){
                     lvl += i + ":";
@@ -695,23 +576,18 @@ public class SettingViewController {
                 //System.out.println(radioButton.getUserData());
                 radioButton.setToggleGroup(difficulty);
                 settingsPane.add(radioButton, 4, i+1);
-                Button delete = new Button("D");
+                Button delete = new Button("X");
                 delete.setFocusTraversable(true);
                 delete.setOnAction(e -> deletelevel(index%3));
                 settingsPane.add(delete, 5, i+1);
             }
             for(int j = 0; j < 4; j++){
                 TextField textField = null;
-                if(j == 3){
-//                    RadioButton radioButton = new RadioButton();
-//
-//                    radioButton.setToggleGroup(difficulty);
-//                    settingsPane.add(radioButton, 4, i+1);
-                }
-                else if(j == 2){
+
+                if(j == 2){
                     textField = createDecimalTextField(initialSettings[i][j]);
                 }
-                else{
+                else if(j != 3){
                     textField = createTextField(initialSettings[i][j]);
                 }
                 if(textField!=null)

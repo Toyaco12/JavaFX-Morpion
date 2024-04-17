@@ -35,9 +35,6 @@ import java.util.Random;
 public class GameController {
 
     public GridPane morpionGrille;
-    public Label currentPlayer;
-    public Button buttonChoice1;
-    public Button buttonChoice2;
     public ImageView player1Object;
     public ImageView player2Object;
     public VBox vboxChoice;
@@ -47,7 +44,6 @@ public class GameController {
     public HBox hboxStart;
     public Label startLabel;
     public Label whosTurn;
-    public StackPane overlayPane;
     public StackPane mainGame;
     public VBox vboxLeft;
     public VBox vboxRight;
@@ -56,7 +52,6 @@ public class GameController {
     public Label victoryLabel;
     public Button homeButton;
     public Button restartButton;
-    public Label numberTry;
 
     public TextField player1Name;
     public TextField player2Name;
@@ -81,10 +76,6 @@ public class GameController {
 
     private Scene scene;
 
-    private Stage stage;
-    public void setStage(Stage s){
-        this.stage = s;
-    }
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -316,8 +307,6 @@ public class GameController {
         }
         fadeInNode(player2Object);
         fadeInNode(player1Object);
-//        startLabel.setVisible(true);
-//        hboxStart.setVisible(true);
     }
 
     public void chooseCross(MouseEvent actionEvent) {
@@ -331,8 +320,6 @@ public class GameController {
         }
         fadeInNode(player2Object);
         fadeInNode(player1Object);
-//        startLabel.setVisible(true);
-//        hboxStart.setVisible(true);
     }
 
     public void startRandom(ActionEvent actionEvent) {
@@ -425,19 +412,16 @@ public class GameController {
 
     private void hideVictory(){
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
-        scaleTransition.setFromX(1.0); // Taille initiale en x
-        scaleTransition.setFromY(1.0); // Taille initiale en y
-        scaleTransition.setToX(0.0);   // Taille finale en x
-        scaleTransition.setToY(0.0);   // Taille finale en y
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(0.0);
+        scaleTransition.setToY(0.0);
         scaleTransition.play();
         scaleTransition.setOnFinished(event ->{
             vBoxVictory.setVisible(false);
             vboxLeft.setEffect(null);
             vboxRight.setEffect(null);
             hboxTop.setEffect(null);
-            //
-            //fadeInGridPane();
-            //hideVictory();
             fadeInNode(hboxStart);
             fadeInNode(startLabel);
             fadeInNode(vboxChoice);
@@ -497,9 +481,6 @@ public class GameController {
 
     public void revenge(ActionEvent actionEvent) {
         hideVictory();
-//        fadeInNode(hboxStart);
-//        fadeInNode(startLabel);
-//        fadeInNode(vboxChoice);
 
         for(int i = 0; i < placement.length ; i++){
             placement[i] = 0;

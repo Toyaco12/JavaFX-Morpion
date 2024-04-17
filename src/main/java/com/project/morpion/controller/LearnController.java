@@ -113,8 +113,7 @@ public class LearnController {
                         System.out.println("START TRAINING ...");
                         System.out.println();
                     }
-                    //
-                    //			int[] layers = new int[]{ size, 128, 128, size };
+
                     int[] layers = new int[l+2];
                     layers[0] = size ;
                     for (int i = 0; i < l; i++) {
