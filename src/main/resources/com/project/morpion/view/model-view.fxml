@@ -38,13 +38,21 @@
       </Label>
    </top>
    <bottom>
-      <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" prefHeight="40.0" prefWidth="80.0" text="Close" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="30.0" top="30.0" />
-         </BorderPane.margin>
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
+       <VBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
+           <Button fx:id="deleteAllButton" text="Delete All" onAction="#deleteAllModels" prefHeight="40.0" prefWidth="120.0" styleClass="orange-button">
+               <font>
+                   <Font size="18.0" />
+               </font>
+           </Button>
+           <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" prefHeight="40.0" prefWidth="80.0" text="Close">
+               <BorderPane.margin>
+                   <Insets bottom="30.0" top="30.0" />
+               </BorderPane.margin>
+               <font>
+                   <Font size="18.0" />
+               </font>
+           </Button>
+       </VBox>
+
    </bottom>
 </BorderPane>

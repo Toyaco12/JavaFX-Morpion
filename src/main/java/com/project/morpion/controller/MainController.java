@@ -121,6 +121,7 @@ public class MainController implements ModelUpdate {
     }
     @Override
     public void onModelUpdated() {
+        btnSinglePlayer.setDisable(false);
         Platform.runLater(() -> {
             // Création de l'alert
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -388,6 +389,7 @@ public class MainController implements ModelUpdate {
             this.modelName = model.getName();
             if(!model.exists()){
                 openLearning(event);
+                btnSinglePlayer.setDisable(true);
             }
             else{
                 loadPlay1v1View(model.getName());

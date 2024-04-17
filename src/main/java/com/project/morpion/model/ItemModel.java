@@ -27,7 +27,6 @@ public class ItemModel {
         String actualDifficultyF = new File("src/main/resources/com/project/morpion/ai/models/model_"+configF.hiddenLayerSize+"_"+configF.learningRate+"_"+configF.numberOfhiddenLayers+".srl").getName();
         String actualDifficultyD = new File("src/main/resources/com/project/morpion/ai/models/model_"+configD.hiddenLayerSize+"_"+configD.learningRate+"_"+configD.numberOfhiddenLayers+".srl").getName();
         String actualDifficultyM = new File("src/main/resources/com/project/morpion/ai/models/model_"+configM.hiddenLayerSize+"_"+configM.learningRate+"_"+configM.numberOfhiddenLayers+".srl").getName();
-        String actualDifficultyC1 = new File("src/main/resources/com/project/morpion/ai/models/model_"+configC1.hiddenLayerSize+"_"+configC1.learningRate+"_"+configC1.numberOfhiddenLayers+".srl").getName();
         try{
             String actualDifficultyC3 = new File("src/main/resources/com/project/morpion/ai/models/model_"+configC3.hiddenLayerSize+"_"+configC3.learningRate+"_"+configC3.numberOfhiddenLayers+".srl").getName();
             if (Filename.getName().equals(actualDifficultyC3)){
@@ -47,6 +46,7 @@ public class ItemModel {
 
         }
         try{
+            String actualDifficultyC1 = new File("src/main/resources/com/project/morpion/ai/models/model_"+configC1.hiddenLayerSize+"_"+configC1.learningRate+"_"+configC1.numberOfhiddenLayers+".srl").getName();
             String actualDifficultyC2 = new File("src/main/resources/com/project/morpion/ai/models/model_"+configC1.hiddenLayerSize+"_"+configC1.learningRate+"_"+configC1.numberOfhiddenLayers+".srl").getName();
             if (Filename.getName().equals(actualDifficultyC1)){
                 this.name +=" [C1]";

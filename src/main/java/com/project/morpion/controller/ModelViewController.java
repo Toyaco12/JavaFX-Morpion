@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -18,6 +16,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ModelViewController {
     public Button closeButton;
@@ -65,6 +66,37 @@ public class ModelViewController {
             }
         }
     }
+
+    @FXML
+    private Button deleteAllButton;
+
+    public void deleteAllModels(ActionEvent actionEvent) {
+        // Créer une alerte
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation de suppression");
+        confirmAlert.setHeaderText("Suppression de tous les modèles");
+        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer tous les modèles ? Cette action est irréversible.");
+
+        //confirmAlert.getDialogPane().setStyle("-fx-font-family: 'sans-serif';");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            deleteModelsInListView(mediumListView);
+        }
+    }
+
+    private void deleteModelsInListView(ListView<ItemModel> listView) {
+        List<ItemModel> models = new ArrayList<>(listView.getItems());
+        for (ItemModel model : models) {
+            File file = new File(model.getFullPath());
+            if (file.delete()) {
+                listView.getItems().remove(model);
+            } else {
+                System.err.println("Failed to delete the model: " + model.getFullPath());
+            }
+        }
+    }
+
 
     public void closeModal(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
