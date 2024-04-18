@@ -219,7 +219,7 @@ public class MainController implements ModelUpdate {
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
-
+        stageLearn.setResizable(false);
         controller.getPreviousStage(stage);
         stageLearn.show();
     }
