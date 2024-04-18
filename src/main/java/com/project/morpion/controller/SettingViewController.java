@@ -373,7 +373,7 @@ public class SettingViewController {
 
             BufferedReader reader = new BufferedReader(new FileReader(file));
             //BufferedWriter writer = new BufferedWriter(new FileWriter(tmp));
-            String[] tmp = new String[5];
+            String[] tmp = new String[6];
             String line;
             int i = 0;
             while ((line = reader.readLine()) != null) {
@@ -436,7 +436,7 @@ public class SettingViewController {
         try{
             File file = new File("src/main/resources/com/project/morpion/settings.txt");
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            String[] tmp = new String[5];
+            String[] tmp = new String[6];
             String line;
             int i = 0;
             while ((line = reader.readLine()) != null) {

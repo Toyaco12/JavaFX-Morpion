@@ -77,6 +77,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     private Cursor cursor;
     private Scene scene;
     AudioPlayer audioPlayer;
+    double volume;
     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
     public void setModelName(String modelName){
         this.modelName = modelName;
@@ -173,6 +174,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
                 restartButton.setDisable(false);
                 if(player == 1){
                     audioPlayer.playVictoryMusic();
+                    audioPlayer.changeVolume(volume);
+                    System.out.println(volume);
                     if(Objects.equals(language, "french"))
                         victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
                     else
@@ -180,6 +183,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
                     game.addSuccessWinPlayer();
                 }
                 else if (player == -1){
+                    audioPlayer.playDefeatMusic();
+                    audioPlayer.changeVolume(volume);
                     if(Objects.equals(language, "french"))
                         victoryLabel.setText("Et Le Gagnant Est  " + player2Name.getText() + "!!!!");
                     else
@@ -208,7 +213,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
         }
         else{
             audioPlayer.playDrawMusic();
-            audioPlayer.changeVolume(50);
+            audioPlayer.changeVolume(volume);
             restartButton.setDisable(false);
             if(Objects.equals(language, "french"))
                 victoryLabel.setText("Et C'est Une Égalité ...");
@@ -261,6 +266,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
         audioPlayer = new AudioPlayer();
         //stage.setOnCloseRequest(event -> audioPlayer.stopMusic());
         //game = new Morpion(model, Coup.O);
+        getVolume();
 
         getCursor();
         if(isFrench()){
@@ -695,6 +701,23 @@ public class PlaySinglePlayerController implements ModelUpdate {
             difficulty = newLetterDifficulty;
             game.setModel(model);
         }
+    }
+
+    public void getVolume(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line != null) {
+                if (line.charAt(0) == 'V') {
+                    String d = line.substring(line.lastIndexOf(":") + 1);
+                    System.out.println("dhezuiduezhduezhu      " + line);
+                    volume = Double.parseDouble(d);
+                    return;
+                }
+                line = bufferedReader.readLine();
+            }
+        }catch (IOException e){}
     }
 
 

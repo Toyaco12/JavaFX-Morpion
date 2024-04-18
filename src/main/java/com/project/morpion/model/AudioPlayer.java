@@ -7,10 +7,11 @@ public class AudioPlayer {
     private MediaPlayer mediaPlayer;
 
     public void playVictoryMusic() {
-        String musicFile = "/com/project/morpion/music/victoryMusic.mp3"; // Chemin relatif
+        String musicFile = "/com/project/morpion/music/victorySound.mp3"; // Chemin relatif
         try {
             Media sound = new Media(getClass().getResource(musicFile).toURI().toString());
             mediaPlayer = new MediaPlayer(sound);
+            //mediaPlayer.setVolume(1);
             mediaPlayer.play();
         } catch (Exception e) {
             e.printStackTrace();
@@ -18,7 +19,7 @@ public class AudioPlayer {
         }
     }
     public void playDefeatMusic() {
-        String musicFile = "/com/project/morpion/music/victoryMusic.mp3"; // Chemin relatif
+        String musicFile = "/com/project/morpion/music/defeatSound.mp3"; // Chemin relatif
         try {
             Media sound = new Media(getClass().getResource(musicFile).toURI().toString());
             mediaPlayer = new MediaPlayer(sound);
@@ -47,6 +48,7 @@ public class AudioPlayer {
     }
     public void changeVolume(double volume) {
         if (mediaPlayer != null) {
+            volume = (volume /100)*0.2;
             mediaPlayer.setVolume(volume);
         }
     }

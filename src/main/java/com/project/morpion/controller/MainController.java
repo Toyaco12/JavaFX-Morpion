@@ -100,6 +100,7 @@ public class MainController implements ModelUpdate {
             setToFrench();
         getTheme();
         int lum = getBrightness();
+        setVolume();
         playGame.setVisible(true);
         playGame.setManaged(true);
 
@@ -269,7 +270,10 @@ public class MainController implements ModelUpdate {
             FileWriter fileWriter = new FileWriter(new File("src/main/resources/com/project/morpion/settings.txt"));
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             int lum = (int) sliderBrightness.getValue();
+            double vol = sliderVolume.getValue();
             bufferedWriter.write("L:"+lum);
+            bufferedWriter.newLine();
+            bufferedWriter.write("V:"+vol);
             bufferedWriter.newLine();
             if(Objects.equals(language, "English")){
                 bufferedWriter.write("A:E");
@@ -751,5 +755,22 @@ public class MainController implements ModelUpdate {
             }
         }
         catch (IOException ignored){}
+    }
+
+    public void setVolume(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line != null) {
+                if (line.charAt(0) == 'V') {
+                    String d = line.substring(line.lastIndexOf(":") + 1);
+                    sliderVolume.setValue(Double.parseDouble(d));
+                    volumeLabel.setText(String.valueOf((int)Double.parseDouble(d)));
+                    return;
+                }
+                line = bufferedReader.readLine();
+            }
+        }catch (IOException e){}
     }
 }

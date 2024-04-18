@@ -1,6 +1,7 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.AudioPlayer;
 import com.project.morpion.model.Morpion;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
@@ -73,6 +74,8 @@ public class GameController {
 
     boolean playKeyBoard = false;
     private Cursor cursor;
+    private double volume;
+    AudioPlayer audioPlayer;
 
     private Scene scene;
 
@@ -83,6 +86,7 @@ public class GameController {
 
 
     public void initialization() {
+        audioPlayer = new AudioPlayer();
         getCursor();
         if(isFrench()){
             language = "French";
@@ -90,6 +94,7 @@ public class GameController {
         }
         getTheme();
         getLuminosity();
+        getVolume();
         setClickListener();
         fadeInNode(vboxChoice);
         fadeInNode(partyState);
@@ -134,7 +139,6 @@ public class GameController {
         }catch (IOException e){}
         return 0;
     }
-
 
     private void setClickListener(){
         morpionGrille.getChildren().forEach(node -> {
@@ -208,6 +212,7 @@ public class GameController {
 
     @FXML
     public void returnHome(ActionEvent actionEvent) throws IOException {
+        audioPlayer.stopMusic();
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             MainController controller = fxmlLoader.getController();
@@ -376,18 +381,24 @@ public class GameController {
 
     private void showVictory(int player){
         if(player == 1){
+            audioPlayer.playVictoryMusic();
+            audioPlayer.changeVolume(volume);
             if(Objects.equals(language, "French"))
                 victoryLabel.setText("Et le Vainqueur Est " + player1Name.getText() + "!!!!");
             else
                 victoryLabel.setText("And the Winner Is " + player1Name.getText() + "!!!!");
         }
         else if (player == -1){
+            audioPlayer.playVictoryMusic();
+            audioPlayer.changeVolume(volume);
             if(Objects.equals(language, "French"))
                 victoryLabel.setText("Et le Vainqueur Est " + player2Name.getText() + "!!!!");
             else
                 victoryLabel.setText("And the Winner Is " + player2Name.getText() + "!!!!");
         }
         else{
+            audioPlayer.playDrawMusic();
+            audioPlayer.changeVolume(volume);
             if(Objects.equals(language, "French")) {
                 victoryLabel.setText("Et C'est Une Égalité ..... ");
                 revengeButton.setText("N'hesitez pas à vous départager !!");
@@ -411,6 +422,7 @@ public class GameController {
     }
 
     private void hideVictory(){
+        audioPlayer.stopMusic();
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
         scaleTransition.setFromX(1.0);
         scaleTransition.setFromY(1.0);
@@ -462,6 +474,7 @@ public class GameController {
 
     @FXML
     public void restartGame(ActionEvent actionEvent) {
+        audioPlayer.stopMusic();
         try{
             Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/game-view.fxml")));
             Scene scene = homeButton.getScene();
@@ -581,6 +594,23 @@ public class GameController {
                 scene.setCursor(cursor);
             }
         }catch (IOException ignored){}
+    }
+
+    public void getVolume(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line != null) {
+                if (line.charAt(0) == 'V') {
+                    String d = line.substring(line.lastIndexOf(":") + 1);
+                    System.out.println("dhezuiduezhduezhu      " + line);
+                    volume = Double.parseDouble(d);
+                    return;
+                }
+                line = bufferedReader.readLine();
+            }
+        }catch (IOException e){}
     }
 
 
