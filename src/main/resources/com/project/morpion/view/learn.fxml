@@ -5,19 +5,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="375.0" spacing="15.0"
-      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.LearnController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="375.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.LearnController">
    <children>
-      <Pane prefHeight="72.0" prefWidth="345.0">
-         <children>
-            <Label fx:id="title" layoutX="105.0" layoutY="14.0" text="Train a Model">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <Label fx:id="diff" layoutX="113.0" layoutY="50.0" prefHeight="17.0" prefWidth="118.0" text="Difficulty :" />
-         </children>
-      </Pane>
+      <Label fx:id="title" text="Train a Model">
+         <font>
+            <Font size="22.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Label>
+      <Label fx:id="diff" prefHeight="17.0" text="Difficulty :" />
       <TextField fx:id="completionField" alignment="CENTER" editable="false" managed="false" prefHeight="19.0" prefWidth="349.0" style="-fx-background-color: transparent;" visible="false">
          <font>
             <Font size="14.0" />

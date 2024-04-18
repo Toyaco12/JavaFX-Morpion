@@ -2,4 +2,4 @@ L:90
 A:F
 T:B
 C:D
-S
+S:Custom1:Anule:lama

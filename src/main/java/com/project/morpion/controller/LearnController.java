@@ -110,6 +110,24 @@ public class LearnController {
                 else
                     textDiff = " Difficile";
                 break;
+            case "C1":
+                if(Objects.equals(language, "English"))
+                    textDiff = " Custom 1";
+                else
+                    textDiff = " Personnalisé 1";
+                break;
+            case "C2":
+                if(Objects.equals(language, "English"))
+                    textDiff = " Custom 2";
+                else
+                    textDiff = " Personnalisé 2";
+                break;
+            case "C3":
+                if(Objects.equals(language, "English"))
+                    textDiff = " Custom 3";
+                else
+                    textDiff = " Personnalisé 3";
+                break;
         }
 
         this.diff.setText(diff.getText() + textDiff);
