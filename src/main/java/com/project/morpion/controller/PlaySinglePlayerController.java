@@ -1,6 +1,7 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.AudioPlayer;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.Morpion;
 import com.project.morpion.model.ai.Config;
@@ -11,10 +12,8 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -34,7 +33,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Random;
 
 public class PlaySinglePlayerController implements ModelUpdate {
@@ -78,6 +76,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     ScaleTransition scaleTransition = null;
     private Cursor cursor;
     private Scene scene;
+    AudioPlayer audioPlayer;
     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
     public void setModelName(String modelName){
         this.modelName = modelName;
@@ -89,7 +88,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     private String language = "English";
     private Stage stage;
     public void setStage(Stage s){
-        this.stage = stage;
+        this.stage = s;
     }
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -173,6 +172,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
             rotateTransition.setOnFinished(e -> {
                 restartButton.setDisable(false);
                 if(player == 1){
+                    audioPlayer.playVictoryMusic();
                     if(Objects.equals(language, "french"))
                         victoryLabel.setText("Et Le Gagnant Est  " + player1Name.getText() + "!!!!");
                     else
@@ -207,6 +207,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
             });
         }
         else{
+            audioPlayer.playDrawMusic();
+            audioPlayer.changeVolume(50);
             restartButton.setDisable(false);
             if(Objects.equals(language, "french"))
                 victoryLabel.setText("Et C'est Une Égalité ...");
@@ -256,6 +258,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
 
 
     public void initialization() {
+        audioPlayer = new AudioPlayer();
+        //stage.setOnCloseRequest(event -> audioPlayer.stopMusic());
         //game = new Morpion(model, Coup.O);
 
         getCursor();
@@ -318,6 +322,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     }
 
     public void returnHome(ActionEvent actionEvent) throws IOException {
+        audioPlayer.stopMusic();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         MainController controller = fxmlLoader.getController();
@@ -338,6 +343,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     }
 
     private void hideVictory(){
+        audioPlayer.stopMusic();
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
         scaleTransition.setFromX(1.0); // Taille initiale en x
         scaleTransition.setFromY(1.0); // Taille initiale en y

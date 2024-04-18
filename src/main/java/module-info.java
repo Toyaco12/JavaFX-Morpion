@@ -1,6 +1,7 @@
 module com.project.morpion {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
 
 
     opens com.project.morpion to javafx.fxml;

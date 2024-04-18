@@ -178,7 +178,7 @@ public class MainController implements ModelUpdate {
         controller.initialization();
         controller.setModelName(this.modelName);
         controller.setDifficulty(letterDifficulty);
-        controller.setStage(stage);
+        //controller.setStage(stage);
         controller.initModel();
 
         stage.setScene(scene);
