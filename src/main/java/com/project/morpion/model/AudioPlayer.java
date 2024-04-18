@@ -30,7 +30,7 @@ public class AudioPlayer {
         }
     }
     public void playDrawMusic() {
-        String musicFile = "/com/project/morpion/music/yoasobi-racing-into-the-night-iphone-ringtone-remix.mp3"; // Chemin relatif
+        String musicFile = "/com/project/morpion/music/drawSound.mp3"; // Chemin relatif
         try {
             Media sound = new Media(getClass().getResource(musicFile).toURI().toString());
             mediaPlayer = new MediaPlayer(sound);
