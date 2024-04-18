@@ -153,6 +153,7 @@ public class LearnController {
         audioPlayer.playWaitingMusic();
         audioPlayer.changeVolume(volume);
 
+        //Initialisation des variables pour la task
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
         Config config = cfl.get(difficulty);
@@ -165,6 +166,7 @@ public class LearnController {
         int l = config.numberOfhiddenLayers;
         boolean verbose = true;
 
+        //TASK
         learningTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {

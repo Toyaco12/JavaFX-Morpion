@@ -651,11 +651,13 @@ public class PlaySinglePlayerController implements ModelUpdate {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stageLearn = new Stage();
+        stageLearn.getIcons().add(new Image("file:src/main/resources/com/project/morpion/image/morpionlogo.png"));
         stageLearn.setScene(scene);
         LearnController controller = fxmlLoader.getController();
         controller.setDifficulty(newLetterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
+        controller.setNotUpdateListener(this);
         stageLearn.setResizable(false);
         controller.getPreviousStage(stage);
         stageLearn.show();
