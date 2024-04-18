@@ -70,6 +70,7 @@ public class MainController implements ModelUpdate {
     public VBox singleVbox;
     public MenuItem settingItem;
     public MenuItem modelItem;
+    public Label languageLabel;
     private ToggleGroup difficultyGroup;
     private String selectDifficulty;
     private String letterDifficulty ="F";
@@ -228,6 +229,7 @@ public class MainController implements ModelUpdate {
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
+        controller.setNotUpdateListener(this);
         stageLearn.setResizable(false);
         controller.setNotUpdateListener(this);
         controller.getPreviousStage(stage);
@@ -447,6 +449,7 @@ public class MainController implements ModelUpdate {
         helpButton.setText("Aide");
         modelItem.setText("Modèles");
         settingItem.setText("Paramètres");
+        languageLabel.setText("Langage");
     }
 
     public void setToEnglish(){
@@ -463,6 +466,7 @@ public class MainController implements ModelUpdate {
         helpButton.setText("Help");
         modelItem.setText("Models");
         settingItem.setText("Settings");
+        languageLabel.setText("Language");
     }
 
     public void selectEnglish(ActionEvent actionEvent) {
@@ -717,7 +721,7 @@ public class MainController implements ModelUpdate {
             RadioButton r = new RadioButton(basic[i]);
             r.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
             r.setOnAction(this::selectDifficulty);
-            r.setPrefWidth(70.0);
+            r.setPrefWidth(110);
             r.setUserData(userData[i]);
             r.setToggleGroup(difficultyGroup);
             singleVbox.getChildren().add(r);
@@ -737,7 +741,7 @@ public class MainController implements ModelUpdate {
                         RadioButton radioButton = new RadioButton(a);
                         radioButton.setStyle("-fx-text-fill: rgb(1, 191, 200); -fx-font-weight: bold;");
                         radioButton.setOnAction(this::selectDifficulty);
-                        radioButton.setPrefWidth(70.0);
+                        radioButton.setPrefWidth(110);
                         radioButton.setUserData(userData[i]);
                         radioButton.setToggleGroup(difficultyGroup);
                         singleVbox.getChildren().add(radioButton);
