@@ -18,9 +18,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class LearnController {
+    public Label title;
     private ModelUpdate updateModel;
     @FXML
     public TextField completionField;
@@ -77,13 +79,22 @@ public class LearnController {
         String textDiff = "";
         switch (this.difficulty){
             case "F":
-                textDiff = " Easy";
+                if(Objects.equals(language, "English"))
+                    textDiff = " Easy";
+                else
+                    textDiff = " Facile";
                 break;
             case "M":
-                textDiff = " Medium";
+                if(Objects.equals(language, "English"))
+                    textDiff = " Medium";
+                else
+                    textDiff = " Moyen";
                 break;
             case "D":
-                textDiff = " Hard";
+                if(Objects.equals(language, "English"))
+                    textDiff = " Hard";
+                else
+                    textDiff = " Difficile";
                 break;
         }
 
@@ -151,15 +162,34 @@ public class LearnController {
                         error += net.backPropagate(c.in, c.out);
 
                         if ( i % 1000 == 0 && verbose) {
+                            String part1 = "Error at step ";
+                            if(!Objects.equals(language, "English")){
+                                part1 = "Erreur à l'étape ";
+                            }
                             actualTrainError = (error/(double)i);
                             if(i==0) actualTrainError = Double.MIN_VALUE;
                             if(actualTrainError > pastTrainError){
-                                updateMessage("Error at step "+i+" is increasing");
+                                if(Objects.equals(language, "English")){
+                                    updateMessage("Error at step "+i+" is increasing");;
+                                }
+                                else{
+                                    updateMessage("L'erreur à l'étape "+i+" augmente");
+                                }
                             } else if (actualTrainError < pastTrainError) {
-                                updateMessage("Error at step "+i+" is decreasing");
+                                if(Objects.equals(language, "English")){
+                                    updateMessage("Error at step "+i+" is decreasing");;
+                                }
+                                else{
+                                    updateMessage("L'erreur à l'étape "+i+" diminue");
+                                }
                             }
                             else {
-                                updateMessage("Error at step "+i+" is constant");
+                                if(Objects.equals(language, "English")){
+                                    updateMessage("Error at step "+i+" is constant");;
+                                }
+                                else{
+                                    updateMessage("L'erreur à l'étape "+i+" est constante");
+                                }
                             }
                             pastTrainError = actualTrainError;
                         }
@@ -167,6 +197,12 @@ public class LearnController {
                     }
                     if ( verbose ){
                         updateMessage("Final error is "+ (error/epochs));
+                        if(Objects.equals(language, "English")){
+                            updateMessage("Final error is"+(error/epochs));;
+                        }
+                        else{
+                            updateMessage("L'erreur final est "+(error/epochs));
+                        }
                         System.out.println(error/epochs);
                     }
 
@@ -235,8 +271,13 @@ public class LearnController {
     }
 
     public void setLanguage(){
-        if(isFrench())
+        if(isFrench()){
             language = "French";
+            title.setText("Entrainer un Modèle");
+            diff.setText("Difficulté : ");
+            closeButton.setText("Fermer");
+        }
+
     }
 
 

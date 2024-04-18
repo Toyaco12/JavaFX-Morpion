@@ -112,6 +112,15 @@ public class MainController implements ModelUpdate {
         });
         sliderBrightness.setValue(lum);
         brightnessLabel.setText(String.valueOf(lum));
+        try {
+            String path = "src/main/resources/com/project/morpion/image/victoryMusic.mp3";
+            //Media media = new Media(new File(path).toURI().toString());
+            //MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+            // Lecture du son
+            //mediaPlayer.play();
+        }
+        catch(Exception ignored){}
     }
     @Override
     public void onModelUpdated() {

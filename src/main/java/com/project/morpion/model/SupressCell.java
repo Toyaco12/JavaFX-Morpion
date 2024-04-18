@@ -6,7 +6,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class SupressCell extends ListCell<ItemModel> {
     HBox hbox = new HBox();
@@ -22,7 +25,10 @@ public class SupressCell extends ListCell<ItemModel> {
 
         deleteButton.setOnAction(event -> {
             ItemModel item = getItem();
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Do you really want to delete "+item.getName()+" ?", ButtonType.YES,ButtonType.NO);
+            String text = "Do you really want to delete ";
+            if(isFrench())
+                text = "Voulez-vous vraiment supprimer ";
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, text +item.getName()+" ?", ButtonType.YES,ButtonType.NO);
             confirm.showAndWait().ifPresent(response -> {
                 if(response == ButtonType.YES){
                     File file = new File(item.getFullPath());
@@ -48,5 +54,20 @@ public class SupressCell extends ListCell<ItemModel> {
             label.setText(item.getName());
             setGraphic(hbox);
         }
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
     }
 }
