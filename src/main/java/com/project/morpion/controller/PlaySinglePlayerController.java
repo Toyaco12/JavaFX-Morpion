@@ -644,7 +644,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
         controller.setDifficulty(newLetterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
-
+        stageLearn.setResizable(false);
         controller.getPreviousStage(stage);
         stageLearn.show();
     }
