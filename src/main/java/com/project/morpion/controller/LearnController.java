@@ -14,6 +14,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 
@@ -36,6 +39,7 @@ public class LearnController {
     public Label diff;
     @FXML
     private Task<Void> learningTask;
+    private String language = "English";
 
     private Stage PreviousStage;
 
@@ -46,6 +50,7 @@ public class LearnController {
     public void getPreviousStage(Stage stage) {
         this.PreviousStage = stage;
     }
+
 
     public void trainingCompleted() {
         if (updateModel != null) {
@@ -212,6 +217,26 @@ public class LearnController {
 
         });
 
+    }
+
+    private boolean isFrench(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line.charAt(0) != 'A')
+                line = bufferedReader.readLine();
+            if(line.charAt(0) == 'A'){
+                String d = line.substring(line.lastIndexOf(":") + 1);
+                return !d.equals("E");
+            }
+        }catch (IOException ignored){}
+        return false;
+    }
+
+    public void setLanguage(){
+        if(isFrench())
+            language = "French";
     }
 
 

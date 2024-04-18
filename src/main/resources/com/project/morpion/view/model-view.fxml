@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx/21" fx:id="mainPane"
+<BorderPane prefHeight="670" prefWidth="900" xmlns="http://javafx.com/javafx/21" fx:id="mainPane"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.ModelViewController" stylesheets="@style.css">
     <center>
       <HBox alignment="CENTER" spacing="30.0">
@@ -39,15 +39,21 @@
    </top>
    <bottom>
        <VBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
-           <Button fx:id="deleteAllButton" text="Delete All" onAction="#deleteAllModels" prefHeight="40.0" prefWidth="120.0" styleClass="orange-button">
+           <Button fx:id="deleteAllButton" text="Delete All" onAction="#deleteAllModels" prefHeight="30.0" prefWidth="145.0" styleClass="blue-button">
                <font>
-                   <Font size="18.0" />
+                   <Font size="16.0" />
                </font>
+               <BorderPane.margin>
+                   <Insets top="30.0" />
+               </BorderPane.margin>
            </Button>
            <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" prefHeight="40.0" prefWidth="80.0" text="Close">
                <BorderPane.margin>
                    <Insets bottom="30.0" top="30.0" />
                </BorderPane.margin>
+               <VBox.margin>
+                   <Insets bottom="30"/>
+               </VBox.margin>
                <font>
                    <Font size="18.0" />
                </font>

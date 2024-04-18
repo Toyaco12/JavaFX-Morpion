@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ModelViewController {
@@ -26,14 +27,11 @@ public class ModelViewController {
     public Label title;
     public Label subtitle;
     @FXML
-    private ListView<ItemModel> easyListView;
-    @FXML
     private ListView<ItemModel> mediumListView;
-    @FXML
-    private ListView<ItemModel> hardListView;
     private String[] settings = new String[4];
     private Cursor cursor;
     private Scene scene;
+    private String language = "English";
     public void setScene(Scene scene) {
         this.scene = scene;
     }
@@ -43,15 +41,12 @@ public class ModelViewController {
             title.setText("Gestion des modèles");
             subtitle.setText("Modèles Crées");
             closeButton.setText("Fermer");
+            deleteAllButton.setText("Tout Supprimer");
+            language = "French";
         }
         getCursor();
         getTheme();
-        //easyListView.setCellFactory(param -> new SupressCell());
         mediumListView.setCellFactory(param -> new SupressCell());
-        //hardListView.setCellFactory(param -> new SupressCell());
-//        loadModels("src/main/resources/com/project/morpion/ai/models/F", easyListView);
-//        loadModels("src/main/resources/com/project/morpion/ai/models/M", mediumListView);
-//        loadModels("src/main/resources/com/project/morpion/ai/models/D", hardListView);
         loadModels("src/main/resources/com/project/morpion/ai/models", mediumListView);
 
     }
@@ -73,12 +68,20 @@ public class ModelViewController {
     public void deleteAllModels(ActionEvent actionEvent) {
         // Créer une alerte
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Confirmation de suppression");
-        confirmAlert.setHeaderText("Suppression de tous les modèles");
-        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer tous les modèles ? Cette action est irréversible.");
-
-        //confirmAlert.getDialogPane().setStyle("-fx-font-family: 'sans-serif';");
-
+        if(Objects.equals(language, "French")) {
+            confirmAlert.setTitle("Confirmation de suppression");
+            confirmAlert.setHeaderText("Suppression de tous les modèles");
+            confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer tous les modèles ? Cette action est irréversible.");
+        }
+        else{
+            confirmAlert.setTitle("Deletion Confirmation");
+            confirmAlert.setHeaderText("Deletion of all templates");
+            confirmAlert.setContentText("Are you sure you want to delete all templates? This action is irreversible.");
+            confirmAlert.getButtonTypes().stream()
+                    .filter(buttonType -> buttonType.getButtonData().isCancelButton())
+                    .findFirst()
+                    .ifPresent(buttonType -> ((Button) confirmAlert.getDialogPane().lookupButton(buttonType)).setText("Cancel"));
+        }
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             deleteModelsInListView(mediumListView);

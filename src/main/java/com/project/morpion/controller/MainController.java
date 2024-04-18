@@ -119,13 +119,19 @@ public class MainController implements ModelUpdate {
         Platform.runLater(() -> {
             // Création de l'alert
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Modèle Prêt");
-            alert.setHeaderText("Votre IA est prête !");
-            alert.setContentText("Voulez-vous commencer la partie contre l'IA maintenant ? \nLe nouveau modèle sera enregistré dans les deux cas.");
-
+            if(Objects.equals(language, "French")) {
+                alert.setTitle("Modèle Prêt");
+                alert.setHeaderText("Votre IA est prête !");
+                alert.setContentText("Voulez-vous commencer la partie contre l'IA maintenant ? \nLe nouveau modèle sera enregistré dans les deux cas.");
+            }
+            else{
+                alert.setTitle("Template Ready");
+                alert.setHeaderText("Your AI is ready !");
+                alert.setContentText("Would you like to start the game against the AI now ? \nThe new template will be saved in both cases.");
+            }
             // Définition des boutons
-            ButtonType buttonTypeYes = new ButtonType("Oui", ButtonBar.ButtonData.YES);
-            ButtonType buttonTypeNo = new ButtonType("Non", ButtonBar.ButtonData.NO);
+            ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+            ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.NO);
 
             alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
@@ -200,6 +206,7 @@ public class MainController implements ModelUpdate {
         Stage stageLearn = new Stage();
         stageLearn.setScene(scene);
         LearnController controller = fxmlLoader.getController();
+        controller.setLanguage();
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
