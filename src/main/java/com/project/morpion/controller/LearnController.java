@@ -1,5 +1,6 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.*;
 import javafx.beans.binding.Bindings;
@@ -8,6 +9,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -22,6 +25,7 @@ import java.util.HashMap;
 
 public class LearnController {
     private ModelUpdate updateModel;
+    private ModelUpdate notUpdateModel;
     @FXML
     public TextField completionField;
     @FXML
@@ -46,6 +50,10 @@ public class LearnController {
     public void setUpdateListener(ModelUpdate updateModel) {
         this.updateModel = updateModel;
     }
+    public void setNotUpdateListener(ModelUpdate notUpdateModel) {
+        this.notUpdateModel = notUpdateModel;
+    }
+
 
     public void getPreviousStage(Stage stage) {
         this.PreviousStage = stage;
@@ -57,6 +65,12 @@ public class LearnController {
             updateModel.onModelUpdated();
         }
     }
+    public void trainingNotCompleted() {
+        if (updateModel != null) {
+            notUpdateModel.onModelNotUpdated();
+        }
+    }
+
 
     @FXML
     private void closeWindow(ActionEvent event) {
@@ -140,8 +154,8 @@ public class LearnController {
                     for(int i = 0; i < epochs; i++){
 
                         if (isCancelled()) {
-                            updateMessage("Unknown");
-                            return null; // Retourne immédiatement si la tâche est annulée
+                            updateMessage("Last error was :"+error/(double)i);
+                            return null;
                         }
 
                         Coup c = null ;
@@ -152,14 +166,15 @@ public class LearnController {
 
                         if ( i % 1000 == 0 && verbose) {
                             actualTrainError = (error/(double)i);
+                            System.out.println(actualTrainError);
                             if(i==0) actualTrainError = Double.MIN_VALUE;
-                            if(actualTrainError > pastTrainError){
+                            if(actualTrainError < pastTrainError+0.001 && actualTrainError > pastTrainError-0.001){
+                                updateMessage("Error at step "+i+" is constant");
+                            }
+                            else if(actualTrainError > pastTrainError){
                                 updateMessage("Error at step "+i+" is increasing");
                             } else if (actualTrainError < pastTrainError) {
                                 updateMessage("Error at step "+i+" is decreasing");
-                            }
-                            else {
-                                updateMessage("Error at step "+i+" is constant");
                             }
                             pastTrainError = actualTrainError;
                         }
@@ -209,6 +224,7 @@ public class LearnController {
             stage.close();
         });
         learningTask.setOnCancelled(event -> {
+            trainingNotCompleted();
             closeButton.setVisible(true);
             closeButton.setManaged(true);
             completionField.setVisible(true);

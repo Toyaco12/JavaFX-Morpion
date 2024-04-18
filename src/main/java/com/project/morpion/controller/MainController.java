@@ -146,6 +146,15 @@ public class MainController implements ModelUpdate {
             }
         });
     }
+    public void onModelNotUpdated(){
+        btnSinglePlayer.setDisable(false);
+    }
+    public void enablePlayingButton(){
+        this.btnSinglePlayer.setDisable(false);
+    }
+    public void disablePlayingButton(){
+        this.btnSinglePlayer.setDisable(true);
+    }
     private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
         Scene scene = null;
@@ -210,7 +219,7 @@ public class MainController implements ModelUpdate {
         controller.setDifficulty(letterDifficulty);
         controller.processStart();
         controller.setUpdateListener(this);
-
+        controller.setNotUpdateListener(this);
         controller.getPreviousStage(stage);
         stageLearn.show();
     }

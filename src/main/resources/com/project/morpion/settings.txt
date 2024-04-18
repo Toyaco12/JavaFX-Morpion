@@ -2,4 +2,4 @@ L:90
 A:E
 T:B
 C:D
-S:lol
+S
