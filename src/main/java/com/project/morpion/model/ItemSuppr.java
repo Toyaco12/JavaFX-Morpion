@@ -2,6 +2,7 @@ package com.project.morpion.model;
 
 import java.io.File;
 
+//Class to handle deleted item
 public class ItemSuppr {
     private String name;
     private String fullPath;
