@@ -165,7 +165,12 @@ public class LearnController {
                     for(int i = 0; i < epochs; i++){
 
                         if (isCancelled()) {
-                            updateMessage("Last error was :"+error/(double)i);
+                            if(Objects.equals(language, "English")){
+                                updateMessage("Last error was : "+error/(double)i);
+                            }
+                            else{
+                                updateMessage("La dernière erreur était : "+error/(double)i);
+                            }
                             return null;
                         }
 
@@ -181,8 +186,8 @@ public class LearnController {
                                 part1 = "Erreur à l'étape ";
                             }
                             actualTrainError = (error/(double)i);
+                            if(i==0) actualTrainError = Double.MAX_VALUE;
                             System.out.println(actualTrainError);
-                            if(i==0) actualTrainError = Double.MIN_VALUE;
                             if(actualTrainError < pastTrainError+0.001 && actualTrainError > pastTrainError-0.001){
                                 if(Objects.equals(language, "English")){
                                     updateMessage("Error at step "+i+" is constant");;
