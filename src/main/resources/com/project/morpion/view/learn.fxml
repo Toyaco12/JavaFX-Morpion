@@ -5,8 +5,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="375.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.LearnController">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="400.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.LearnController">
    <children>
+      <Button fx:id="sound" mnemonicParsing="false" text="" textAlignment="CENTER" VBox.vgrow="ALWAYS" focusTraversable="false" onAction="#changeMusic">
+         <VBox.margin>
+            <Insets left="270.0" />
+         </VBox.margin>
+         <graphic>
+            <ImageView fx:id="soundImage" fitHeight="25" fitWidth="25">
+               <Image url="@../image/sound.png"/>
+            </ImageView>
+         </graphic>
+      </Button>
       <Label fx:id="title" text="Train a Model">
          <font>
             <Font size="22.0" />

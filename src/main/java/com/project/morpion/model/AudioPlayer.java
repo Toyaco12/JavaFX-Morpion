@@ -40,10 +40,31 @@ public class AudioPlayer {
             throw new RuntimeException("Resource not found: " + musicFile);
         }
     }
+    public void playWaitingMusic() {
+        String musicFile = "/com/project/morpion/music/Elevator.mp3"; // Chemin relatif
+        try {
+            Media sound = new Media(getClass().getResource(musicFile).toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Resource not found: " + musicFile);
+        }
+    }
 
     public void stopMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+        }
+    }
+    public void pauseMusic() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
+    }
+    public void playMusic(){
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
         }
     }
     public void changeVolume(double volume) {

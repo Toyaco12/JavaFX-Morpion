@@ -1,6 +1,7 @@
 package com.project.morpion.controller;
 
 import com.project.morpion.App;
+import com.project.morpion.model.AudioPlayer;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.*;
 import javafx.beans.binding.Bindings;
@@ -15,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -26,6 +29,8 @@ import java.util.Objects;
 
 public class LearnController {
     public Label title;
+    public Button sound;
+    public ImageView soundImage;
     private ModelUpdate updateModel;
     private ModelUpdate notUpdateModel;
     @FXML
@@ -46,6 +51,9 @@ public class LearnController {
     @FXML
     private Task<Void> learningTask;
     private String language = "English";
+    AudioPlayer audioPlayer;
+    double volume;
+    private boolean isSound = true;
 
     private Stage PreviousStage;
 
@@ -133,12 +141,17 @@ public class LearnController {
         this.diff.setText(diff.getText() + textDiff);
     }
     public void initialize(){
+        audioPlayer = new AudioPlayer();
+        getVolume();
     }
 
     @FXML
     public void processStart() {
+
         startbutton.setVisible(false);
         startbutton.setManaged(false);
+        audioPlayer.playWaitingMusic();
+        audioPlayer.changeVolume(volume);
 
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
@@ -276,6 +289,7 @@ public class LearnController {
 
         learningTask.setOnSucceeded(event -> {
             trainingCompleted();
+            audioPlayer.stopMusic();
             closeButton.setVisible(true);
             closeButton.setManaged(true);
 
@@ -287,6 +301,7 @@ public class LearnController {
         });
         learningTask.setOnCancelled(event -> {
             trainingNotCompleted();
+            audioPlayer.stopMusic();
             closeButton.setVisible(true);
             closeButton.setManaged(true);
             completionField.setVisible(true);
@@ -320,6 +335,33 @@ public class LearnController {
             closeButton.setText("Fermer");
         }
 
+    }
+    public void getVolume(){
+        try{
+            FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = bufferedReader.readLine();
+            while(line != null) {
+                if (line.charAt(0) == 'V') {
+                    String d = line.substring(line.lastIndexOf(":") + 1);
+                    volume = Double.parseDouble(d);
+                    return;
+                }
+                line = bufferedReader.readLine();
+            }
+        }catch (IOException e){}
+    }
+    public void changeMusic(){
+        if(isSound){
+            soundImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/noSound.png"));
+            audioPlayer.pauseMusic();
+            isSound = false;
+        }
+        else{
+            soundImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/sound.png"));
+            audioPlayer.playMusic();
+            isSound = true;
+        }
     }
 
 
