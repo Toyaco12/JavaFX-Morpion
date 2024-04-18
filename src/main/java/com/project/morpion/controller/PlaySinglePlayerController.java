@@ -620,7 +620,9 @@ public class PlaySinglePlayerController implements ModelUpdate {
         catch (IOException ignored){}
         return null;
     }
-
+    public void onModelNotUpdated(){
+        return;
+    }
     public void onModelUpdated() {
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");

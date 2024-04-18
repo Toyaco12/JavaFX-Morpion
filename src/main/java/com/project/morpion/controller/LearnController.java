@@ -1,5 +1,6 @@
 package com.project.morpion.controller;
 
+import com.project.morpion.App;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.ai.*;
 import javafx.beans.binding.Bindings;
@@ -8,6 +9,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -24,6 +27,7 @@ import java.util.Objects;
 public class LearnController {
     public Label title;
     private ModelUpdate updateModel;
+    private ModelUpdate notUpdateModel;
     @FXML
     public TextField completionField;
     @FXML
@@ -48,6 +52,10 @@ public class LearnController {
     public void setUpdateListener(ModelUpdate updateModel) {
         this.updateModel = updateModel;
     }
+    public void setNotUpdateListener(ModelUpdate notUpdateModel) {
+        this.notUpdateModel = notUpdateModel;
+    }
+
 
     public void getPreviousStage(Stage stage) {
         this.PreviousStage = stage;
@@ -59,6 +67,12 @@ public class LearnController {
             updateModel.onModelUpdated();
         }
     }
+    public void trainingNotCompleted() {
+        if (updateModel != null) {
+            notUpdateModel.onModelNotUpdated();
+        }
+    }
+
 
     @FXML
     private void closeWindow(ActionEvent event) {
@@ -151,8 +165,13 @@ public class LearnController {
                     for(int i = 0; i < epochs; i++){
 
                         if (isCancelled()) {
-                            updateMessage("Unknown");
-                            return null; // Retourne immédiatement si la tâche est annulée
+                            if(Objects.equals(language, "English")){
+                                updateMessage("Last error was : "+error/(double)i);
+                            }
+                            else{
+                                updateMessage("La dernière erreur était : "+error/(double)i);
+                            }
+                            return null;
                         }
 
                         Coup c = null ;
@@ -167,15 +186,24 @@ public class LearnController {
                                 part1 = "Erreur à l'étape ";
                             }
                             actualTrainError = (error/(double)i);
-                            if(i==0) actualTrainError = Double.MIN_VALUE;
-                            if(actualTrainError > pastTrainError){
+                            if(i==0) actualTrainError = Double.MAX_VALUE;
+                            System.out.println(actualTrainError);
+                            if(actualTrainError < pastTrainError+0.001 && actualTrainError > pastTrainError-0.001){
+                                if(Objects.equals(language, "English")){
+                                    updateMessage("Error at step "+i+" is constant");;
+                                }
+                                else{
+                                    updateMessage("L'erreur à l'étape "+i+" est constante");
+                                }
+                            }
+                            else if(actualTrainError > pastTrainError){
                                 if(Objects.equals(language, "English")){
                                     updateMessage("Error at step "+i+" is increasing");;
                                 }
                                 else{
                                     updateMessage("L'erreur à l'étape "+i+" augmente");
-                                }
-                            } else if (actualTrainError < pastTrainError) {
+                                }                            }
+                            else if (actualTrainError < pastTrainError) {
                                 if(Objects.equals(language, "English")){
                                     updateMessage("Error at step "+i+" is decreasing");;
                                 }
@@ -184,12 +212,7 @@ public class LearnController {
                                 }
                             }
                             else {
-                                if(Objects.equals(language, "English")){
-                                    updateMessage("Error at step "+i+" is constant");;
-                                }
-                                else{
-                                    updateMessage("L'erreur à l'étape "+i+" est constante");
-                                }
+
                             }
                             pastTrainError = actualTrainError;
                         }
@@ -245,6 +268,7 @@ public class LearnController {
             stage.close();
         });
         learningTask.setOnCancelled(event -> {
+            trainingNotCompleted();
             closeButton.setVisible(true);
             closeButton.setManaged(true);
             completionField.setVisible(true);
