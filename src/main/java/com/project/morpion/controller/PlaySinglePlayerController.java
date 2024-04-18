@@ -222,10 +222,6 @@ public class PlaySinglePlayerController implements ModelUpdate {
             scaleTransition.setToY(1.0);   // Taille finale en y
             scaleTransition.play();
         }
-
-
-
-
     }
 
     private void blur(){
@@ -286,6 +282,39 @@ public class PlaySinglePlayerController implements ModelUpdate {
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.getCode().isKeypadKey() && !Objects.equals(keyEvent.getText(), "0")) {
+            int index = Integer.parseInt(keyEvent.getText());
+            switch (index){
+                case 1 : index = 7;
+                    break;
+                case 2 : index = 8;
+                    break;
+                case 3 : index = 9;
+                    break;
+                case 7 : index = 1;
+                    break;
+                case 8 : index = 2;
+                    break;
+                case 9 : index = 3;
+                    break;
+            }
+            final int i = index;
+                if (readyToPlay) {
+                    if (game.isAvailable(i-1)) {
+                        game.playGUI(i-1);
+                        readyToPlay = false;
+                        updateGridPane();
+                        if (game.isWin()) {
+                            showVictory(1);
+                        } else if (game.isDraw()) {
+                            showVictory(0);
+                        } else {
+                            game.playIAGUI();
+                            pauseTransition.play();
+                        }
+                    }
+                }
+        }
     }
 
     public void returnHome(ActionEvent actionEvent) throws IOException {
