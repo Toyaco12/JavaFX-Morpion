@@ -27,6 +27,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         //stage.setOnCloseRequest(event -> audioPlayer.stopMusic());
+
         stage.show();
 
     }
