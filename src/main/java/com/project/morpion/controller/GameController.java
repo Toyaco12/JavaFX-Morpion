@@ -401,7 +401,7 @@ public class GameController {
             audioPlayer.changeVolume(volume);
             if(Objects.equals(language, "French")) {
                 victoryLabel.setText("Et C'est Une Égalité ..... ");
-                revengeButton.setText("N'hesitez pas à vous départager !!");
+                revengeLabel.setText("N'hesitez pas à vous départager !!");
             }
             else {
                 victoryLabel.setText("And It's A Draw .....");
