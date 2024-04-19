@@ -72,6 +72,10 @@ public class ModelViewController {
             confirmAlert.setTitle("Confirmation de suppression");
             confirmAlert.setHeaderText("Suppression de tous les modèles");
             confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer tous les modèles ? Cette action est irréversible.");
+            confirmAlert.getButtonTypes().stream()
+                    .filter(buttonType -> buttonType.getButtonData().isCancelButton())
+                    .findFirst()
+                    .ifPresent(buttonType -> ((Button) confirmAlert.getDialogPane().lookupButton(buttonType)).setText("Annuler"));
         }
         else{
             confirmAlert.setTitle("Deletion Confirmation");
