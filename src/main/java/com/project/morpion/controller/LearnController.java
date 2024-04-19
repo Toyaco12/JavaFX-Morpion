@@ -356,7 +356,7 @@ public class LearnController {
     }
     public void changeMusic(){
         if(isSound){
-            soundImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/noSound.png"));
+            soundImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/nosound.png"));
             audioPlayer.pauseMusic();
             isSound = false;
         }
