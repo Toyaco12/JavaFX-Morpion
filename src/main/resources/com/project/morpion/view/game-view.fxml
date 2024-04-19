@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: rgb(20,20,20)" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.morpion.controller.GameController">
    <top>
       <HBox fx:id="hboxTop" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="100.0" prefWidth="352.0">
+            <VBox prefHeight="100.0" prefWidth="404.0">
                <children>
-                  <Label fx:id="partyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="354.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Game In Progress" textAlignment="CENTER">
+                  <Label fx:id="partyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="800.0" style="-fx-text-fill: fc6c00; -fx-font-weight: bold" text="Game In Progress" textAlignment="CENTER">
                      <font>
                         <Font size="40.0" />
                      </font>
@@ -50,7 +41,7 @@
                   <Insets top="15" />
                </VBox.margin>
             </Label>
-            <Button fx:id="homeButton" styleClass="blue-button" focusTraversable="false" onAction="#returnHome">
+            <Button fx:id="homeButton" focusTraversable="false" onAction="#returnHome" styleClass="blue-button">
                <graphic>
                   <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../image/home.png" />
@@ -79,7 +70,7 @@
                         <Insets top="15" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="restartButton" styleClass="orange-button" onAction="#restartGame">
+                  <Button fx:id="restartButton" onAction="#restartGame" styleClass="orange-button">
                      <graphic>
                         <ImageView fitHeight="54.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <Image url="@../image/restart.png" />
@@ -159,7 +150,7 @@
             </GridPane>
             <VBox fx:id="vboxChoice" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="chooseLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="Player 1 choose you're Icon">
+                  <Label fx:id="chooseLabel" style="-fx-text-fill: rgb(1, 191, 200)" text="Player 1 choose your Icon">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -194,7 +185,7 @@
                   </Label>
                   <HBox fx:id="hboxStart" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
                      <children>
-                        <Button fx:id="startPlayer1" styleClass="orange-button" mnemonicParsing="false" onAction="#startPlayer1" style="-fx-text-fill: white" text="Player 1">
+                        <Button fx:id="startPlayer1" mnemonicParsing="false" onAction="#startPlayer1" style="-fx-text-fill: white" styleClass="orange-button" text="Player 1">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -202,7 +193,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startPlayer2" styleClass="blue-button" mnemonicParsing="false" onAction="#startPlayer2" style="-fx-text-fill: white" text="Player 2">
+                        <Button fx:id="startPlayer2" mnemonicParsing="false" onAction="#startPlayer2" style="-fx-text-fill: white" styleClass="blue-button" text="Player 2">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -210,7 +201,7 @@
                               <Insets right="30.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="startRandom" styleClass="orange-button" mnemonicParsing="false" onAction="#startRandom" style="-fx-text-fill: white" text="Random">
+                        <Button fx:id="startRandom" mnemonicParsing="false" onAction="#startRandom" style="-fx-text-fill: white" styleClass="orange-button" text="Random">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -245,17 +236,17 @@
                         <Insets top="50" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="revengeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#revenge" style="-fx-text-fill: white; -fx-font-size: 18;" prefHeight="50.0" prefWidth="120.0" text="Revenge">
-                     <VBox.margin >
-                        <Insets top="40" bottom="40"/>
+                  <Button fx:id="revengeButton" mnemonicParsing="false" onAction="#revenge" prefHeight="50.0" prefWidth="120.0" style="-fx-text-fill: white; -fx-font-size: 18;" styleClass="orange-button" text="Revenge">
+                     <VBox.margin>
+                        <Insets bottom="40" top="40" />
                      </VBox.margin>
                   </Button>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="orange-button" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0">
+                        <Button mnemonicParsing="false" onAction="#returnHome" prefHeight="40.0" prefWidth="80.0" styleClass="orange-button">
                            <graphic>
                               <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
-                                 <Image url="@../image/home.png"/>
+                                 <Image url="@../image/home.png" />
                               </ImageView>
                            </graphic>
                         </Button>
