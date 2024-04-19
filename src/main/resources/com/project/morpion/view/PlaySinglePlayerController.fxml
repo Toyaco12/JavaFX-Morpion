@@ -236,7 +236,7 @@
                                 <Insets top="35" />
                             </VBox.margin>
                         </Label>
-                        <Button fx:id="revengeButton" mnemonicParsing="false" onAction="#revenge" prefHeight="50.0" prefWidth="110.0" style="-fx-text-fill: white; -fx-font-size: 18;" styleClass="orange-button" text="Revenge">
+                        <Button fx:id="revengeButton" mnemonicParsing="false" onAction="#revenge" prefHeight="50.0" prefWidth="120.0" style="-fx-text-fill: white; -fx-font-size: 18;" styleClass="orange-button" text="Revenge">
                             <VBox.margin>
                                 <Insets top="30" />
                             </VBox.margin>
