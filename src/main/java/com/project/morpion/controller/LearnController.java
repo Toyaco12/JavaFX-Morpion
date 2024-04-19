@@ -303,6 +303,7 @@ public class LearnController {
         });
         learningTask.setOnCancelled(event -> {
             trainingNotCompleted();
+            sound.setDisable(true);
             audioPlayer.stopMusic();
             closeButton.setVisible(true);
             closeButton.setManaged(true);

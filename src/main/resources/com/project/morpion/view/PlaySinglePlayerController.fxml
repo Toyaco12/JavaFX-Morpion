@@ -273,17 +273,14 @@
                                             <Image url="@../image/home.png"/>
                                         </ImageView>
                                     </graphic>
-                                    <HBox.margin>
-                                        <Insets right="40.0" />
-                                    </HBox.margin>
                                 </Button>
-                                <Button styleClass="blue-button" mnemonicParsing="false" onAction="#restartGame" prefHeight="40.0" prefWidth="80.0">
-                                    <graphic>
-                                        <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">
-                                            <Image url="@../image/restart.png"/>
-                                        </ImageView>
-                                    </graphic>
-                                </Button>
+<!--                                <Button styleClass="blue-button" mnemonicParsing="false" onAction="#restartGame" prefHeight="40.0" prefWidth="80.0">-->
+<!--                                    <graphic>-->
+<!--                                        <ImageView fitHeight="20" fitWidth="60" pickOnBounds="true" preserveRatio="true">-->
+<!--                                            <Image url="@../image/restart.png"/>-->
+<!--                                        </ImageView>-->
+<!--                                    </graphic>-->
+<!--                                </Button>-->
                             </children>
                         </HBox>
                     </children>

@@ -101,6 +101,8 @@ public class GameController {
         fadeInNode(player1Name);
         fadeInNode(player2Name);
         fadeInNode(restartButton);
+        restartButton.setDisable(true);
+        restartButton.setVisible(false);
         fadeInNode(homeButton);
         TextFormatter<String> textFormatter1 = new TextFormatter<>(change -> {
             if (change.isContentChange() && change.getControlNewText().length() > 12) {
@@ -401,7 +403,7 @@ public class GameController {
             audioPlayer.changeVolume(volume);
             if(Objects.equals(language, "French")) {
                 victoryLabel.setText("Et C'est Une Égalité ..... ");
-                revengeButton.setText("N'hesitez pas à vous départager !!");
+                revengeLabel.setText("N'hesitez pas à vous départager !!");
             }
             else {
                 victoryLabel.setText("And It's A Draw .....");
@@ -422,6 +424,7 @@ public class GameController {
     }
 
     private void hideVictory(){
+
         audioPlayer.stopMusic();
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1), vBoxVictory);
         scaleTransition.setFromX(1.0);
@@ -437,6 +440,7 @@ public class GameController {
             fadeInNode(hboxStart);
             fadeInNode(startLabel);
             fadeInNode(vboxChoice);
+            revengeButton.setDisable(false);
         });
     }
 
@@ -474,7 +478,7 @@ public class GameController {
 
     @FXML
     public void restartGame(ActionEvent actionEvent) {
-        audioPlayer.stopMusic();
+        //audioPlayer.stopMusic();
         try{
             Parent mainView = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("view/game-view.fxml")));
             Scene scene = homeButton.getScene();
@@ -507,6 +511,7 @@ public class GameController {
     }
 
     public void revenge(ActionEvent actionEvent) {
+        revengeButton.setDisable(true);
         hideVictory();
 
         for(int i = 0; i < placement.length ; i++){

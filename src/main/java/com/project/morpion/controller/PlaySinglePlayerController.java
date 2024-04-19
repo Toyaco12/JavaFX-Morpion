@@ -277,6 +277,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         getTheme();
         getLuminosity();
         setClickListener();
+        restartButton.setDisable(true);
+        restartButton.setVisible(false);
         pauseTransition.setOnFinished(e->{
             updateGridPane();
             if(game.isWin()){
@@ -367,6 +369,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
             fadeInNode(hboxStart);
             fadeInNode(startLabel);
             fadeInNode(vboxChoice);
+            revengeButton.setDisable(false);
         });
     }
 
@@ -485,6 +488,7 @@ public class PlaySinglePlayerController implements ModelUpdate {
     }
 
     public void revenge(ActionEvent actionEvent) {
+        revengeButton.setDisable(true);
         game.restart();
         restartGame(null);
         if(Objects.equals(language, "french")) {
