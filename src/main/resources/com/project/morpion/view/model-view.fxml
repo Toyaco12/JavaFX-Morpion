@@ -39,7 +39,7 @@
    </top>
    <bottom>
        <VBox alignment="CENTER" spacing="10" BorderPane.alignment="CENTER">
-           <Button fx:id="deleteAllButton" text="Delete All" onAction="#deleteAllModels" prefHeight="30.0" prefWidth="145.0" styleClass="blue-button">
+           <Button fx:id="deleteAllButton" text="Delete All" onAction="#deleteAllModels" prefHeight="30.0" prefWidth="160.0" styleClass="blue-button">
                <font>
                    <Font size="16.0" />
                </font>
@@ -47,7 +47,7 @@
                    <Insets top="30.0" />
                </BorderPane.margin>
            </Button>
-           <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" prefHeight="40.0" prefWidth="80.0" text="Close">
+           <Button fx:id="closeButton" styleClass="orange-button" mnemonicParsing="false" onAction="#closeModal" prefHeight="40.0" prefWidth="90.0" text="Close">
                <BorderPane.margin>
                    <Insets bottom="30.0" top="30.0" />
                </BorderPane.margin>
