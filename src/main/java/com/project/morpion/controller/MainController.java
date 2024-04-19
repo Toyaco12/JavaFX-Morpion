@@ -98,6 +98,8 @@ public class MainController implements ModelUpdate {
         getCursor();
         if(isFrench())
             setToFrench();
+        else
+            languageButton.setText("English");
         getTheme();
         int lum = getBrightness();
         setVolume();
@@ -316,9 +318,22 @@ public class MainController implements ModelUpdate {
 
     private void setTheme() {
         if(Objects.equals(theme, "white")){
+            if(Objects.equals(language, "French")){
+                themeButton.setText("Blanc");
+            }
+            else{
+                themeButton.setText("White");
+            }
+
             borderPane.setStyle("-fx-background-color: white;");
         }
         else{
+            if(Objects.equals(language, "French")){
+                themeButton.setText("Noir");
+            }
+            else{
+                themeButton.setText("Black");
+            }
             borderPane.setStyle("-fx-background-color: rgb(20,20,20);");
         }
 
@@ -441,6 +456,7 @@ public class MainController implements ModelUpdate {
     }
 
     public void setToFrench(){
+        languageButton.setText("Français");
         playButton.setText("Jouer");
         settingButton.setText("Réglages");
         exitButton.setText("Quitter");

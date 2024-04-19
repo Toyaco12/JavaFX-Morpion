@@ -141,7 +141,7 @@
                      </HBox>
                      <HBox alignment="CENTER" spacing="10" styleClass="orange-theme">
                          <Label fx:id="languageLabel" style="-fx-text-fill: rgb(1, 191, 200); -fx-font-size: 16; -fx-font-weight: bold" text="Language : " />
-                         <SplitMenuButton fx:id="languageButton" styleClass="orange-theme" text="English">
+                         <SplitMenuButton fx:id="languageButton" styleClass="orange-theme">
                              <items>
                                  <MenuItem onAction="#selectEnglish" styleClass="" text="English" />
                                  <MenuItem onAction="#selectFrench" styleClass="" text="French" />
