@@ -11,11 +11,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+// Classe personnalisée pour un élément de liste qui gère l'affichage et la suppression de modèles IA dans une interface utilisateur.
+
 public class SupressCell extends ListCell<ItemModel> {
     HBox hbox = new HBox();
     Label label = new Label("(vide)");
     Pane pane = new Pane();
     Button deleteButton = new Button("X");
+
+    // Constructeur qui prépare l'interface de la cellule, incluant un bouton de suppression qui demande confirmation avant de supprimer le fichier associé au modèle.
 
     public SupressCell() {
         super();
@@ -44,6 +48,8 @@ public class SupressCell extends ListCell<ItemModel> {
         });
     }
 
+    // Met à jour l'affichage de la cellule. Si l'élément n'est pas vide et existe, affiche le nom du modèle et le bouton de suppression. Sinon, cache l'affichage.
+
     @Override
     protected void updateItem(ItemModel item, boolean empty) {
         super.updateItem(item, empty);
@@ -55,6 +61,8 @@ public class SupressCell extends ListCell<ItemModel> {
             setGraphic(hbox);
         }
     }
+
+    // Vérifie si la langue configurée est le français en lisant les paramètres du fichier de configuration.
 
     private boolean isFrench(){
         try{

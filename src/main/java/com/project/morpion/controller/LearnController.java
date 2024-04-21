@@ -1,17 +1,12 @@
 package com.project.morpion.controller;
 
-import com.project.morpion.App;
 import com.project.morpion.model.AudioPlayer;
 import com.project.morpion.model.ModelUpdate;
-import com.project.morpion.model.ai.*;
+import com.project.morpion.tools.ai.*;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -57,9 +52,14 @@ public class LearnController {
 
     private Stage PreviousStage;
 
+    // Définit l'écouteur pour les mises à jour de modèle réussies.
+
     public void setUpdateListener(ModelUpdate updateModel) {
         this.updateModel = updateModel;
     }
+
+    // Définit l'écouteur pour les tentatives de mise à jour de modèle non réussies.
+
     public void setNotUpdateListener(ModelUpdate notUpdateModel) {
         this.notUpdateModel = notUpdateModel;
     }
@@ -69,18 +69,23 @@ public class LearnController {
         this.PreviousStage = stage;
     }
 
+    // Méthode appelée lorsque l'entraînement du modèle est terminé avec succès.
 
     public void trainingCompleted() {
         if (updateModel != null) {
             updateModel.onModelUpdated();
         }
     }
+
+    // Méthode appelée lorsque l'entraînement du modèle est interrompu ou non réussi.
+
     public void trainingNotCompleted() {
         if (updateModel != null) {
             notUpdateModel.onModelNotUpdated();
         }
     }
 
+    // Ferme la fenêtre actuelle.
 
     @FXML
     private void closeWindow(ActionEvent event) {
@@ -88,6 +93,9 @@ public class LearnController {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
+
+    // Annule la tâche d'apprentissage en cours si elle est en exécution.
+
     @FXML
     public void cancelTask(ActionEvent actionEvent) {
         if (learningTask != null){
@@ -95,6 +103,8 @@ public class LearnController {
         }
     }
     private String difficulty;
+
+    // Configure la difficulté de l'apprentissage en fonction du paramètre fourni et ajuste l'affichage correspondant.
 
     public void setDifficulty(String difficulty){
         this.difficulty = difficulty;
@@ -140,10 +150,15 @@ public class LearnController {
 
         this.diff.setText(diff.getText() + textDiff);
     }
+
+    // Initialise le contrôleur, notamment en configurant le lecteur audio et en récupérant le volume initial.
+
     public void initialize(){
         audioPlayer = new AudioPlayer();
         getVolume();
     }
+
+    // Démarre le processus d'apprentissage en préparant l'interface utilisateur et en lançant la tâche d'apprentissage.
 
     @FXML
     public void processStart() {
@@ -157,7 +172,7 @@ public class LearnController {
         ConfigFileLoader cfl = new ConfigFileLoader();
         cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
         Config config = cfl.get(difficulty);
-        System.out.println("Test.main() : "+config);
+        System.out.println("Apprentissage : "+config);
         HashMap<Integer, Coup> mapTrain = Test.setup();
         double epochs = 10000;
         int size =9;
@@ -315,6 +330,8 @@ public class LearnController {
 
     }
 
+    // Vérifie si la langue configurée est le français en lisant un fichier de paramètres.
+
     private boolean isFrench(){
         try{
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
@@ -330,6 +347,8 @@ public class LearnController {
         return false;
     }
 
+    // Ajuste les textes de l'interface utilisateur à la langue configurée.
+
     public void setLanguage(){
         if(isFrench()){
             language = "French";
@@ -339,6 +358,9 @@ public class LearnController {
         }
 
     }
+
+    // Récupère le volume actuel à partir des paramètres et ajuste le volume du lecteur audio.
+
     public void getVolume(){
         try{
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
@@ -354,6 +376,9 @@ public class LearnController {
             }
         }catch (IOException e){}
     }
+
+    // Bascule l'état de la musique entre actif et muet, en ajustant l'icône correspondante.
+
     public void changeMusic(){
         if(isSound){
             soundImage.setImage(new Image("file:src/main/resources/com/project/morpion/image/nosound.png"));

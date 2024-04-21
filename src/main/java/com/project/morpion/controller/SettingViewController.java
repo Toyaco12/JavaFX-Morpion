@@ -39,10 +39,13 @@ public class SettingViewController {
     private String radio;
     private String language;
 
+    // Définit la scène actuelle utilisée par le contrôleur.
 
     public void setScene(Scene scene) {
         this.scene = scene;
     }
+
+    // Initialise le contrôleur en configurant les paramètres de langue, les niveaux de difficulté, et en appliquant les formateurs de texte aux champs de saisie.
 
     public void initialization() {
         if(isFrench()){
@@ -70,6 +73,9 @@ public class SettingViewController {
         });
         createTextField.setTextFormatter(textFormatter);
     }
+
+    // Ferme le modal des paramètres, vérifie si des modifications ont été apportées et si elles ont été sauvegardées avant de fermer.
+
     public void closeModal(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         String[][] settings = getSettings();
@@ -116,6 +122,8 @@ public class SettingViewController {
             stage.close();
         }
     }
+
+    // Sauvegarde les paramètres définis par l'utilisateur et ferme la fenêtre si aucune erreur n'est détectée.
 
     public void saveSettings(ActionEvent actionEvent) {
         boolean error = false;
@@ -173,6 +181,8 @@ public class SettingViewController {
 
     }
 
+    // Crée et retourne un champ de texte configuré pour accepter uniquement les chiffres.
+
     private TextField createTextField(String setText){
         TextField textField = new TextField(setText);
 
@@ -190,6 +200,8 @@ public class SettingViewController {
         return textField;
     }
 
+    // Crée et retourne un champ de texte configuré pour accepter les nombres décimaux.
+
     private TextField createDecimalTextField(String setText){
         TextField textField = new TextField(setText);
 
@@ -206,6 +218,8 @@ public class SettingViewController {
 
         return textField;
     }
+
+    // Récupère les paramètres actuels à partir d'un fichier de configuration et retourne ces paramètres sous forme de tableau bidimensionnel.
 
     public String[][] getSettings() {
         try {
@@ -246,6 +260,8 @@ public class SettingViewController {
         return 0;
     }
 
+    // Enregistre les paramètres modifiés dans le fichier de configuration, incluant le niveau de difficulté sélectionné.
+
     public void setSettings(ArrayList<String> settings, String diff){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/com/project/morpion/ai/config.txt"))) {
             int i = 0;
@@ -266,6 +282,8 @@ public class SettingViewController {
         } catch (IOException ignored) { }
     }
 
+    // Applique le thème de couleur à l'interface utilisateur selon les paramètres de l'utilisateur.
+
     private void getTheme(){
         try{
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
@@ -284,6 +302,8 @@ public class SettingViewController {
             }
         }catch (IOException ignored){}
     }
+
+    // Configure le curseur de la souris selon les paramètres de l'utilisateur.
 
     private void getCursor(){
         try{
@@ -307,6 +327,8 @@ public class SettingViewController {
             }
         }catch (IOException ignored){}
     }
+
+    // Récupère les niveaux de difficulté optionnels configurés par l'utilisateur et ajuste la visibilité des éléments de l'interface en conséquence.
 
     private void getOptionnalLevel() {
         try {
@@ -332,6 +354,8 @@ public class SettingViewController {
         catch (IOException ignored){}
     }
 
+    // Compare deux matrices pour vérifier si elles sont identiques, utilisé pour détecter les modifications non sauvegardées dans les paramètres.
+
     private boolean areMatricesEquals(String[][] a, String[][] b){
         if(a.length != b.length || a[0].length != b[0].length){
             return false;
@@ -345,6 +369,8 @@ public class SettingViewController {
         }
         return true;
     }
+
+    // Ajoute un nouveau niveau de difficulté personnalisé à la liste des niveaux disponibles.
 
     public void addLevel(ActionEvent actionEvent) {
         if(!createTextField.getText().isEmpty()){
@@ -365,6 +391,8 @@ public class SettingViewController {
             createTextField.clear();
         }
     }
+
+    // Écrit un nouveau niveau de difficulté dans le fichier de configuration.
 
     private void writeOptionnalLevel(String lvl, int index){
         try{
@@ -424,6 +452,8 @@ public class SettingViewController {
         }
         catch (IOException ignored){}
     }
+
+    // Supprime un niveau de difficulté personnalisé spécifié par l'index.
 
     private void deletelevel(int lvl){
         String deleteLvl = optionnalLevel[lvl];
@@ -498,6 +528,8 @@ public class SettingViewController {
         catch (IOException ignored){}
 
     }
+
+    // Configure l'affichage des niveaux de difficulté et d'autres paramètres dans l'interface utilisateur.
 
     private void setLevel(){
         settingsPane.getChildren().clear();
@@ -602,6 +634,8 @@ public class SettingViewController {
         }
     }
 
+    // Sélectionne le niveau de difficulté actuellement actif selon les paramètres enregistrés.
+
     private void getSelectedLevel(){
         for(Toggle toggle : difficulty.getToggles()){
             RadioButton radioButton = (RadioButton) toggle;
@@ -610,6 +644,8 @@ public class SettingViewController {
             }
         }
     }
+
+    // Vérifie si la langue actuelle des paramètres est définie sur Français.
 
     private boolean isFrench(){
         try{

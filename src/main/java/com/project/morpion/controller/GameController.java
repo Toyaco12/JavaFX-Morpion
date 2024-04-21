@@ -84,6 +84,7 @@ public class GameController {
         this.scene = scene;
     }
 
+    // Initialise le contrôleur en configurant l'audio, les préférences de l'utilisateur, et en préparant l'interface utilisateur pour le démarrage du jeu.
 
     public void initialization() {
         audioPlayer = new AudioPlayer();
@@ -120,12 +121,16 @@ public class GameController {
         player2Name.setTextFormatter(textFormatter2);
     }
 
+    // Ajuste la luminosité de l'interface utilisateur selon le paramètre spécifié.
+
     public void setLuminosity(int lum){
         double l = -0.9 + ((double) lum /100);
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(l);
         borderPane.setEffect(colorAdjust);
     }
+
+    // Récupère et applique la luminosité configurée à partir d'un fichier de paramètres.
 
     public int getLuminosity(){
         try{
@@ -142,6 +147,8 @@ public class GameController {
         return 0;
     }
 
+    // Configure les écouteurs d'événements sur les images de la grille pour gérer les clics et placer les pions.
+
     private void setClickListener(){
         morpionGrille.getChildren().forEach(node -> {
             StackPane stackPane = (StackPane) node;
@@ -156,12 +163,16 @@ public class GameController {
         });
     }
 
+    // Configure les écouteurs d'événements sur les images de la grille pour gérer les clics et placer les pions.
+
     public void changeWhosTurn(TextField textField){
         if (Objects.equals(language, "French"))
             whosTurn.setText("Au Tour De " + textField.getText());
         else
             whosTurn.setText(textField.getText() + "'s Turn");
     }
+
+    // Gère les actions à effectuer après un clic sur une case du jeu, y compris le placement des pions et la vérification des conditions de victoire.
 
     public void imageClicked(ImageView imageView, StackPane stackPane){
         if(!finish) {
@@ -212,6 +223,8 @@ public class GameController {
         }
     }
 
+    // Gère le retour à l'écran d'accueil lorsqu'on clique sur le bouton correspondant.
+
     @FXML
     public void returnHome(ActionEvent actionEvent) throws IOException {
         audioPlayer.stopMusic();
@@ -225,6 +238,7 @@ public class GameController {
             stageGame.show();
     }
 
+    // Vérifie les conditions de victoire sur la grille et retourne le résultat (vainqueur, égalité, ou jeu en cours).
     public int victory() {
         // Vérifier chaque ligne
         for (int i = 0; i <= 6; i += 3) {
@@ -264,6 +278,8 @@ public class GameController {
     }
 
 
+    // Renvoie les indices des cases formant une ligne gagnante pour mettre en évidence les pions victorieux.
+
     private int[] getVictory() {
         // Vérifie chaque ligne
         for (int i = 0; i <= 6; i += 3) {
@@ -291,6 +307,7 @@ public class GameController {
         return new int[0];
     }
 
+    // Crée et joue une animation de rotation pour l'image spécifiée, utilisée pour souligner un pion dans une ligne gagnante.
 
     private RotateTransition rotateImage(ImageView i){
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2), i);
@@ -301,6 +318,7 @@ public class GameController {
         return rotateTransition;
     }
 
+    // Permet au joueur de sélectionner le symbole avec lequel il souhaite jouer (cercle ou croix).
 
     public void chooseCircle(MouseEvent actionEvent) {
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
@@ -328,6 +346,8 @@ public class GameController {
         fadeInNode(player2Object);
         fadeInNode(player1Object);
     }
+
+    // Démarre une nouvelle partie en déterminant aléatoirement ou manuellement quel joueur commence.
 
     public void startRandom(ActionEvent actionEvent) {
         hideToStartGame();
@@ -361,6 +381,8 @@ public class GameController {
         fadeInGridPane();
     }
 
+    // Cache les éléments de configuration pour commencer le jeu, désactive les modifications du nom des joueurs.
+
     public void hideToStartGame(){
         checkEmptyField();
         startLabel.setVisible(false);
@@ -380,6 +402,8 @@ public class GameController {
             player2Name.setText("Player 2");
         }
     }
+
+    // Affiche l'écran de victoire en indiquant le gagnant ou une égalité et joue la musique appropriée.
 
     private void showVictory(int player){
         if(player == 1){
@@ -423,6 +447,8 @@ public class GameController {
 
     }
 
+    // Cache l'écran de victoire et réinitialise les éléments visuels pour un nouveau jeu.
+
     private void hideVictory(){
 
         audioPlayer.stopMusic();
@@ -444,12 +470,16 @@ public class GameController {
         });
     }
 
+    // Applique un effet de flou aux éléments de l'interface pour mettre en évidence l'écran de victoire.
+
     private void blur(){
         BoxBlur boxBlur = new BoxBlur(10, 10, 3);
         vboxLeft.setEffect(boxBlur);
         vboxRight.setEffect(boxBlur);
         hboxTop.setEffect(boxBlur);
     }
+
+    // Gère les transitions de visibilité pour la grille de jeu en utilisant des animations de fondu.
 
     private void fadeOutGridPane() {
         playKeyBoard = false;
@@ -510,6 +540,8 @@ public class GameController {
 //        }
     }
 
+    // Permet de démarrer une nouvelle partie après une égalité ou une victoire pour revanche.
+
     public void revenge(ActionEvent actionEvent) {
         revengeButton.setDisable(true);
         hideVictory();
@@ -531,6 +563,8 @@ public class GameController {
         victoryPlayer2.setVisible(true);
     }
 
+    // Configure l'interface et les textes en français.
+
     public void setToFrench(){
         partyState.setText("Partie en Cours");
         chooseLabel.setText("Joueur 1 Choisissez Votre Forme");
@@ -541,6 +575,8 @@ public class GameController {
         revengeLabel.setText("N'Hesitez Pas a Prendre Votre Revanche !!");
         revengeButton.setText("Revanche");
     }
+
+    // Détermine si la langue de l'application doit être configurée en français en lisant les paramètres.
 
     private boolean isFrench(){
         try{
@@ -556,6 +592,7 @@ public class GameController {
         }catch (IOException ignored){}
         return false;
     }
+
     private void getTheme(){
         try{
             FileReader fileReader = new FileReader("src/main/resources/com/project/morpion/settings.txt");
@@ -586,15 +623,12 @@ public class GameController {
                 String d = line.substring(line.lastIndexOf(":") + 1);
                 if(d.equals("D")){
                     cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/cursor.png"));
-                    System.out.println("zob");
                 }
                 else if(d.equals("C")){
                     cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/catcursor.png"));
-                    System.out.println("zab");
                 }
                 else{
                     cursor = new ImageCursor(new Image("file:src/main/resources/com/project/morpion/image/pattes.png"));
-                    System.out.println("zub");
                 }
                 scene.setCursor(cursor);
             }
@@ -609,7 +643,6 @@ public class GameController {
             while(line != null) {
                 if (line.charAt(0) == 'V') {
                     String d = line.substring(line.lastIndexOf(":") + 1);
-                    System.out.println("dhezuiduezhduezhu      " + line);
                     volume = Double.parseDouble(d);
                     return;
                 }

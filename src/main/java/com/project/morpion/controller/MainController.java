@@ -2,11 +2,8 @@ package com.project.morpion.controller;
 
 import com.project.morpion.App;
 import com.project.morpion.model.ModelUpdate;
-import com.project.morpion.model.ai.Config;
-import com.project.morpion.model.ai.ConfigFileLoader;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import com.project.morpion.tools.ai.Config;
+import com.project.morpion.tools.ai.ConfigFileLoader;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -83,7 +79,11 @@ public class MainController implements ModelUpdate {
 
     @FXML
     private static Stage stage = null;
+
     private Scene scene = null;
+
+    // Configure le stage et la scène pour ce contrôleur.
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -91,7 +91,8 @@ public class MainController implements ModelUpdate {
         this.scene = scene;
     }
 
-//testttt
+    // Initialise le contrôleur principal, configure les éléments d'interface utilisateur et charge les paramètres utilisateur comme le volume et la luminosité.
+
     public void initialization() {
         difficultyGroup = new ToggleGroup();
         setOptionnalLevel();
@@ -126,6 +127,9 @@ public class MainController implements ModelUpdate {
         }
         catch(Exception ignored){}
     }
+
+    // Fonction appelée lors de la mise à jour du modèle d'IA, permettant de commencer un jeu contre l'IA ou de sauvegarder le modèle.
+
     @Override
     public void onModelUpdated() {
         btnSinglePlayer.setDisable(false);
@@ -173,6 +177,9 @@ public class MainController implements ModelUpdate {
     public void disablePlayingButton(){
         this.btnSinglePlayer.setDisable(true);
     }
+
+    // Charge la vue pour jouer contre l'IA, initialise le contrôleur de jeu pour un seul joueur et définit la difficulté basée sur le modèle sélectionné.
+
     private void loadPlay1v1View(String modelName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/PlaySinglePlayerController.fxml"));
         Scene scene = null;
@@ -194,6 +201,8 @@ public class MainController implements ModelUpdate {
         stage.show();
     }
 
+    // Démarre le jeu en chargeant la vue de jeu et en initialisant ses composants.
+
     public void startGame(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/game-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -206,6 +215,7 @@ public class MainController implements ModelUpdate {
         stageGame.show();
     }
 
+    // Ouvre la fenêtre des paramètres permettant à l'utilisateur de modifier les configurations d'apprentissage des modèles.
 
     public void openSettings(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/setting-view.fxml"));
@@ -227,6 +237,8 @@ public class MainController implements ModelUpdate {
         stageSettings.showAndWait();
     }
 
+    // Ouvre la fenêtre pour démarrer l'entraînement d'un modèle d'IA.
+
     public void openLearning(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -245,6 +257,8 @@ public class MainController implements ModelUpdate {
         stageLearn.show();
     }
 
+    // Ouvre la fenêtre de gestion des modèles d'IA où les utilisateurs peuvent gérer des modèles.
+
     public void openModels(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/model-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -259,12 +273,16 @@ public class MainController implements ModelUpdate {
         stageModel.showAndWait();
     }
 
+    // Ajuste la luminosité de l'interface utilisateur selon le niveau spécifié.
+
     public void setBrightness(int lum){
         double l = -0.9 + ((double) lum /100);
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(l);
         borderPane.setEffect(colorAdjust);
     }
+
+    // Sauvegarde les configurations actuelles de l'utilisateur dans un fichier de paramètres.
 
     public void save(){
         try{
@@ -360,6 +378,8 @@ public class MainController implements ModelUpdate {
         return 0;
     }
 
+    // Traite le démarrage du jeu en configurant l'affichage des options de mode de jeu.
+
     @FXML
     public void play(ActionEvent actionEvent) {
         playGame.setVisible(false);
@@ -379,6 +399,8 @@ public class MainController implements ModelUpdate {
         chooseDifficulty.setVisible(true);
     }
 
+    // Sélectionne et applique la difficulté choisie pour le jeu.
+
     @FXML
     public void selectDifficulty(ActionEvent actionEvent) {
         RadioButton selectedRadioButton = (RadioButton) difficultyGroup.getSelectedToggle();
@@ -397,6 +419,7 @@ public class MainController implements ModelUpdate {
         }
     }
 
+    // Lance une partie contre l'IA si un modèle correspondant a la difficulté choisi est déjà entrainé ou lance l'apprentissage
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
         //if (selectDifficulty != null && !selectDifficulty.isEmpty()) {
@@ -404,8 +427,7 @@ public class MainController implements ModelUpdate {
         if (radioButton !=null) {
             String diff = (String) radioButton.getUserData();
             letterDifficulty = diff;
-            System.out.println("Difficulté sélectionnée: " + selectDifficulty);
-            System.out.println("dif :           " + diff);
+            System.out.println("Difficulté sélectionnée:" + diff);
             ConfigFileLoader cfl = new ConfigFileLoader();
             cfl.loadConfigFile("src/main/resources/com/project/morpion/ai/config.txt");
             Config config = cfl.get(diff);
@@ -426,7 +448,7 @@ public class MainController implements ModelUpdate {
         }
     }
 
-
+    // Gère le retour à l'écran précédent dans le flux de navigation de l'application.
 
     public void back(ActionEvent actionEvent) {
         if(chooseGameMode.isVisible()){
@@ -456,9 +478,13 @@ public class MainController implements ModelUpdate {
         settingVbox.setVisible(true);
     }
 
+    // Ferme l'application
+
     public void exit(ActionEvent actionEvent) {
         Platform.exit();
     }
+
+    // Configure l'interface utilisateur en français ou en anglais selon le choix de l'utilisateur.
 
     public void setToFrench(){
         languageButton.setText("Français");
@@ -574,6 +600,8 @@ public class MainController implements ModelUpdate {
         themeButton.setText("Black");
     }
 
+    // Affiche les aides ou règles du jeu à l'utilisateur.
+
     public void showHelp(ActionEvent actionEvent) {
         helpVbox.setVisible(true);
         helpVbox.setManaged(true);
@@ -653,6 +681,8 @@ public class MainController implements ModelUpdate {
         transition.play();
 
     }
+
+    // Affiche des informations sur l'entraînement de l'IA et son utilisation dans le jeu.
 
     public void showIA(ActionEvent actionEvent) {
         iaButton.setDisable(true);
@@ -739,6 +769,8 @@ public class MainController implements ModelUpdate {
         }catch (IOException ignored){}
     }
 
+    // Configure les niveaux de difficulté optionnels pour le jeu à partir de paramètres personnalisés.
+
     private void setOptionnalLevel(){
         singleVbox.getChildren().removeIf(node -> node instanceof RadioButton);
         String[] basic = {"Easy", "Medium", "Hard"};
@@ -779,6 +811,8 @@ public class MainController implements ModelUpdate {
         }
         catch (IOException ignored){}
     }
+
+    // Configure le volume global de l'application à partir des paramètres sauvegardés.
 
     public void setVolume(){
         try{

@@ -32,9 +32,14 @@ public class ModelViewController {
     private Cursor cursor;
     private Scene scene;
     private String language = "English";
+
+    // Définit la scène actuelle utilisée par ce contrôleur.
+
     public void setScene(Scene scene) {
         this.scene = scene;
     }
+
+    // Initialise le contrôleur en configurant la langue, le curseur, le thème, et charge les modèles existants dans la liste.
 
     public void initialization(){
         if(isFrench()){
@@ -51,6 +56,11 @@ public class ModelViewController {
 
     }
 
+    /*
+        Charge tous les fichiers de modèle (.srl) du répertoire spécifié,
+        les encapsule dans des objets ItemModel, et les ajoute à la ListView pour affichage.
+     */
+
     private void loadModels(String directoryPath, ListView<ItemModel> listView) {
         File dir = new File(directoryPath);
         File[] files = dir.listFiles((d, name) -> name.endsWith(".srl"));
@@ -65,6 +75,10 @@ public class ModelViewController {
     @FXML
     private Button deleteAllButton;
 
+    /*
+    Demande une confirmation pour supprimer tous les modèles listés.
+    Si confirmé, la fonction deleteModelsInListView est appelée pour effectuer la suppression.
+    */
     public void deleteAllModels(ActionEvent actionEvent) {
         // Créer une alerte
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -92,6 +106,8 @@ public class ModelViewController {
         }
     }
 
+    // Supprime "physiquement" les fichiers des modèles sélectionnés et les retire de la liste affichée.
+
     private void deleteModelsInListView(ListView<ItemModel> listView) {
         List<ItemModel> models = new ArrayList<>(listView.getItems());
         for (ItemModel model : models) {
@@ -104,11 +120,14 @@ public class ModelViewController {
         }
     }
 
+    // Ferme la fenêtre modale associée à ce contrôleur.
 
     public void closeModal(ActionEvent actionEvent) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
+
+    // Charge et applique le thème (clair ou sombre) en fonction des paramètres utilisateur.
 
     private void getTheme(){
         try{
@@ -128,6 +147,8 @@ public class ModelViewController {
             }
         }catch (IOException ignored){}
     }
+
+    // Charge et applique le curseur personnalisé en fonction des paramètres utilisateur.
 
     private void getCursor(){
         try{
@@ -151,6 +172,8 @@ public class ModelViewController {
             }
         }catch (IOException ignored){}
     }
+
+    // Détermine si la langue française est sélectionnée dans les paramètres et renvoie vrai si c'est le cas.
 
     private boolean isFrench(){
         try{

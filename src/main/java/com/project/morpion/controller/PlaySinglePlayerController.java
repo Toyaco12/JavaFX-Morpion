@@ -4,10 +4,10 @@ import com.project.morpion.App;
 import com.project.morpion.model.AudioPlayer;
 import com.project.morpion.model.ModelUpdate;
 import com.project.morpion.model.Morpion;
-import com.project.morpion.model.ai.Config;
-import com.project.morpion.model.ai.ConfigFileLoader;
-import com.project.morpion.model.ai.Coup;
-import com.project.morpion.model.ai.MultiLayerPerceptron;
+import com.project.morpion.tools.ai.Config;
+import com.project.morpion.tools.ai.ConfigFileLoader;
+import com.project.morpion.tools.ai.Coup;
+import com.project.morpion.tools.ai.MultiLayerPerceptron;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
@@ -79,6 +79,9 @@ public class PlaySinglePlayerController implements ModelUpdate {
     AudioPlayer audioPlayer;
     double volume;
     PauseTransition pauseTransition = new PauseTransition(Duration.seconds(0.5));
+
+    // Définit le nom du modèle et la difficulté pour la partie en cours.
+
     public void setModelName(String modelName){
         this.modelName = modelName;
     }
@@ -94,11 +97,15 @@ public class PlaySinglePlayerController implements ModelUpdate {
     public void setScene(Scene scene) {
         this.scene = scene;
     }
+
+    // Charge le modèle d'intelligence artificielle basé sur la difficulté et le nom spécifiés.
+
     public void initModel() {
         System.out.println(this.modelName);
-        System.out.println(this.difficulty);
         model = MultiLayerPerceptron.loadModel(difficulty, modelName);
     }
+
+    // Configure les écouteurs sur chaque case de la grille pour gérer les actions de jeu (placement des pions par l'utilisateur et par l'IA).
 
     private void setClickListener(){
         morpionGrille.getChildren().forEach(node -> {
@@ -134,6 +141,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
     private void lanchGame(){
 
     }
+
+    // Affiche les résultats de la partie, gère l'affichage des messages de victoire, d'égalité ou de défaite, et lance les animations correspondantes.
 
     private void showVictory(int player){
         restartButton.setDisable(true);
@@ -243,6 +252,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         }
     }
 
+    // Applique un effet de flou aux éléments de l'interface pour focaliser l'attention sur les messages de victoire ou d'égalité.
+
     private void blur(){
         BoxBlur boxBlur = new BoxBlur(10, 10, 3);
         vboxLeft.setEffect(boxBlur);
@@ -250,12 +261,16 @@ public class PlaySinglePlayerController implements ModelUpdate {
         hboxTop.setEffect(boxBlur);
     }
 
+    // Gère l'affichage et le masquage de la grille de jeu avec des animations de transition.
+
     private void fadeOutGridPane() {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), morpionGrille);
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
         fadeTransition.play();
     }
+
+    // Met à jour l'affichage de la grille de jeu en fonction de l'état actuel du tableau de jeu (après chaque mouvement de l'utilisateur ou de l'IA).
 
     private void updateGridPane(){
         double[] board = game.getBoard();
@@ -273,6 +288,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         }
     }
 
+
+    // Initialise le contrôleur, configure les paramètres de jeu, charge les préférences utilisateur, et prépare l'interface pour une nouvelle partie.
 
     public void initialization() {
         audioPlayer = new AudioPlayer();
@@ -341,6 +358,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
 //        }
     }
 
+    // Gère le retour à l'écran principal de l'application.
+
     public void returnHome(ActionEvent actionEvent) throws IOException {
         audioPlayer.stopMusic();
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main-view.fxml"));
@@ -353,6 +372,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         stageGame.show();
     }
 
+    // Réinitialise le jeu à son état initial pour permettre de démarrer une nouvelle partie. (Fonctionnalité retirée)
+
     public void restartGame(ActionEvent actionEvent) {
         setClickListener();
         game.restart();
@@ -361,6 +382,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         victoryPlayer1.setVisible(false);
         victoryPlayer2.setVisible(false);
     }
+
+    // Masque les éléments de l'interface relatifs à la victoire et réinitialise les paramètres pour une nouvelle partie.
 
     private void hideVictory(){
         audioPlayer.stopMusic();
@@ -385,6 +408,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         });
     }
 
+    // Permet au joueur de choisir entre jouer avec une croix ou un cercle.
+
     public void chooseCross(MouseEvent mouseEvent) {
         player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
@@ -399,7 +424,6 @@ public class PlaySinglePlayerController implements ModelUpdate {
     }
 
     public void chooseCircle(MouseEvent mouseEvent) {
-        System.out.println(modelName);
         player2Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/cross.png");
         player1Image = new Image("file:src/main/resources/com/project/morpion/ai/images/TicTacToe/circle.png");
 
@@ -412,6 +436,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         fadeInNode(player2Object);
         fadeInNode(player1Object);
     }
+
+    // Démarre une nouvelle partie en définissant quel joueur commence : le joueur 1, le joueur 2, ou un choix aléatoire.
 
     public void startPlayer1(ActionEvent actionEvent) {
         hideToStartGame();
@@ -499,6 +525,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         }
     }
 
+    // Permet de démarrer une nouvelle partie directement après une victoire ou une égalité pour revanche.
+
     public void revenge(ActionEvent actionEvent) {
         revengeButton.setDisable(true);
         game.restart();
@@ -546,6 +574,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         borderPane.setEffect(colorAdjust);
     }
 
+    // Configure l'interface en français, modifiant tous les textes affichés selon la langue choisie.
+
     public void setToFrench(){
         partyState.setText("Partie en Cours");
         chooseLabel.setText("Joueur 1 Choisissez Votre Forme");
@@ -559,6 +589,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
         player1Name.setText("Joueur 1");
         changeLabel.setText("Vous pouvez changer la difficulté !!");
     }
+
+    // Vérifie si la langue de l'interface doit être configurée en français en lisant un fichier de paramètres.
 
     private boolean isFrench(){
         try{
@@ -663,6 +695,8 @@ public class PlaySinglePlayerController implements ModelUpdate {
 
     }
 
+    // Ouvre l'interface pour l'apprentissage de l'IA en cas de besoin de mise à jour ou de création de modèle.
+
     public void openLearning(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/learn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -678,6 +712,9 @@ public class PlaySinglePlayerController implements ModelUpdate {
         controller.getPreviousStage(stage);
         stageLearn.show();
     }
+
+    // Change le niveau de difficulté pour la prochaine partie et charge le modèle d'IA correspondant.
+
     private void changeLevel(int i) throws IOException {
         String[] diff = getLevel();
         switch (i){
@@ -729,7 +766,6 @@ public class PlaySinglePlayerController implements ModelUpdate {
             while(line != null) {
                 if (line.charAt(0) == 'V') {
                     String d = line.substring(line.lastIndexOf(":") + 1);
-                    System.out.println("dhezuiduezhduezhu      " + line);
                     volume = Double.parseDouble(d);
                     return;
                 }

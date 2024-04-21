@@ -1,13 +1,17 @@
 package com.project.morpion.model;
 
-import com.project.morpion.model.ai.Config;
-import com.project.morpion.model.ai.ConfigFileLoader;
+import com.project.morpion.tools.ai.Config;
+import com.project.morpion.tools.ai.ConfigFileLoader;
 
 import java.io.File;
+
+// Classe représentant un modèle de fichier IA, avec des méthodes pour récupérer son nom et chemin complet.
 
 public class ItemModel {
     private String name;
     private String fullPath;
+
+    // Constructeur qui initialise un modèle avec le chemin complet du fichier, charge la configuration des modèles IA, et détermine le nom du modèle en fonction de sa correspondance avec les configurations de difficulté actuelles.
 
     public ItemModel(String fullPath) {
         this.fullPath = fullPath;
@@ -21,9 +25,6 @@ public class ItemModel {
         Config configC1 = cfl.get("C1");
         Config configC2 = cfl.get("C2");
         Config configC3 = cfl.get("C3");
-//        String actualDifficultyF = new File("src/main/resources/com/project/morpion/ai/models/"+"F"+"/model_"+configF.hiddenLayerSize+"_"+configF.learningRate+"_"+configF.numberOfhiddenLayers+".srl").getName();
-//        String actualDifficultyD = new File("src/main/resources/com/project/morpion/ai/models/"+"D"+"/model_"+configD.hiddenLayerSize+"_"+configD.learningRate+"_"+configD.numberOfhiddenLayers+".srl").getName();
-//        String actualDifficultyM = new File("src/main/resources/com/project/morpion/ai/models/"+"M"+"/model_"+configM.hiddenLayerSize+"_"+configM.learningRate+"_"+configM.numberOfhiddenLayers+".srl").getName();
         String actualDifficultyF = new File("src/main/resources/com/project/morpion/ai/models/model_"+configF.hiddenLayerSize+"_"+configF.learningRate+"_"+configF.numberOfhiddenLayers+".srl").getName();
         String actualDifficultyD = new File("src/main/resources/com/project/morpion/ai/models/model_"+configD.hiddenLayerSize+"_"+configD.learningRate+"_"+configD.numberOfhiddenLayers+".srl").getName();
         String actualDifficultyM = new File("src/main/resources/com/project/morpion/ai/models/model_"+configM.hiddenLayerSize+"_"+configM.learningRate+"_"+configM.numberOfhiddenLayers+".srl").getName();
@@ -77,6 +78,8 @@ public class ItemModel {
     public String getFullPath() {
         return fullPath;
     }
+
+    // Redéfinit la méthode toString pour retourner le nom du modèle, facilitant ainsi son utilisation dans des interfaces utilisateur ou des logs.
 
     @Override
     public String toString() {

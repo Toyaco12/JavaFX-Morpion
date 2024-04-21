@@ -26,8 +26,6 @@ public class App extends Application {
         stage.getIcons().add(new Image("file:src/main/resources/com/project/morpion/image/morpionlogo.png"));
         stage.setScene(scene);
         stage.setResizable(false);
-        //stage.setOnCloseRequest(event -> audioPlayer.stopMusic());
-
         stage.show();
 
     }

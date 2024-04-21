@@ -1,8 +1,4 @@
-package com.project.morpion.model.ai;
-
-import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.scene.control.ProgressBar;
+package com.project.morpion.tools.ai;
 
 import java.io.*;
 import java.util.Arrays;

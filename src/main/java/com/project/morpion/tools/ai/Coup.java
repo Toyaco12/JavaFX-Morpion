@@ -1,4 +1,4 @@
-package com.project.morpion.model.ai;
+package com.project.morpion.tools.ai;
 
 import java.util.Arrays;
 
