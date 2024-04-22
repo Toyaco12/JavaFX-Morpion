@@ -11,11 +11,15 @@ Ce projet consiste en une implémentation d'un jeu de morpion en JavaFX, réalis
 - Aide intégrée expliquant comment jouer et utiliser l'IA.
 - Visualisation de l'apprentissage de l'IA et gestion des modèles d'IA.
 
+## Environnement de Développement
+Le projet a été développé en utilisant IntelliJ IDEA et géré avec Maven pour la gestion des dépendances, ce qui facilite la configuration et l'exécution du projet.
+
 ## Installation
 Pour installer et exécuter ce projet, suivez les étapes ci-dessous :
 1. Clonez le dépôt GitHub : https://github.com/Toyaco12/JavaFX-Morpion.git
-2. Assurez-vous que JavaFX est correctement configuré sur votre système.
-3. Compilez et exécutez le projet depuis votre IDE ou via la ligne de commande.
+2. Assurez-vous que JavaFX et Maven sont correctement configurés sur votre système.
+3. Ouvrez le projet dans IntelliJ IDEA ou un autre IDE prenant en charge Maven.
+4. Compilez et exécutez le projet via votre IDE ou en utilisant Maven en ligne de commande (`mvn javafx:run`).
 
 ## Utilisation
 Lancez l'application et suivez les instructions à l'écran pour choisir les modes de jeu et les configurations. Utilisez la menuBar pour accéder aux différents réglages et options.
@@ -25,5 +29,4 @@ Lancez l'application et suivez les instructions à l'écran pour choisir les mod
 - Erwan
 
 ## Licence
-Ce projet est disponible sous la licence GNU. Veuillez consulter le fichier LICENSE pour plus de détails.
-
+Ce projet est distribué sous la Licence Publique Générale GNU, version 3 (GPLv3). Pour plus d'informations, veuillez consulter le fichier [LICENSE].
